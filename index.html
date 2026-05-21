@@ -18,24 +18,27 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text
 h1{font-size:20px;text-align:center;color:var(--gold);
   padding:16px 10px;line-height:1.5;
   background:var(--panel);border:5px solid var(--border);outline:3px solid var(--wood);
-  border-radius:4px;margin-bottom:14px;box-shadow:0 6px 0 var(--border);font-weight:900;}
+  border-radius:4px;font-weight:900;margin-bottom:14px;box-shadow:0 6px 0 var(--border);}
 
 .card{background:var(--panel);border:4px solid var(--border);border-radius:4px;padding:16px;margin-bottom:14px;box-shadow:0 5px 0 var(--border);}
 .card-title{font-weight:900;font-size:14px;margin-bottom:12px;padding-bottom:8px;border-bottom:3px solid var(--stripe);}
 
+/* 勵志話語獨立卡片內文樣式 */
+.motto-content{text-align:center;padding:10px;font-size:14px;font-weight:700;color:#444;cursor:pointer;user-select:none;line-height:1.6;}
+
 /* config */
 .cfg-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;align-items:end;}
 .fld label{display:block;font-size:12px;font-weight:700;margin-bottom:4px;color:#555;}
-.fld input,.fld select{width:100%;max-width:100%;padding:8px 9px;border:3px solid var(--border);font-family:'Noto Sans TC';font-weight:700;font-size:13px;background:#fff;height:40px;box-sizing:border-box;border-radius:0;margin:0;appearance:none;}
-.today-box{width:100%;max-width:100%;border:3px solid var(--border);background:var(--lb);padding:8px 9px;font-size:13px;font-weight:900;color:var(--blue);display:flex;align-items:center;height:40px;box-sizing:border-box;}
-.countdown-box{width:100%;max-width:100%;border:3px solid var(--border);background:#dcfce7;color:#14532d;padding:8px 9px;font-size:13px;font-weight:900;display:flex;align-items:center;height:40px;box-sizing:border-box;}
+.fld input,.fld select{width:100%;max-width:100%;padding:8px 9px;border:3px solid var(--border);font-family:'Noto Sans TC';font-weight:700;font-size:13px;background:#fff;height:40px;box-sizing:border-box;border-radius:0;margin:0;appearance:none;text-align:left;}
+.today-box{width:100%;max-width:100%;border:3px solid var(--border);background:var(--lb);padding:8px 9px;font-size:13px;font-weight:900;color:var(--blue);display:flex;align-items:center;height:40px;box-sizing:border-box;justify-content:flex-start;}
+.countdown-box{width:100%;max-width:100%;border:3px solid var(--border);background:#dcfce7;color:#14532d;padding:8px 9px;font-size:13px;font-weight:900;display:flex;align-items:center;height:40px;box-sizing:border-box;justify-content:flex-start;}
 
 /* calc box */
 .calc-box{background:var(--lb);border:3px solid var(--border);border-radius:4px;padding:12px;margin-top:10px;font-size:13px;}
 .cr{display:flex;justify-content:space-between;align-items:baseline;padding:4px 0;border-bottom:1px dashed #d4c9a8;gap:8px;}
 .cr:last-child{border-bottom:none;}
 .cl{color:#555;flex-shrink:0;font-size:13px;}
-.cv{font-weight:900;text-align:right;}
+.cv font-weight:900;text-align:right;}
 .cv.r{color:var(--red);}
 .cv.g{color:var(--green);}
 .cf{font-size:10px;color:#aaa;margin-left:5px;}
@@ -108,8 +111,22 @@ h1{font-size:20px;text-align:center;color:var(--gold);
 .subj-section-title{background:var(--stripe);border:3px solid var(--border);border-radius:3px 3px 0 0;padding:8px 12px;font-weight:900;font-size:13px;display:flex;justify-content:space-between;align-items:center;}
 
 @media(max-width:600px){
-  .cfg-row{grid-template-columns:1fr;}
   h1{font-size:18px;}
+  
+  /* 手機版排版：強制單欄、靠左、等寬對齊 */
+  .cfg-row{grid-template-columns:1fr !important;width:100%;}
+  .fld input[type="date"]{width:100% !important;max-width:100% !important;text-align:left !important;}
+  .today-box, .countdown-box{width:100% !important;max-width:100% !important;justify-content:flex-start !important;}
+  
+  /* 手機版科目區塊標題按鈕縮小 */
+  .subj-section-title{flex-direction:column;align-items:flex-start;gap:8px;padding:10px;}
+  .subj-section-title div:last-child{width:100%;display:flex;gap:6px;}
+  .subj-section-title .btn-sm{flex:1;padding:5px 4px;font-size:11px;text-align:center;}
+  
+  /* 手機版底端全域按鈕縮小與限寬 */
+  .btn{padding:6px 10px;font-size:12px;}
+  .wrap > .card:last-of-type div:last-of-type{display:flex;flex-direction:column;gap:8px;width:100%;}
+  .wrap > .card:last-of-type .btn{width:100%;max-width:160px;}
 }
 </style>
 </head>
@@ -117,6 +134,11 @@ h1{font-size:20px;text-align:center;color:var(--gold);
 <div class="wrap">
 
 <h1>國家考試備考進度控制台</h1>
+
+<div class="card">
+  <div class="card-title">每日備考語錄</div>
+  <div class="motto-content" id="motto-display" onclick="refreshMotto()" title="點擊可更換一句"></div>
+</div>
 
 <div class="card">
   <div class="card-title">基本設定與考試倒數</div>
@@ -259,6 +281,25 @@ const SESSIONS = [
   {key:'flex',label:'彈性',cls:'sess-flex'}
 ];
 
+// 勵志話語資料庫
+const MOTTOS = [
+  "「孤獨是優秀的伴侶，挨得住寂寞，才撐得起未來的法律正義。」",
+  "「此時此刻的痛苦都是暫時的，當你在榜單上看到名字，這一切都將明朗。」",
+  "「讀書沒有捷徑，你翻過的每一頁法典、寫過的每一題考古，都是上榜的基石。」",
+  "「不要去想能不能考上，要把心思專注在今天設定的頁數有沒有推進。」",
+  "「法律人的修煉，從看清自己與目標的差距、並腳踏實地補足它開始。」",
+  "「當你想放棄的時候，想想當初為什麼決定報考。堅持下去，勝負往往在最後一刻。」",
+  "「精準配速，穩定輸出。你不需要一天讀完一本書，你需要的是每天都往前走一點。」",
+  "「上榜不是靠奇蹟，而是靠每天在控制台前，對自己進度的嚴格與誠實。」",
+  "「把焦慮轉化為翻閱法條的動力，只要賽車手還在推進，你就沒有落後。」",
+  "「唯有在暗處默默努力、反覆錘鍊，才能在放榜那天問心無愧。」"
+];
+
+function refreshMotto() {
+  const idx = Math.floor(Math.random() * MOTTOS.length);
+  document.getElementById('motto-display').innerText = MOTTOS[idx];
+}
+
 function makeSlot(hours){ return {subject:'休息', hours}; }
 function makeDefaultSchedule(){
   const sched = {};
@@ -308,6 +349,7 @@ function load(){
   }catch(e){}}
   document.getElementById('exam-date').value=S.examDate||'';
   showToday();
+  refreshMotto(); 
 }
 function save(){
   S.examDate=document.getElementById('exam-date').value;
