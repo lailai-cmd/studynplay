@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>星露谷備考物語 — 進度司令部 v24</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4edd2;--wood:#c07d34;--panel:#fff;--border:#3a2211;
+  --text:#2a1508;--green:#15803d;--blue:#0369a1;--gold:#b45309;
+  --red:#b91c1c;--lb:#fdf6e2;--stripe:#ebdcb9;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:14px;display:flex;justify-content:center;}
+.wrap{width:100%;max-width:1060px;}
+
+h1{font-family:'Press Start 2P',monospace;font-size:13px;text-align:center;color:var(--gold);
+  padding:16px 10px;line-height:1.9;text-shadow:2px 2px 0 #fff,3px 3px 0 var(--border);
+  background:var(--panel);border:5px solid var(--border);outline:3px solid var(--wood);
+  border-radius:4px;margin-bottom:14px;box-shadow:0 6px 0 var(--border);}
+
+.card{background:var(--panel);border:4px solid var(--border);border-radius:4px;padding:16px;margin-bottom:14px;box-shadow:0 5px 0 var(--border);}
+.card-title{font-weight:900;font-size:14px;margin-bottom:12px;padding-bottom:8px;border-bottom:3px solid var(--stripe);}
+
+/* wallet bar */
+.wallet-bar{display:flex;justify-content:space-between;align-items:center;background:var(--lb);border:3px solid var(--border);border-radius:4px;padding:10px 14px;margin-bottom:14px;font-weight:900;font-size:14px;box-shadow:0 3px 0 var(--border);}
+.gold-display{color:var(--gold);font-size:16px;}
+
+/* config */
+.cfg-row{display:grid;grid-template-columns:200px 200px 1fr;gap:14px;align-items:end;}
+.fld label{display:block;font-size:12px;font-weight:700;margin-bottom:4px;color:#555;}
+.fld input,.fld select{width:100%;padding:8px 9px;border:3px solid var(--border);font-family:'Noto Sans TC';font-weight:700;font-size:13px;background:#fff;height:40px;}
+.today-box{border:3px solid var(--border);background:var(--lb);padding:8px 9px;font-size:13px;font-weight:900;color:var(--blue);display:flex;align-items:center;height:40px;border-radius:0px;}
+.exam-countdown{border:3px solid var(--border);background:#fef9c3;padding:8px 9px;font-size:13px;font-weight:900;color:var(--gold);display:flex;align-items:center;min-height:40px;height:auto;border-radius:0px;white-space:nowrap;}
+
+/* status */
+.banner{padding:14px 18px;border:4px solid var(--border);border-radius:4px;font-weight:700;font-size:13px;margin-bottom:14px;box-shadow:0 4px 0 var(--border);line-height:1.8;}
+.banner.ok{background:#dcfce7;border-color:#16a34a;color:#14532d;}
+.banner.warn{background:#fee2e2;border-color:#dc2626;color:#7f1d1d;}
+.banner.neutral{background:var(--lb);border-color:var(--border);color:var(--text);}
+
+/* calc box */
+.calc-box{background:var(--lb);border:3px solid var(--border);border-radius:4px;padding:12px;margin-top:10px;font-size:13px;}
+.cr{display:flex;justify-content:space-between;align-items:baseline;padding:4px 0;border-bottom:1px dashed #d4c9a8;gap:8px;}
+.cr:last-child{border-bottom:none;}
+.cl{color:#555;flex-shrink:0;font-size:13px;}
+.cv{font-weight:900;text-align:right;}
+.cv.r{color:var(--red);}
+.cv.g{color:var(--green);}
+.cf{font-size:10px;color:#aaa;margin-left:5px;}
+
+/* chips */
+.chip{display:inline-block;padding:2px 7px;border-radius:10px;font-size:11px;font-weight:700;border:1px solid;}
+.ok2{background:#dcfce7;color:#14532d;border-color:#16a34a;}
+.warn2{background:#fee2e2;color:#7f1d1d;border-color:#dc2626;}
+.done2{background:#dbeafe;color:#1e3a8a;border-color:#2563eb;}
+
+/* buttons */
+.btn{padding:8px 13px;border:3px solid var(--border);font-weight:700;font-size:13px;cursor:pointer;border-radius:3px;box-shadow:0 3px 0 var(--border);font-family:'Noto Sans TC';transition:transform .07s;}
+.btn:active{transform:translateY(3px);box-shadow:none;}
+.btn-g{background:#16a34a;color:#fff;}
+.btn-r{background:#dc2626;color:#fff;}
+.btn-w{background:var(--wood);color:#fff;}
+.btn-b{background:var(--blue);color:#fff;}
+.btn-sm{padding:4px 9px;font-size:11px;box-shadow:0 2px 0 var(--border);}
+
+/* mini progress */
+.mini-bar{height:9px;background:#e2d6b5;border:1px solid #ccc;border-radius:2px;overflow:hidden;margin-top:3px;}
+.mini-fill{height:100%;background:linear-gradient(90deg,#16a34a,#4ade80);transition:width .3s;}
+.pt{font-size:10px;font-weight:700;color:#555;}
+
+/* racer toy */
+.racer-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:12px;}
+.racer-panel{background:var(--lb);border:3px solid var(--border);padding:12px;border-radius:4px;margin-top:10px;}
+.racer-bar-container{background:#e2d6b5;border:2px solid var(--border);height:20px;border-radius:3px;overflow:hidden;position:relative;margin:10px 0;}
+.racer-bar-fill{height:100%;background:linear-gradient(90deg, #0369a1, #38bdf8);width:0%;transition:width 0.5s;}
+.racer-bar-text{position:absolute;width:100%;text-align:center;top:0;left:0;font-size:11px;font-weight:900;line-height:16px;color:var(--text);text-shadow:1px 1px 0 #fff;}
+
+/* ══ CHARACTER PANEL ══ */
+.char-panel{display:grid;grid-template-columns:180px 1fr;gap:16px;align-items:start;}
+@media(max-width:600px){.char-panel{grid-template-columns:1fr;}}
+.avatar-box{background:#604a34;border:4px solid var(--border);padding:14px;text-align:center;border-radius:4px;color:#fff;box-shadow:inset 0 0 10px rgba(0,0,0,0.4);}
+.pixel-canvas{width:96px;height:96px;background:#8ba857;border:3px solid var(--border);margin:10px auto;image-rendering:pixelated;display:block;}
+.avatar-status{font-size:11px;font-weight:700;color:#f0d8a0;margin-top:6px;line-height:1.4;}
+.inv-box{background:var(--stripe);border:3px solid var(--border);padding:10px;border-radius:4px;}
+.inv-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:8px;}
+@media(max-width:500px){.inv-grid{grid-template-columns:repeat(5,1fr);}}
+.inv-slot{aspect-ratio:1;background:#fff;border:2px solid var(--border);border-radius:3px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2px;max-width:52px;}
+.inv-slot:hover{background:var(--lb);}
+.inv-slot.equipped{outline:3px solid var(--gold);background:#fef08a;}
+.inv-slot svg{width:20px;height:20px;image-rendering:pixelated;}
+.slot-label{font-size:7px;color:var(--text);font-weight:700;margin-top:1px;text-align:center;line-height:1.1;}
+
+/* ══ SHOP GRID ══ */
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:12px;}
+.shop-item{background:var(--lb);border:3px solid var(--border);padding:12px;text-align:center;border-radius:4px;}
+.shop-item.owned{opacity:0.6;}
+.shop-item svg{width:48px;height:48px;image-rendering:pixelated;margin:4px auto;display:block;}
+.shop-section-title{font-weight:900;font-size:13px;margin:16px 0 6px;color:var(--gold);border-bottom:2px dashed var(--border);padding-bottom:4px;}
+
+/* ══ DAILY CHECK ══ */
+.daily-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:10px;}
+@media(max-width:500px){.daily-grid{grid-template-columns:1fr;}}
+.daily-session{background:var(--lb);border:3px solid var(--border);border-radius:4px;padding:12px;}
+.daily-session-title{font-weight:900;font-size:13px;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.daily-task{display:flex;align-items:center;gap:8px;margin-bottom:6px;padding:6px 8px;background:#fff;border:2px solid #d4c9a8;border-radius:4px;transition:background .2s;}
+.daily-task.done{background:#dcfce7;border-color:#16a34a;}
+.daily-task input[type=checkbox]{width:18px;height:18px;cursor:pointer;accent-color:var(--green);}
+.daily-task label{font-size:12px;font-weight:700;cursor:pointer;flex:1;}
+.daily-coin{font-size:11px;color:var(--gold);font-weight:700;white-space:nowrap;}
+.daily-date-note{font-size:11px;color:#888;margin-top:8px;}
+
+/* ══ WEEKLY SCHEDULE TABLE ══ */
+.sched-wrap{overflow-x:auto;margin-top:10px;}
+.sched-table{width:100%;border-collapse:collapse;min-width:620px;font-size:13px;}
+.sched-table th{background:var(--stripe);padding:8px 6px;border:2px solid var(--border);text-align:center;font-weight:700;font-size:12px;}
+.sched-table td{border:2px solid var(--border);padding:6px;vertical-align:top;}
+.slot-cell{display:flex;flex-direction:column;gap:4px;}
+.slot-hours{display:flex;align-items:center;gap:4px;font-size:11px;}
+.slot-hours input{width:48px;padding:3px 5px;border:2px solid #ccc;font-family:'Noto Sans TC';font-weight:700;font-size:11px;}
+.slot-subject select{width:100%;padding:4px 5px;border:2px solid #ccc;font-family:'Noto Sans TC';font-weight:700;font-size:11px;background:#fff;}
+.slot-badge{display:inline-block;padding:2px 6px;border-radius:3px;font-size:10px;font-weight:700;color:#fff;margin-top:2px;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;}
+.session-label{font-weight:900;font-size:12px;color:#fff;padding:4px 8px;text-align:center;border-radius:3px;}
+.sess-am{background:#d97706;}
+.sess-pm{background:#0369a1;}
+.sess-eve{background:#6d28d9;}
+
+/* ══ SUBJECT SUMMARY TABLE ══ */
+.subj-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px;}
+.subj-table th{background:var(--stripe);padding:8px 10px;border:2px solid var(--border);font-weight:700;font-size:12px;text-align:left;}
+.subj-table td{padding:7px 8px;border:1px solid #d4c9a8;vertical-align:middle;}
+.subj-table tr:nth-child(even) td{background:#fafaf5;}
+.big-num{font-size:17px;font-weight:900;}
+
+/* ══ TIMELINE TABLE ══ */
+.timeline-wrap{overflow-x:auto;margin-top:10px;}
+.timeline-table{width:100%;border-collapse:collapse;font-size:13px;}
+.timeline-table th{background:var(--stripe);padding:8px 10px;border:2px solid var(--border);font-weight:700;font-size:12px;text-align:left;}
+.timeline-table td{padding:8px 10px;border:1px solid #d4c9a8;vertical-align:middle;}
+.timeline-table tr:nth-child(even) td{background:#fafaf5;}
+
+/* books card */
+.book-wrap{overflow-x:auto;margin-top:10px;}
+.book-tbl{width:100%;border-collapse:collapse;font-size:13px;}
+.book-tbl th{background:var(--stripe);padding:8px 9px;border:2px solid var(--border);font-weight:700;font-size:12px;text-align:left;white-space:nowrap;}
+.book-tbl td{padding:6px 7px;border:1px solid #d4c9a8;vertical-align:middle;}
+.book-tbl td input{border:2px solid #ccc;padding:4px 6px;font-family:'Noto Sans TC';font-weight:700;font-size:12px;width:100%;}
+.book-tbl tr:nth-child(even) td{background:#fafaf5;}
+.subj-section{margin-bottom:20px;}
+.subj-section-title{background:var(--stripe);border:3px solid var(--border);border-radius:3px 3px 0 0;padding:8px 12px;font-weight:900;font-size:13px;display:flex;justify-content:space-between;align-items:center;}
+
+@media(max-width:600px){
+  .cfg-row{grid-template-columns:1fr;}
+  h1{font-size:11px;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>⚖️ 星露谷備考物語 — 初級法師司令部 ⚖️</h1>
+
+<!-- 金幣欄 -->
+<div class="wallet-bar">
+  <div>🪙 持有金幣：<span class="gold-display" id="gold-display">0</span> G</div>
+  <div style="font-size:12px;color:#666;">完成每日任務或讀書即可獲得金幣！</div>
+</div>
+
+<!-- 基本設定 -->
+<div class="card">
+  <div class="card-title">⚙️ 基本設定</div>
+  <div class="cfg-row">
+    <div class="fld">
+      <label>📅 考試日期</label>
+      <input type="date" id="exam-date" onchange="save();run()">
+    </div>
+    <div class="fld">
+      <label>⏰ 系統時間</label>
+      <div class="today-box" id="today-display">今天是：2026/5/21</div>
+    </div>
+    <div class="fld">
+      <label>📊 距考試倒數</label>
+      <div class="exam-countdown" id="exam-countdown">☀️ 📊 距考試（2026/5/30）還有 10 天（1.4 週）</div>
+    </div>
+  </div>
+</div>
+
+<!-- 角色、背包、換裝 -->
+<div class="card">
+  <div class="card-title">🧙 初級法師 — 角色外觀與法袍換裝</div>
+  <div class="char-panel">
+    <div class="avatar-box">
+      <div style="font-size:10px;letter-spacing:1px;color:#e2d6b5;">初級法師</div>
+      <svg class="pixel-canvas" viewBox="0 0 32 32" id="avatar-canvas">
+        <!-- shadow -->
+        <ellipse cx="16" cy="29" rx="7" ry="2" fill="#3a5a1a" opacity="0.4"/>
+        <!-- base body layers filled by JS -->
+        <g id="avatar-robe-layer"></g>
+        <!-- face -->
+        <rect x="13" y="7" width="6" height="7" fill="#ffdbac"/>
+        <rect x="14" y="10" width="1" height="1" fill="#3a2211"/>
+        <rect x="17" y="10" width="1" height="1" fill="#3a2211"/>
+        <rect x="14" y="12" width="4" height="1" fill="#e0a890"/>
+        <g id="avatar-head-layer"></g>
+        <g id="avatar-item-layer"></g>
+      </svg>
+      <div class="avatar-status" id="avatar-status">--</div>
+    </div>
+    <div>
+      <div class="inv-box">
+        <div style="font-size:12px;font-weight:900;color:var(--text);">🎒 裝備背包（點擊切換穿戴）</div>
+        <div class="inv-grid" id="inventory-grid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 每日檢核 -->
+<div class="card">
+  <div class="card-title">✅ 每日任務檢核（完成打勾即可獲得金幣）</div>
+  <div style="font-size:12px;color:#666;margin-bottom:8px;" id="daily-date-display">今日任務（2026/5/21）</div>
+  <div class="daily-grid">
+    <div class="daily-session">
+      <div class="daily-session-title"><span class="session-label sess-am" style="font-size:11px;padding:3px 8px;">早</span>上午任務</div>
+      <div class="daily-task" id="task-am-1">
+        <input type="checkbox" id="chk-am-1" onchange="toggleDailyTask('am',1,this.checked)">
+        <label for="chk-am-1">☀️ 完成讀書計劃</label>
+        <span class="daily-coin">+1🪙</span>
+      </div>
+    </div>
+    <div class="daily-session">
+      <div class="daily-session-title"><span class="session-label sess-pm" style="font-size:11px;padding:3px 8px;">中</span>下午任務</div>
+      <div class="daily-task" id="task-pm-1">
+        <input type="checkbox" id="chk-pm-1" onchange="toggleDailyTask('pm',1,this.checked)">
+        <label for="chk-pm-1">⚖️ 完成讀書計劃</label>
+        <span class="daily-coin">+1🪙</span>
+      </div>
+    </div>
+    <div class="daily-session">
+      <div class="daily-session-title"><span class="session-label sess-eve" style="font-size:11px;padding:3px 8px;">晚</span>晚間任務</div>
+      <div class="daily-task" id="task-eve-1">
+        <input type="checkbox" id="chk-eve-1" onchange="toggleDailyTask('eve',1,this.checked)">
+        <label for="chk-eve-1">🌙 完成讀書計劃</label>
+        <span class="daily-coin">+1🪙</span>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:10px;font-size:12px;color:#888;">⚠️ 每日任務每天自動重置，金幣永久保留。今日已獲得：<span id="daily-coins-today" style="color:var(--gold);font-weight:900;">0</span> 🪙</div>
+</div>
+
+<!-- 商店 -->
+<div class="card">
+  <div class="card-title">🏪 法師裝備商店（用金幣購買法袍與道具）</div>
+  <div id="shop-container"></div>
+</div>
+
+<!-- Racer -->
+<div class="card">
+  <div class="card-title">🏎️ 齊先生的配速玩具：頁數賽車手</div>
+  <div style="font-size:12px;color:#666;margin-bottom:10px;">設定本次讀書目標，啟動後系統將實時推算理論進度，協助維持專注力與配速。</div>
+  
+  <div class="racer-grid">
+    <div class="fld">
+      <label>📖 起始頁碼</label>
+      <input type="number" id="rc-start" value="1" min="1" oninput="handleRacerInput('page')">
+    </div>
+    <div class="fld">
+      <label>📘 結束頁碼</label>
+      <input type="number" id="rc-end" value="21" min="1" oninput="handleRacerInput('page')">
+    </div>
+    <div class="fld">
+      <label>⏱️ 預計讀多久 (分)</label>
+      <input type="number" id="rc-min" value="60" min="1" oninput="handleRacerInput('time')">
+    </div>
+    <div class="fld">
+      <label>📊 預計速度 (分/頁)</label>
+      <input type="number" id="rc-speed-input" value="3.00" min="0.01" step="0.1" oninput="handleRacerInput('speed')">
+    </div>
+  </div>
+
+  <div style="display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap;">
+    <button class="btn btn-g" id="rc-btn-start" onclick="startRacer()">🏁 開始衝刺</button>
+    <button class="btn btn-w" id="rc-btn-pause" onclick="togglePauseRacer()" disabled>⏸️ 暫停計時</button>
+    <button class="btn btn-r" id="rc-btn-stop" onclick="stopRacer()" disabled>🛑 結束並結算</button>
+  </div>
+
+  <div class="racer-panel" id="rc-panel" style="display:none;">
+    <div style="display:flex;font-weight:700;font-size:13px;gap:20px;flex-wrap:wrap;">
+      <div>⏳ 剩餘時間：<span id="rc-time-left" style="color:var(--red);font-size:15px;font-weight:900;">--:--</span> <span id="rc-pause-status" style="color:var(--wood);display:none;">(已暫停)</span></div>
+      <div>🎯 理論上目前應讀到：第 <span id="rc-current-target" style="color:var(--blue);font-size:15px;font-weight:900;">--</span> 頁</div>
+    </div>
+    <div class="racer-bar-container">
+      <div class="racer-bar-fill" id="rc-bar"></div>
+      <div class="racer-bar-text" id="rc-bar-text">進度：0%</div>
+    </div>
+  </div>
+
+  <div id="rc-result" style="margin-top:12px;font-size:13px;font-weight:700;color:var(--green);display:none;padding:10px;background:#e2f0d9;border:2px dashed var(--border);position:relative;">
+    <div id="rc-result-text"></div>
+    <div style="text-align:right;margin-top:8px;">
+      <button class="btn btn-w btn-sm" onclick="clearRacerResult()">🧹 清除報告</button>
+    </div>
+  </div>
+</div>
+
+<div class="banner neutral" id="status-banner">請先設定考試日期與科目書本。</div>
+
+<div class="card">
+  <div class="card-title">📅 每週讀書時段排表（早 / 中 / 晚 × 7天 = 21格）</div>
+  <div style="font-size:12px;color:#666;margin-bottom:10px;">
+    每格選擇該時段要讀的科目，並填入時數。系統會以此排表乘以考試前週數，計算各科實際可用時間。
+    <br>若某天某時段不讀書，選「休息」即可。
+  </div>
+  <div class="sched-wrap">
+    <table class="sched-table" id="sched-table"></table>
+  </div>
+  <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+    <span style="font-size:12px;color:#555;">時段預設時數：</span>
+    <label style="font-size:12px;font-weight:700;">早 <input type="number" id="def-am" value="2" min="0" max="12" step="0.5" style="width:52px;padding:4px;border:2px solid var(--border);font-weight:700;" onchange="applyDefaultHours('am',this.value)"> 小時</label>
+    <label style="font-size:12px;font-weight:700;">中 <input type="number" id="def-pm" value="3" min="0" max="12" step="0.5" style="width:52px;padding:4px;border:2px solid var(--border);font-weight:700;" onchange="applyDefaultHours('pm',this.value)"> 小時</label>
+    <label style="font-size:12px;font-weight:700;">晚 <input type="number" id="def-eve" value="2" min="0" max="12" step="0.5" style="width:52px;padding:4px;border:2px solid var(--border);font-weight:700;" onchange="applyDefaultHours('eve',this.value)"> 小時</label>
+    <button class="btn btn-w btn-sm" onclick="fillAllSlots()">套用至全部格子</button>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">📊 各科目可用時間 vs 所需時間</div>
+  <div id="subj-summary-wrap"><div style="color:#888;font-size:13px;">新增書本後自動計算。</div></div>
+</div>
+
+<div class="card">
+  <div class="card-title">📅 各書籍預計完成時程表（首日為今日）</div>
+  <div style="font-size:12px;color:#666;margin-bottom:8px;">依據各科目排定之每週時數，由今日起算依序估算每本書的預計完成日期。</div>
+  <div class="timeline-wrap" id="timeline-area">
+    <div style="color:#888;font-size:13px;">設定資料後自動計算。</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">🔢 齊先生的精算報告 — 詳細計算依據</div>
+  <div id="calc-content"><div style="color:#888;font-size:13px;">輸入資料後自動精算。</div></div>
+</div>
+
+<div class="card">
+  <div class="card-title">🌱 書本進度管理（手動輸入已讀頁數）</div>
+  <div id="books-area"></div>
+  <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
+    <button class="btn btn-g" onclick="addSubject()">＋ 新增科目</button>
+  </div>
+</div>
+
+<div style="text-align:right;margin-bottom:28px;">
+  <button class="btn btn-r btn-sm" onclick="resetAll()">⚠️ 重置所有資料</button>
+</div>
+
+</div>
+<script>
+// ══════════════════════════════════════════
+//  ITEM REGISTRY — 法師裝備圖鑑
+// ══════════════════════════════════════════
+const ITEMS = {
+  robes: {
+    "初學者灰袍": {
+      name:"初學者灰袍", price:0, category:"法袍",
+      desc:"法師入門灰袍，初來乍到的謙遜象徵。",
+      icon:`<rect x="3" y="4" width="10" height="10" fill="#9ca3af" rx="1"/><rect x="5" y="6" width="6" height="7" fill="#d1d5db"/>`,
+      robe:`<rect x="11" y="15" width="10" height="13" fill="#9ca3af" rx="1"/><rect x="12" y="16" width="8" height="11" fill="#d1d5db"/><rect x="15" y="15" width="2" height="13" fill="#e5e7eb"/>`,
+      head:`<rect x="12" y="5" width="8" height="2" fill="#6b7280"/><rect x="11" y="6" width="10" height="1" fill="#9ca3af"/>`
+    },
+    "法官藍袍": {
+      name:"法官藍袍", price:30, category:"法袍",
+      desc:"象徵青天，代表公平公正、不受外界干擾。藍邊鑲飾彰顯權威。",
+      icon:`<rect x="3" y="4" width="10" height="10" fill="#1e3a8a" rx="1"/><rect x="4" y="4" width="10" height="2" fill="#2563eb"/><rect x="3" y="4" width="1" height="10" fill="#2563eb"/><rect x="12" y="4" width="1" height="10" fill="#2563eb"/>`,
+      robe:`<rect x="11" y="15" width="10" height="13" fill="#1e3a8a" rx="1"/><rect x="12" y="16" width="8" height="11" fill="#1d4ed8"/><rect x="11" y="15" width="10" height="1" fill="#3b82f6"/><rect x="11" y="15" width="1" height="13" fill="#3b82f6"/><rect x="20" y="15" width="1" height="13" fill="#3b82f6"/><rect x="15" y="15" width="2" height="13" fill="#2563eb"/>`,
+      head:`<rect x="12" y="4" width="8" height="3" fill="#1e3a8a"/><rect x="10" y="6" width="12" height="1" fill="#3b82f6"/>`
+    },
+    "檢察官紫袍": {
+      name:"檢察官紫袍", price:30, category:"法袍",
+      desc:"代表威嚴，象徵督促被告反省與改過自新。紫邊鑲飾顯示威嚴。",
+      icon:`<rect x="3" y="4" width="10" height="10" fill="#4c1d95" rx="1"/><rect x="4" y="4" width="10" height="2" fill="#7c3aed"/><rect x="3" y="4" width="1" height="10" fill="#7c3aed"/><rect x="12" y="4" width="1" height="10" fill="#7c3aed"/>`,
+      robe:`<rect x="11" y="15" width="10" height="13" fill="#4c1d95" rx="1"/><rect x="12" y="16" width="8" height="11" fill="#6d28d9"/><rect x="11" y="15" width="10" height="1" fill="#7c3aed"/><rect x="11" y="15" width="1" height="13" fill="#7c3aed"/><rect x="20" y="15" width="1" height="13" fill="#7c3aed"/><rect x="15" y="15" width="2" height="13" fill="#8b5cf6"/>`,
+      head:`<rect x="12" y="4" width="8" height="3" fill="#4c1d95"/><rect x="10" y="6" width="12" height="1" fill="#7c3aed"/>`
+    },
+    "律師白袍": {
+      name:"律師白袍", price:30, category:"法袍",
+      desc:"象徵純潔與無預設立場，追求當事人的合法權益。白邊鑲飾彰顯高尚。",
+      icon:`<rect x="3" y="4" width="10" height="10" fill="#f8fafc" rx="1" stroke="#cbd5e1" stroke-width="1"/><rect x="4" y="4" width="10" height="2" fill="#fff"/><rect x="3" y="4" width="1" height="10" fill="#e2e8f0"/><rect x="12" y="4" width="1" height="10" fill="#e2e8f0"/>`,
+      robe:`<rect x="11" y="15" width="10" height="13" fill="#f8fafc" rx="1"/><rect x="12" y="16" width="8" height="11" fill="#ffffff"/><rect x="11" y="15" width="10" height="1" fill="#e2e8f0"/><rect x="11" y="15" width="1" height="13" fill="#e2e8f0"/><rect x="20" y="15" width="1" height="13" fill="#e2e8f0"/><rect x="15" y="15" width="2" height="13" fill="#f1f5f9"/>`,
+      head:`<rect x="12" y="4" width="8" height="3" fill="#e2e8f0"/><rect x="10" y="6" width="12" height="1" fill="#cbd5e1"/>`
+    },
+    "書記官黑袍": {
+      name:"書記官黑袍", price:20, category:"法袍",
+      desc:"早期需使用墨水筆錄，黑色設計不怕弄髒最為實用。黑邊鑲飾典雅。",
+      icon:`<rect x="3" y="4" width="10" height="10" fill="#111827" rx="1"/><rect x="4" y="4" width="10" height="2" fill="#1f2937"/><rect x="3" y="4" width="1" height="10" fill="#374151"/><rect x="12" y="4" width="1" height="10" fill="#374151"/>`,
+      robe:`<rect x="11" y="15" width="10" height="13" fill="#111827" rx="1"/><rect x="12" y="16" width="8" height="11" fill="#1f2937"/><rect x="11" y="15" width="10" height="1" fill="#374151"/><rect x="11" y="15" width="1" height="13" fill="#374151"/><rect x="20" y="15" width="1" height="13" fill="#374151"/><rect x="15" y="15" width="2" height="13" fill="#374151"/>`,
+      head:`<rect x="12" y="4" width="8" height="3" fill="#111827"/><rect x="10" y="6" width="12" height="1" fill="#374151"/>`
+    },
+    "公設辯護人綠袍": {
+      name:"公設辯護人綠袍", price:20, category:"法袍",
+      desc:"國家指派的辯護律師，代表人民的守護者。綠邊鑲飾象徵希望。",
+      icon:`<rect x="3" y="4" width="10" height="10" fill="#14532d" rx="1"/><rect x="4" y="4" width="10" height="2" fill="#16a34a"/><rect x="3" y="4" width="1" height="10" fill="#16a34a"/><rect x="12" y="4" width="1" height="10" fill="#16a34a"/>`,
+      robe:`<rect x="11" y="15" width="10" height="13" fill="#14532d" rx="1"/><rect x="12" y="16" width="8" height="11" fill="#166534"/><rect x="11" y="15" width="10" height="1" fill="#16a34a"/><rect x="11" y="15" width="1" height="13" fill="#16a34a"/><rect x="20" y="15" width="1" height="13" fill="#16a34a"/><rect x="15" y="15" width="2" height="13" fill="#15803d"/>`,
+      head:`<rect x="12" y="4" width="8" height="3" fill="#14532d"/><rect x="10" y="6" width="12" height="1" fill="#16a34a"/>`
+    },
+    "公證人紅袍": {
+      name:"公證人紅袍", price:20, category:"法袍",
+      desc:"辦理公證業務使用，莊嚴的紅邊鑲飾象徵公信力與信任。",
+      icon:`<rect x="3" y="4" width="10" height="10" fill="#7f1d1d" rx="1"/><rect x="4" y="4" width="10" height="2" fill="#dc2626"/><rect x="3" y="4" width="1" height="10" fill="#dc2626"/><rect x="12" y="4" width="1" height="10" fill="#dc2626"/>`,
+      robe:`<rect x="11" y="15" width="10" height="13" fill="#7f1d1d" rx="1"/><rect x="12" y="16" width="8" height="11" fill="#991b1b"/><rect x="11" y="15" width="10" height="1" fill="#dc2626"/><rect x="11" y="15" width="1" height="13" fill="#dc2626"/><rect x="20" y="15" width="1" height="13" fill="#dc2626"/><rect x="15" y="15" width="2" height="13" fill="#b91c1c"/>`,
+      head:`<rect x="12" y="4" width="8" height="3" fill="#7f1d1d"/><rect x="10" y="6" width="12" height="1" fill="#dc2626"/>`
+    },
+    "齊先生的黃金大法袍": {
+      name:"齊先生的黃金大法袍", price:60, category:"法袍",
+      desc:"傳說中的終極法袍，通過所有考試的至高勝利象徵！",
+      icon:`<rect x="2" y="3" width="12" height="11" fill="#b45309" rx="2"/><rect x="3" y="4" width="10" height="9" fill="#d97706"/><rect x="7" y="3" width="2" height="11" fill="#fef08a"/>`,
+      robe:`<rect x="10" y="15" width="12" height="13" fill="#b45309" rx="2"/><rect x="11" y="16" width="10" height="11" fill="#d97706"/><rect x="15" y="15" width="2" height="13" fill="#fef08a"/><circle cx="16" cy="21" r="1" fill="#f59e0b"/>`,
+      head:`<rect x="12" y="3" width="8" height="4" fill="#b45309"/><rect x="10" y="6" width="12" height="1" fill="#fef08a"/><rect x="15" y="3" width="2" height="4" fill="#fef08a"/>`
+    }
+  },
+  tools: {
+    "六法全書": {
+      name:"六法全書", price:5, category:"道具",
+      desc:"法師的必備典籍，知識的源泉。",
+      icon:`<rect x="3" y="2" width="9" height="12" fill="#1e3a8a" rx="1"/><rect x="4" y="3" width="7" height="10" fill="#dbeafe"/><rect x="5" y="5" width="5" height="1" fill="#1e3a8a"/><rect x="5" y="7" width="5" height="1" fill="#1e3a8a"/><rect x="5" y="9" width="3" height="1" fill="#1e3a8a"/>`,
+      graphic:`<rect x="22" y="14" width="6" height="9" fill="#1e3a8a" rx="1"/><rect x="23" y="15" width="4" height="7" fill="#dbeafe"/><rect x="24" y="16" width="2" height="1" fill="#1e3a8a"/><rect x="24" y="18" width="2" height="1" fill="#1e3a8a"/>`
+    },
+    "法槌": {
+      name:"法槌", price:6, category:"道具",
+      desc:"法官的法槌，象徵最終裁決。咚！",
+      icon:`<rect x="5" y="7" width="6" height="5" fill="#7c3aed" rx="1"/><rect x="7" y="7" width="2" height="8" fill="#6b21a8"/><rect x="6" y="11" width="5" height="2" fill="#5b21b6"/>`,
+      graphic:`<rect x="20" y="14" width="7" height="4" fill="#7c3aed" rx="1"/><rect x="23" y="14" width="2" height="9" fill="#6b21a8"/><rect x="21" y="17" width="6" height="2" fill="#5b21b6"/>`
+    },
+    "咖啡杯": {
+      name:"咖啡杯", price:3, category:"道具",
+      desc:"法師的戰鬥燃料，一杯下去精神百倍！",
+      icon:`<rect x="4" y="5" width="8" height="9" fill="#fff" rx="1" stroke="#3a2211" stroke-width="1"/><rect x="5" y="7" width="6" height="5" fill="#6b3a1f"/><path d="M12 8 Q14 8 14 10 Q14 12 12 12" fill="none" stroke="#3a2211" stroke-width="1"/><rect x="4" y="13" width="8" height="1" fill="#e2d6b5"/>`,
+      graphic:`<rect x="21" y="17" width="5" height="6" fill="#fff" rx="1"/><rect x="22" y="18" width="3" height="4" fill="#6b3a1f"/><path d="M26 19 Q28 19 28 21 Q28 23 26 23" fill="none" stroke="#3a2211" stroke-width="1"/>`
+    },
+    "羽毛筆": {
+      name:"羽毛筆", price:4, category:"道具",
+      desc:"書記官的墨水筆，記錄一切的神聖文具。",
+      icon:`<path d="M8 2 L14 8 L7 14 L5 12 Z" fill="#fef9c3"/><path d="M8 2 L14 8 L11 11" fill="#fde68a"/><rect x="5" y="12" width="1" height="3" fill="#3a2211"/>`,
+      graphic:`<path d="M25 12 L28 15 L22 22 L20 20 Z" fill="#fef9c3"/><path d="M25 12 L28 15 L26 19" fill="#fde68a"/><rect x="20" y="20" width="1" height="3" fill="#3a2211"/>`
+    },
+    "法典卷軸": {
+      name:"法典卷軸", price:5, category:"道具",
+      desc:"古老的法律卷軸，蘊含無數法條智慧。",
+      icon:`<rect x="3" y="5" width="10" height="8" fill="#fef3c7" rx="1"/><rect x="3" y="5" width="10" height="1" fill="#d97706"/><rect x="3" y="12" width="10" height="1" fill="#d97706"/><rect x="5" y="7" width="6" height="1" fill="#9ca3af"/><rect x="5" y="9" width="4" height="1" fill="#9ca3af"/>`,
+      graphic:`<rect x="20" y="15" width="8" height="7" fill="#fef3c7" rx="1"/><rect x="20" y="15" width="8" height="1" fill="#d97706"/><rect x="20" y="21" width="8" height="1" fill="#d97706"/><rect x="22" y="17" width="4" height="1" fill="#9ca3af"/>`
+    },
+    "星空水晶球": {
+      name:"星空水晶球", price:10, category:"道具",
+      desc:"預測考題的神秘水晶球，法師的秘密武器！",
+      icon:`<circle cx="8" cy="8" r="5" fill="#2563eb"/><circle cx="8" cy="8" r="4" fill="#1d4ed8"/><circle cx="7" cy="7" r="1" fill="#93c5fd" opacity="0.8"/><circle cx="10" cy="9" r="1" fill="#bfdbfe" opacity="0.5"/><rect x="6" y="13" width="4" height="2" fill="#7c3aed" rx="1"/>`,
+      graphic:`<circle cx="24" cy="19" r="4" fill="#2563eb"/><circle cx="24" cy="19" r="3" fill="#1d4ed8"/><circle cx="23" cy="18" r="1" fill="#93c5fd" opacity="0.7"/>`
+    },
+    "魔法帽": {
+      name:"魔法帽", price:7, category:"道具",
+      desc:"加成法術知識+10，戴上它成為真正的法師！",
+      icon:`<polygon points="8,2 4,12 12,12" fill="#581c87"/><rect x="3" y="11" width="10" height="2" fill="#7e22ce"/><circle cx="8" cy="7" r="1" fill="#fef08a"/>`,
+      graphic:`<polygon points="24,10 20,18 28,18" fill="#581c87"/><rect x="19" y="17" width="10" height="2" fill="#7e22ce"/><circle cx="24" cy="14" r="1" fill="#fef08a"/>`
+    },
+    "勝訴判決書": {
+      name:"勝訴判決書", price:15, category:"道具",
+      desc:"傳說中的勝訴判決，考試必勝護身符！",
+      icon:`<rect x="2" y="2" width="12" height="14" fill="#fff" rx="1" stroke="#dc2626" stroke-width="2"/><rect x="4" y="5" width="8" height="1" fill="#374151"/><rect x="4" y="7" width="6" height="1" fill="#374151"/><rect x="4" y="9" width="7" height="1" fill="#374151"/><rect x="4" y="12" width="4" height="1" fill="#dc2626"/><text x="8" y="14" font-size="3" fill="#dc2626" text-anchor="middle">✓</text>`,
+      graphic:`<rect x="20" y="13" width="8" height="11" fill="#fff" rx="1"/><rect x="20" y="13" width="8" height="11" fill="none" stroke="#dc2626" stroke-width="1"/><rect x="21" y="15" width="5" height="1" fill="#374151"/><rect x="21" y="17" width="4" height="1" fill="#374151"/><rect x="21" y="20" width="3" height="1" fill="#dc2626"/>`
+    }
+  }
+};
+
+// ══════════════════════════════════════════
+//  SUBJECT COLOURS
+// ══════════════════════════════════════════
+const PALETTE = [
+  '#dc2626','#d97706','#16a34a','#0369a1','#7c3aed',
+  '#db2777','#0891b2','#65a30d','#ea580c','#4f46e5'
+];
+function subjColor(idx){ return PALETTE[idx % PALETTE.length]; }
+
+// ══════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════
+const DAYS = ['週一','週二','週三','週四','週五','週六','週日'];
+const SESSIONS = [
+  {key:'am', label:'早', cls:'sess-am'},
+  {key:'pm', label:'中', cls:'sess-pm'},
+  {key:'eve',label:'晚', cls:'sess-eve'}
+];
+
+function makeSlot(hours){ return {subject:'休息', hours}; }
+function makeDefaultSchedule(){
+  const sched = {};
+  DAYS.forEach(d=>{
+    sched[d]={};
+    SESSIONS.forEach(s=>{ sched[d][s.key]=makeSlot(s.key==='pm'?3:2); });
+  });
+  return sched;
+}
+
+function makeDailyTasks(){
+  return {am:{1:false},pm:{1:false},eve:{1:false}};
+}
+
+let S = {
+  examDate:'',
+  schedule: makeDefaultSchedule(),
+  subjects: [
+    {
+      name:'民法',
+      books:[
+        {title:'民法總則', total:500, current:0, speed:4},
+        {title:'債法總論', total:400, current:0, speed:4}
+      ]
+    }
+  ],
+  gold: 0,
+  ownedRobes: ["初學者灰袍"],
+  ownedTools: [],
+  equippedRobe: "初學者灰袍",
+  equippedTool: null,
+  dailyTasks: makeDailyTasks(),
+  dailyTaskDate: ""
+};
+
+// ══════════════════════════════════════════
+//  PERSIST
+// ══════════════════════════════════════════
+function load(){
+  const r=localStorage.getItem('SDv24');
+  if(r){try{
+    const p=JSON.parse(r);
+    if(!p.schedule) p.schedule=makeDefaultSchedule();
+    DAYS.forEach(d=>{
+      if(!p.schedule[d]) p.schedule[d]={};
+      SESSIONS.forEach(s=>{
+        if(!p.schedule[d][s.key]) p.schedule[d][s.key]=makeSlot(s.key==='pm'?3:2);
+      });
+    });
+    if(!p.gold) p.gold=0;
+    if(!p.ownedRobes) p.ownedRobes=["初學者灰袍"];
+    if(!p.ownedTools) p.ownedTools=[];
+    if(!p.equippedRobe) p.equippedRobe="初學者灰袍";
+    if(!p.equippedTool) p.equippedTool=null;
+    if(!p.dailyTasks) p.dailyTasks=makeDailyTasks();
+    if(!p.dailyTaskDate) p.dailyTaskDate="";
+    S=p;
+  }catch(e){}}
+  document.getElementById('exam-date').value=S.examDate||'';
+  showToday();
+  checkDailyReset();
+}
+
+function save(){
+  S.examDate=document.getElementById('exam-date').value;
+  localStorage.setItem('SDv24',JSON.stringify(S));
+}
+
+function resetAll(){
+  if(!confirm('確定清空所有資料？'))return;
+  localStorage.removeItem('SDv24');location.reload();
+}
+
+// ══════════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════════
+const NOW_DATE = "2026/5/21";
+function showToday(){
+  document.getElementById('today-display').innerText = "今天是：" + NOW_DATE;
+  document.getElementById('daily-date-display').innerText = "今日任務（" + NOW_DATE + "）";
+}
+function addDays(d,n){ const r=new Date(d);r.setDate(r.getDate()+n);return r; }
+function diffDays(a,b){ return Math.ceil((b-a)/86400000); }
+function ds(d){ return d.toLocaleDateString('zh-TW',{year:'numeric',month:'numeric',day:'numeric'}); }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+function fmt(n){ return Number(n).toLocaleString(); }
+function allSubjectNames(){ return S.subjects.map(s=>s.name); }
+
+// ══════════════════════════════════════════
+//  GOLD & WALLET
+// ══════════════════════════════════════════
+function updateGoldUI(){
+  document.getElementById('gold-display').innerText = S.gold;
+}
+
+// ══════════════════════════════════════════
+//  DAILY TASKS
+// ══════════════════════════════════════════
+function checkDailyReset(){
+  if(S.dailyTaskDate !== NOW_DATE){
+    S.dailyTasks = makeDailyTasks();
+    S.dailyTaskDate = NOW_DATE;
+    save();
+  }
+  renderDailyTasks();
+}
+
+function renderDailyTasks(){
+  let todayCoins = 0;
+  ['am','pm','eve'].forEach(sess=>{
+    [1].forEach(n=>{
+      const done = S.dailyTasks[sess][n];
+      const box = document.getElementById('task-'+sess+'-'+n);
+      const chk = document.getElementById('chk-'+sess+'-'+n);
+      if(box){ box.className='daily-task'+(done?' done':''); }
+      if(chk){ chk.checked=done; }
+      if(done) todayCoins++;
+    });
+  });
+  document.getElementById('daily-coins-today').innerText = todayCoins;
+  updateGoldUI();
+}
+
+function toggleDailyTask(sess, n, checked){
+  const wasChecked = S.dailyTasks[sess][n];
+  S.dailyTasks[sess][n] = checked;
+  if(checked && !wasChecked){
+    S.gold += 1;
+  } else if(!checked && wasChecked){
+    S.gold = Math.max(0, S.gold - 1);
+  }
+  save();
+  renderDailyTasks();
+}
+
+// ══════════════════════════════════════════
+//  EXAM COUNTDOWN in config
+// ══════════════════════════════════════════
+function renderExamCountdown(daysLeft, weeksLeft, examDate){
+  const el = document.getElementById('exam-countdown');
+  if(!S.examDate){
+    el.innerText = "請先設定考試日期";
+    return;
+  }
+  el.innerText = `☀️ 📊 距考試（${ds(examDate)}）還有 ${daysLeft} 天（${weeksLeft.toFixed(1)} 週）`;
+}
+
+// ══════════════════════════════════════════
+//  AVATAR & INVENTORY
+// ══════════════════════════════════════════
+function updateAvatar(){
+  const robeData = ITEMS.robes[S.equippedRobe] || ITEMS.robes["初學者灰袍"];
+  const toolData = S.equippedTool ? ITEMS.tools[S.equippedTool] : null;
+  document.getElementById('avatar-robe-layer').innerHTML = robeData.robe;
+  document.getElementById('avatar-head-layer').innerHTML = robeData.head;
+  document.getElementById('avatar-item-layer').innerHTML = toolData ? toolData.graphic : '';
+  document.getElementById('avatar-status').innerHTML = robeData.name + (toolData ? '<br>'+toolData.name : '');
+}
+
+function renderInventory(){
+  const grid = document.getElementById('inventory-grid');
+  grid.innerHTML = '';
+  // robes
+  S.ownedRobes.forEach(key=>{
+    const item = ITEMS.robes[key];
+    if(!item) return;
+    const isEq = S.equippedRobe === key;
+    const slot = document.createElement('div');
+    slot.className = 'inv-slot' + (isEq?' equipped':'');
+    slot.title = item.name + '：' + item.desc;
+    slot.onclick = ()=>{ S.equippedRobe=key; save(); updateAvatar(); renderInventory(); };
+    slot.innerHTML = `<svg viewBox="0 0 16 16">${item.icon}</svg><div class="slot-label">${item.name}</div>`;
+    grid.appendChild(slot);
+  });
+  // tools
+  S.ownedTools.forEach(key=>{
+    const item = ITEMS.tools[key];
+    if(!item) return;
+    const isEq = S.equippedTool === key;
+    const slot = document.createElement('div');
+    slot.className = 'inv-slot' + (isEq?' equipped':'');
+    slot.title = item.name + '：' + item.desc;
+    slot.onclick = ()=>{
+      S.equippedTool = (S.equippedTool===key) ? null : key;
+      save(); updateAvatar(); renderInventory();
+    };
+    slot.innerHTML = `<svg viewBox="0 0 16 16">${item.icon}</svg><div class="slot-label">${item.name}</div>`;
+    grid.appendChild(slot);
+  });
+}
+
+// ══════════════════════════════════════════
+//  SHOP
+// ══════════════════════════════════════════
+function renderShop(){
+  const container = document.getElementById('shop-container');
+  let html = '';
+
+  // Robes section
+  html += `<div class="shop-section-title">⚖️ 法袍系列</div><div class="shop-grid">`;
+  for(const key in ITEMS.robes){
+    const item = ITEMS.robes[key];
+    if(item.price === 0) continue;
+    const owned = S.ownedRobes.includes(key);
+    html += `<div class="shop-item ${owned?'owned':''}">
+      <svg viewBox="0 0 16 16">${item.icon}</svg>
+      <div style="font-weight:900;font-size:12px;margin-top:4px;">${item.name}</div>
+      <div style="font-size:10px;color:#666;margin:4px 0;">${item.desc}</div>
+      <div style="color:var(--gold);font-weight:900;margin:4px 0;">${owned?'已擁有':item.price+' 🪙'}</div>
+      <button class="btn btn-sm ${owned?'btn-b':'btn-w'}" onclick="${owned?`equipFromShop('robe','${key}')`:`buyItem('robe','${key}',${item.price})`}" style="width:100%;margin-top:4px;">
+        ${owned?'立即穿上':'購買'}
+      </button>
+    </div>`;
+  }
+  html += `</div>`;
+
+  // Tools section
+  html += `<div class="shop-section-title">🔮 法師道具</div><div class="shop-grid">`;
+  for(const key in ITEMS.tools){
+    const item = ITEMS.tools[key];
+    const owned = S.ownedTools.includes(key);
+    html += `<div class="shop-item ${owned?'owned':''}">
+      <svg viewBox="0 0 16 16">${item.icon}</svg>
+      <div style="font-weight:900;font-size:12px;margin-top:4px;">${item.name}</div>
+      <div style="font-size:10px;color:#666;margin:4px 0;">${item.desc}</div>
+      <div style="color:var(--gold);font-weight:900;margin:4px 0;">${owned?'已擁有':item.price+' 🪙'}</div>
+      <button class="btn btn-sm ${owned?'btn-b':'btn-w'}" onclick="${owned?`equipFromShop('tool','${key}')`:`buyItem('tool','${key}',${item.price})`}" style="width:100%;margin-top:4px;">
+        ${owned?'立即持用':'購買'}
+      </button>
+    </div>`;
+  }
+  html += `</div>`;
+
+  container.innerHTML = html;
+}
+
+function buyItem(type, key, price){
+  if(S.gold < price){ alert('❌ 金幣不足！完成每日任務或讀書來獲得金幣。'); return; }
+  S.gold -= price;
+  if(type==='robe'){ S.ownedRobes.push(key); S.equippedRobe=key; }
+  else { S.ownedTools.push(key); S.equippedTool=key; }
+  save(); updateGoldUI(); updateAvatar(); renderInventory(); renderShop();
+  alert(`🎉 購買成功：${key}！已自動裝備。`);
+}
+
+function equipFromShop(type, key){
+  if(type==='robe') S.equippedRobe=key;
+  else S.equippedTool = (S.equippedTool===key)?null:key;
+  save(); updateAvatar(); renderInventory(); renderShop();
+}
+
+// ══════════════════════════════════════════
+//  TOY: PAGE RACER LOGIC
+// ══════════════════════════════════════════
+let racerInterval = null;
+let racerStartTime = null;
+let racerTotalSeconds = 0;
+let racerElapsedBeforePause = 0;
+let isRacerPaused = false;
+
+function handleRacerInput(source) {
+  const startPage = +document.getElementById('rc-start').value;
+  const endPage = +document.getElementById('rc-end').value;
+  const totalPages = endPage - startPage;
+  if (totalPages <= 0) return;
+  if (source === 'time' || source === 'page') {
+    const totalMin = +document.getElementById('rc-min').value;
+    if (totalMin > 0) document.getElementById('rc-speed-input').value = (totalMin / totalPages).toFixed(2);
+  } else if (source === 'speed') {
+    const speed = +document.getElementById('rc-speed-input').value;
+    if (speed > 0) document.getElementById('rc-min').value = Math.round(speed * totalPages);
+  }
+}
+
+function getRacerConfig() {
+  const startPage = +document.getElementById('rc-start').value;
+  const endPage = +document.getElementById('rc-end').value;
+  const totalMin = +document.getElementById('rc-min').value;
+  const totalPages = endPage - startPage;
+  if (totalPages <= 0 || totalMin <= 0) return null;
+  return { startPage, endPage, totalMin, totalPages };
+}
+
+function startRacer() {
+  const config = getRacerConfig();
+  if (!config) { alert('請確認結束頁碼大於起始頁碼，且預計時間大於 0 分鐘。'); return; }
+  document.getElementById('rc-panel').style.display = 'block';
+  document.getElementById('rc-result').style.display = 'none';
+  document.getElementById('rc-btn-start').disabled = true;
+  document.getElementById('rc-btn-pause').disabled = false;
+  document.getElementById('rc-btn-stop').disabled = false;
+  document.getElementById('rc-btn-pause').innerText = '⏸️ 暫停計時';
+  racerTotalSeconds = config.totalMin * 60;
+  racerStartTime = Date.now();
+  racerElapsedBeforePause = 0;
+  isRacerPaused = false;
+  document.getElementById('rc-pause-status').style.display = 'none';
+  if (racerInterval) clearInterval(racerInterval);
+  racerInterval = setInterval(updateRacerTicks, 1000);
+  updateRacerTicks();
+}
+
+function togglePauseRacer() {
+  if (!racerInterval && !isRacerPaused) return;
+  if (!isRacerPaused) {
+    isRacerPaused = true;
+    clearInterval(racerInterval); racerInterval = null;
+    racerElapsedBeforePause += Math.floor((Date.now() - racerStartTime) / 1000);
+    document.getElementById('rc-btn-pause').innerText = '▶️ 繼續計時';
+    document.getElementById('rc-pause-status').style.display = 'inline';
+  } else {
+    isRacerPaused = false;
+    racerStartTime = Date.now();
+    document.getElementById('rc-btn-pause').innerText = '⏸️ 暫停計時';
+    document.getElementById('rc-pause-status').style.display = 'none';
+    racerInterval = setInterval(updateRacerTicks, 1000);
+  }
+}
+
+function updateRacerTicks() {
+  const config = getRacerConfig();
+  if (!config) return;
+  let currentElapsed = racerElapsedBeforePause;
+  if (!isRacerPaused && racerStartTime) currentElapsed += Math.floor((Date.now() - racerStartTime) / 1000);
+  const remainingSeconds = Math.max(0, racerTotalSeconds - currentElapsed);
+  const m = Math.floor(remainingSeconds / 60);
+  const s = remainingSeconds % 60;
+  document.getElementById('rc-time-left').innerText = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  const ratio = Math.min(1, currentElapsed / racerTotalSeconds);
+  const currentTargetPage = (config.startPage + (config.totalPages * ratio)).toFixed(1);
+  document.getElementById('rc-current-target').innerText = currentTargetPage;
+  const pct = (ratio * 100).toFixed(1);
+  document.getElementById('rc-bar').style.width = `${pct}%`;
+  document.getElementById('rc-bar-text').innerText = `時間進度：${pct}%`;
+  if (remainingSeconds <= 0) stopRacer();
+}
+
+function stopRacer() {
+  if (racerInterval) { clearInterval(racerInterval); racerInterval = null; }
+  const config = getRacerConfig();
+  let currentElapsed = racerElapsedBeforePause;
+  if (!isRacerPaused && racerStartTime) currentElapsed += Math.floor((Date.now() - racerStartTime) / 1000);
+  const elapsedMinutes = currentElapsed / 60;
+  document.getElementById('rc-btn-start').disabled = false;
+  document.getElementById('rc-btn-pause').disabled = true;
+  document.getElementById('rc-btn-stop').disabled = true;
+  document.getElementById('rc-pause-status').style.display = 'none';
+  isRacerPaused = false;
+  if (config) {
+    const actualSpeed = (elapsedMinutes / config.totalPages).toFixed(2);
+    const targetSpeed = (+document.getElementById('rc-speed-input').value).toFixed(2);
+    document.getElementById('rc-result').style.display = 'block';
+    document.getElementById('rc-result-text').innerHTML = `🏁 <strong>賽車手結算報告：</strong><br>
+      ⏱️ 本次總共花費時間：<strong>${(elapsedMinutes).toFixed(1)}</strong> 分鐘<br>
+      📖 總共閱讀頁數：<strong>${config.totalPages}</strong> 頁<br>
+      🚀 實際配速為：<span style="color:var(--blue); font-size:14px;"><strong>${actualSpeed}</strong></span> 分/頁 (原預估為 ${targetSpeed} 分/頁)。`;
+  }
+}
+
+function clearRacerResult() {
+  document.getElementById('rc-result').style.display = 'none';
+  document.getElementById('rc-panel').style.display = 'none';
+  document.getElementById('rc-result-text').innerHTML = '';
+}
+
+// ══════════════════════════════════════════
+//  RENDER SCHEDULE TABLE
+// ══════════════════════════════════════════
+function renderSchedule(){
+  const tbl=document.getElementById('sched-table');
+  const subjNames=allSubjectNames();
+  let html=`<thead><tr><th style="width:60px;">時段</th>${DAYS.map(d=>`<th>${d}</th>`).join('')}</tr></thead><tbody>`;
+  SESSIONS.forEach(sess=>{
+    html+=`<tr><td style="text-align:center;"><span class="session-label ${sess.cls}">${sess.label}</span></td>`;
+    DAYS.forEach(day=>{
+      const slot=S.schedule[day][sess.key];
+      const subjIdx=subjNames.indexOf(slot.subject);
+      const color=subjIdx>=0?subjColor(subjIdx):'#9ca3af';
+      const badgeTxt=slot.subject==='休息'?'休息':slot.subject;
+      html+=`<td><div class="slot-cell">
+        <div class="slot-hours"><input type="number" min="0" max="12" step="0.5" value="${slot.hours}" onchange="updSlotHours('${day}','${sess.key}',+this.value)"><span style="font-size:11px;">h</span></div>
+        <div class="slot-subject"><select onchange="updSlotSubject('${day}','${sess.key}',this.value)">${['休息',...subjNames].map(n=>`<option value="${esc(n)}"${n===slot.subject?' selected':''}>${esc(n)}</option>`).join('')}</select></div>
+        <span class="slot-badge" style="background:${color};">${esc(badgeTxt)}</span>
+      </div></td>`;
+    });
+    html+=`</tr>`;
+  });
+  html+=`</tbody>`;
+  tbl.innerHTML=html;
+}
+
+function updSlotHours(day,sess,val){ S.schedule[day][sess].hours=val; save();run(); }
+function updSlotSubject(day,sess,val){ S.schedule[day][sess].subject=val; save();renderSchedule();run(); }
+function applyDefaultHours(sess,val){ DAYS.forEach(d=>{ S.schedule[d][sess].hours=+val; }); save();renderSchedule();run(); }
+function fillAllSlots(){
+  const am=+document.getElementById('def-am').value;
+  const pm=+document.getElementById('def-pm').value;
+  const eve=+document.getElementById('def-eve').value;
+  DAYS.forEach(d=>{ S.schedule[d]['am'].hours=am; S.schedule[d]['pm'].hours=pm; S.schedule[d]['eve'].hours=eve; });
+  save();renderSchedule();run();
+}
+
+// ══════════════════════════════════════════
+//  COMPUTE SUBJECT WEEKLY HOURS
+// ══════════════════════════════════════════
+function computeWeeklyHoursPerSubject(){
+  const map={};
+  DAYS.forEach(d=>{ SESSIONS.forEach(s=>{
+    const slot=S.schedule[d][s.key];
+    if(slot.subject && slot.subject!=='休息') map[slot.subject]=(map[slot.subject]||0)+slot.hours;
+  }); });
+  return map;
+}
+
+// ══════════════════════════════════════════
+//  RENDER BOOKS AREA
+// ══════════════════════════════════════════
+function renderBooks(){
+  const area=document.getElementById('books-area');
+  if(!S.subjects.length){area.innerHTML='<div style="color:#888;font-size:13px;">尚未新增科目。</div>';return;}
+  let html='';
+  S.subjects.forEach((subj,si)=>{
+    const color=subjColor(si);
+    html+=`<div class="subj-section">
+      <div class="subj-section-title" style="border-color:${color};background:${color}20;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${color};"></span>
+          <input value="${esc(subj.name)}" onchange="updSubjName(${si},this.value)" style="font-size:13px;font-weight:900;border:2px solid ${color};padding:3px 7px;min-width:100px;background:#fff;">
+        </div>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-g btn-sm" onclick="addBook(${si})">＋ 新增書本</button>
+          <button class="btn btn-r btn-sm" onclick="removeSubject(${si})">刪除科目</button>
+        </div>
+      </div>
+      <div class="book-wrap"><table class="book-tbl">
+        <thead><tr><th>書名</th><th>總頁數</th><th>已讀頁數<br><span style="font-size:10px;font-weight:400;">手動更新</span></th><th>速度<br><span style="font-size:10px;font-weight:400;">(分/頁)</span></th><th>進度</th><th>所需時數</th><th></th></tr></thead>
+        <tbody>`;
+    subj.books.forEach((b,bi)=>{
+      const rem=Math.max(0,b.total-b.current);
+      const pct=b.total>0?Math.min(100,Math.round(b.current/b.total*100)):0;
+      const hrs=(rem*b.speed/60).toFixed(1);
+      html+=`<tr>
+        <td><input value="${esc(b.title)}" onchange="updBook(${si},${bi},'title',this.value)" style="min-width:120px;"></td>
+        <td><input type="number" value="${b.total}" onchange="updBook(${si},${bi},'total',+this.value)" style="width:68px;"></td>
+        <td><input type="number" value="${b.current}" onchange="updBook(${si},${bi},'current',+this.value)" style="width:68px;"></td>
+        <td><input type="number" value="${b.speed}" onchange="updBook(${si},${bi},'speed',+this.value)" style="width:58px;"></td>
+        <td><div class="pt">${b.current}/${b.total}（${pct}%）</div><div class="mini-bar"><div class="mini-fill" style="width:${pct}%;"></div></div><div class="pt">剩 ${fmt(rem)} 頁</div></td>
+        <td style="text-align:right;font-weight:700;">${hrs} 小時<br><span style="font-size:10px;color:#888;">${fmt(rem)} 頁 × ${b.speed}分 ÷ 60</span></td>
+        <td><button class="btn btn-r btn-sm" onclick="removeBook(${si},${bi})">移除</button></td>
+      </tr>`;
+    });
+    html+=`</tbody></table></div></div>`;
+  });
+  area.innerHTML=html;
+}
+
+function addSubject(){ S.subjects.push({name:'新科目',books:[{title:'請填寫書名',total:400,current:0,speed:4}]}); save();run(); }
+function removeSubject(si){ if(!confirm('確定刪除此科目及其所有書本？'))return; S.subjects.splice(si,1); save();run(); }
+function updSubjName(si,val){
+  const old=S.subjects[si].name; S.subjects[si].name=val;
+  DAYS.forEach(d=>SESSIONS.forEach(s=>{ if(S.schedule[d][s.key].subject===old) S.schedule[d][s.key].subject=val; }));
+  save();run();
+}
+function addBook(si){ S.subjects[si].books.push({title:'新書',total:300,current:0,speed:4}); save();run(); }
+function removeBook(si,bi){ if(!confirm('確定移除？'))return; S.subjects[si].books.splice(si,1); save();run(); }
+function updBook(si,bi,field,val){
+  S.subjects[si].books[bi][field]=val;
+  const b=S.subjects[si].books[bi];
+  if(b.current>b.total)b.current=b.total;
+  if(b.current<0)b.current=0;
+  save();run();
+}
+
+// ══════════════════════════════════════════
+//  RENDER SUBJECT SUMMARY
+// ══════════════════════════════════════════
+function renderSubjSummary(weeklyHrs, daysLeft){
+  const el=document.getElementById('subj-summary-wrap');
+  if(!S.subjects.length){el.innerHTML='<div style="color:#888;font-size:13px;">尚未新增科目。</div>';return;}
+  if(!S.examDate){el.innerHTML='<div style="color:#888;font-size:13px;">請先設定考試日期。</div>';return;}
+  const weeksLeft = daysLeft/7;
+  let html=`<div style="overflow-x:auto;"><table class="subj-table"><thead><tr><th>科目</th><th>每週排定時數</th><th>考試前總可用時數</th><th>所有書本合計需要時數</th><th>時間差距</th><th>判斷</th></tr></thead><tbody>`;
+  S.subjects.forEach((subj,si)=>{
+    const color=subjColor(si);
+    const wh=weeklyHrs[subj.name]||0;
+    const avail=wh*weeksLeft;
+    const needed=subj.books.reduce((a,b)=>{const rem=Math.max(0,b.total-b.current);return a+rem*b.speed/60;},0);
+    const diff=avail-needed;
+    const ok=diff>=0;
+    const allDone=subj.books.every(b=>b.current>=b.total);
+    html+=`<tr>
+      <td><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${color};margin-right:6px;"></span><strong>${esc(subj.name)}</strong></td>
+      <td style="text-align:right;"><span class="big-num">${wh.toFixed(1)}</span> h/週</td>
+      <td style="text-align:right;"><span class="big-num" style="color:var(--blue);">${avail.toFixed(1)}</span> 小時</td>
+      <td style="text-align:right;"><span class="big-num" style="color:${ok?'var(--green)':'var(--red)'};">${needed.toFixed(1)}</span> 小時</td>
+      <td style="text-align:right;font-weight:900;color:${ok?'var(--green)':'var(--red)'};">${ok?'+':''}${diff.toFixed(1)} h</td>
+      <td>${allDone?'<span class="chip done2">✅ 已完成</span>':ok?'<span class="chip ok2">☀️ 來得及</span>':'<span class="chip warn2">⚠️ 來不及</span>'}</td>
+    </tr>`;
+  });
+  html+=`</tbody></table></div>`;
+  el.innerHTML=html;
+}
+
+// ══════════════════════════════════════════
+//  RENDER TIMELINE
+// ══════════════════════════════════════════
+function renderTimelineTable(weeklyHrs, examDate){
+  const el=document.getElementById('timeline-area');
+  const now = new Date(NOW_DATE);
+  if(!S.subjects.length){el.innerHTML='<div style="color:#888;font-size:12px;">請先新增科目與書本。</div>';return;}
+  let html=`<table class="timeline-table"><thead><tr><th>科目</th><th>書名</th><th>剩餘所需時數</th><th>預計結束日期</th><th>狀態判斷</th></tr></thead><tbody>`;
+  S.subjects.forEach((subj, si) => {
+    const color = subjColor(si);
+    const wh = weeklyHrs[subj.name] || 0;
+    const hpd = wh / 7;
+    let cursor = new Date(now);
+    subj.books.forEach((b) => {
+      const rem = Math.max(0, b.total - b.current);
+      const hrs = rem * b.speed / 60;
+      let finDate;
+      if (rem === 0) { finDate = new Date(now); }
+      else if (hpd <= 0) { finDate = null; }
+      else { const daysNeeded = Math.ceil(hrs / hpd); finDate = addDays(cursor, daysNeeded); cursor = new Date(finDate); }
+      let dateStr = '', statusChip = '';
+      if (rem === 0) { dateStr = '<span style="color:var(--blue); font-weight:700;">✅ 已完成</span>'; statusChip = '<span class="chip done2">已完成</span>'; }
+      else if (!finDate) { dateStr = '<span style="color:var(--red); font-weight:700;">無法計算</span>'; statusChip = '<span class="chip warn2">⚠️ 未排讀書時數</span>'; }
+      else {
+        dateStr = ds(finDate);
+        if (examDate && finDate <= examDate) { statusChip = '<span class="chip ok2">☀️ 準時完成</span>'; }
+        else if (examDate) { statusChip = '<span class="chip warn2">⚠️ 超出考試日期</span>'; }
+        else { statusChip = '<span class="chip">未設定考試日</span>'; }
+      }
+      html += `<tr>
+        <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${color};margin-right:6px;"></span><strong>${esc(subj.name)}</strong></td>
+        <td>${esc(b.title)}</td><td>${hrs.toFixed(1)} 小時</td><td>${dateStr}</td><td>${statusChip}</td>
+      </tr>`;
+    });
+  });
+  html += `</tbody></table>`;
+  el.innerHTML = html;
+}
+
+// ══════════════════════════════════════════
+//  RENDER CALC
+// ══════════════════════════════════════════
+function renderCalc(weeklyHrs, daysLeft){
+  const el=document.getElementById('calc-content');
+  if(!S.examDate||!S.subjects.length){el.innerHTML='<div style="color:#888;font-size:13px;">輸入資料後自動精算。</div>';return;}
+  const weeksLeft=daysLeft/7;
+  const totalWeeklyHrs=Object.values(weeklyHrs).reduce((a,b)=>a+b,0);
+  const totalAvail=totalWeeklyHrs*weeksLeft;
+  const totalNeeded=S.subjects.reduce((a,subj)=>a+subj.books.reduce((b2,bk)=>{const rem=Math.max(0,bk.total-bk.current);return b2+rem*bk.speed/60;},0),0);
+  const ok=totalAvail>=totalNeeded;
+  let subjRows='';
+  S.subjects.forEach((subj,si)=>{
+    const wh=weeklyHrs[subj.name]||0;
+    const avail=wh*weeksLeft;
+    const needed=subj.books.reduce((a,b)=>{const rem=Math.max(0,b.total-b.current);return a+rem*b.speed/60;},0);
+    const diff=avail-needed;
+    subjRows+=`<tr><td><strong>${esc(subj.name)}</strong></td><td style="text-align:right;">${wh.toFixed(1)} h/週</td><td style="text-align:right;">${wh.toFixed(1)} × ${weeksLeft.toFixed(1)} = <strong>${avail.toFixed(1)}</strong> h</td><td style="text-align:right;">${needed.toFixed(1)} h</td><td style="text-align:right;font-weight:900;color:${diff>=0?'var(--green)':'var(--red)'};">${diff>=0?'+':''}${diff.toFixed(1)} h</td></tr>`;
+  });
+  el.innerHTML=`
+    <div style="overflow-x:auto;"><table style="font-size:12px;min-width:500px;border-collapse:collapse;"><thead><tr style="background:var(--stripe);"><th style="padding:7px;border:2px solid var(--border);">科目</th><th style="padding:7px;border:2px solid var(--border);">每週排定時數</th><th style="padding:7px;border:2px solid var(--border);">考試前可用時數</th><th style="padding:7px;border:2px solid var(--border);">實際需要時數</th><th style="padding:7px;border:2px solid var(--border);">時間差</th></tr></thead><tbody>${subjRows}</tbody></table></div>
+    <div class="calc-box">
+      <div class="cr"><span class="cl">① 距離考試剩餘天數</span><span class="cv">${daysLeft} 天</span></div>
+      <div class="cr"><span class="cl">② 剩餘週數</span><span class="cv">${weeksLeft.toFixed(2)} 週</span></div>
+      <div class="cr"><span class="cl">③ 總可用讀書時數</span><span class="cv">${totalAvail.toFixed(1)} 小時</span></div>
+      <div class="cr"><span class="cl">④ 總所需時數</span><span class="cv">${totalNeeded.toFixed(1)} 小時</span></div>
+      <div class="cr"><span class="cl">⑤ 結論</span><span class="cv ${ok?'g':'r'}">${ok?'✅ 整體時間足夠':'❌ 時間不足'}</span></div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════
+//  RENDER STATUS BANNER
+// ══════════════════════════════════════════
+function renderStatus(weeklyHrs, daysLeft, examDate){
+  const el=document.getElementById('status-banner');
+  if(!S.examDate){el.className='banner neutral';el.innerHTML='⚙️ 請先設定考試日期。';return;}
+  const weeksLeft=daysLeft/7;
+  el.className='banner ok';
+  el.innerHTML=`☀️ 📊 距考試（${ds(examDate)}）還有 <strong>${daysLeft} 天（${weeksLeft.toFixed(1)} 週）</strong>。加油！法師正在修煉之中。⚖️`;
+  renderExamCountdown(daysLeft, weeksLeft, examDate);
+}
+
+// ══════════════════════════════════════════
+//  MAIN RUN
+// ══════════════════════════════════════════
+function run(){
+  const weeklyHrs=computeWeeklyHoursPerSubject();
+  const examDate=S.examDate?new Date(S.examDate):null;
+  const now = new Date(NOW_DATE);
+  const daysLeft=examDate?Math.max(0,diffDays(now,examDate)):0;
+
+  renderBooks();
+  renderSchedule();
+  renderStatus(weeklyHrs,daysLeft,examDate);
+  renderSubjSummary(weeklyHrs,daysLeft);
+  renderCalc(weeklyHrs,daysLeft);
+  renderTimelineTable(weeklyHrs,examDate);
+  updateGoldUI();
+  updateAvatar();
+  renderInventory();
+  renderShop();
+}
+
+load(); run();
+</script>
+</body>
+</html>
