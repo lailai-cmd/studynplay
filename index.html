@@ -15,8 +15,8 @@
 body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:14px;display:flex;justify-content:center;}
 .wrap{width:100%;max-width:1060px;}
 
-h1{font-size:16px;text-align:center;color:var(--gold);
-  padding:16px 10px;line-height:1.9;text-shadow:2px 2px 0 #fff,3px 3px 0 var(--border);
+h1{font-size:20px;text-align:center;color:var(--gold);
+  padding:16px 10px;line-height:1.5;
   background:var(--panel);border:5px solid var(--border);outline:3px solid var(--wood);
   border-radius:4px;margin-bottom:14px;box-shadow:0 6px 0 var(--border);font-weight:900;}
 
@@ -24,11 +24,11 @@ h1{font-size:16px;text-align:center;color:var(--gold);
 .card-title{font-weight:900;font-size:14px;margin-bottom:12px;padding-bottom:8px;border-bottom:3px solid var(--stripe);}
 
 /* config */
-.cfg-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;align-items:end;}
+.cfg-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;align-items:end;}
 .fld label{display:block;font-size:12px;font-weight:700;margin-bottom:4px;color:#555;}
-.fld input,.fld select{width:100%;padding:8px 9px;border:3px solid var(--border);font-family:'Noto Sans TC';font-weight:700;font-size:13px;background:#fff;height:40px;}
-.today-box{border:3px solid var(--border);background:var(--lb);padding:8px 9px;font-size:13px;font-weight:900;color:var(--blue);display:flex;align-items:center;height:40px;}
-.countdown-box{border:3px solid var(--border);background:#dcfce7;color:#14532d;padding:8px 9px;font-size:13px;font-weight:900;display:flex;align-items:center;height:40px;}
+.fld input,.fld select{width:100%;max-width:100%;padding:8px 9px;border:3px solid var(--border);font-family:'Noto Sans TC';font-weight:700;font-size:13px;background:#fff;height:40px;box-sizing:border-box;border-radius:0;margin:0;appearance:none;}
+.today-box{width:100%;max-width:100%;border:3px solid var(--border);background:var(--lb);padding:8px 9px;font-size:13px;font-weight:900;color:var(--blue);display:flex;align-items:center;height:40px;box-sizing:border-box;}
+.countdown-box{width:100%;max-width:100%;border:3px solid var(--border);background:#dcfce7;color:#14532d;padding:8px 9px;font-size:13px;font-weight:900;display:flex;align-items:center;height:40px;box-sizing:border-box;}
 
 /* calc box */
 .calc-box{background:var(--lb);border:3px solid var(--border);border-radius:4px;padding:12px;margin-top:10px;font-size:13px;}
@@ -109,7 +109,7 @@ h1{font-size:16px;text-align:center;color:var(--gold);
 
 @media(max-width:600px){
   .cfg-row{grid-template-columns:1fr;}
-  h1{font-size:14px;}
+  h1{font-size:18px;}
 }
 </style>
 </head>
@@ -129,7 +129,7 @@ h1{font-size:16px;text-align:center;color:var(--gold);
       <label>系統時間</label>
       <div class="today-box" id="today-display">今天是：2026/5/21</div>
     </div>
-    <div class="fld" style="grid-column: span 1;">
+    <div class="fld">
       <label>考試倒數狀態</label>
       <div class="countdown-box" id="countdown-display">請先設定考試日期</div>
     </div>
@@ -329,7 +329,6 @@ function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').r
 function fmt(n){ return Number(n).toLocaleString(); }
 function allSubjectNames(){ return S.subjects.map(s=>s.name); }
 
-/* 頁數賽車手變數 */
 let racerInterval = null;
 let racerStartTime = null;   
 let racerEndTime = null;     
@@ -415,7 +414,6 @@ function updateRacerTicks() {
   const s = Math.floor((remainingMs % 60000) / 1000);
   document.getElementById('rc-time-left').innerText = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
   
-  // 更新時間進度條
   const elapsedMs = now - racerStartTime;
   const timePct = Math.min(100, (elapsedMs / totalDuration * 100)).toFixed(1);
   document.getElementById('rc-bar').style.width = `${timePct}%`;
@@ -425,7 +423,6 @@ function updateRacerTicks() {
   const endPage = +document.getElementById('rc-end').value;
   const liveCurrent = +document.getElementById('rc-live-current').value;
   
-  // 更新頁碼進度條
   const totalPages = endPage - startPage;
   const readPages = Math.max(0, liveCurrent - startPage);
   const pagePct = totalPages > 0 ? Math.min(100, (readPages / totalPages * 100)).toFixed(1) : 0;
@@ -436,7 +433,7 @@ function updateRacerTicks() {
   const speedDisplayEl = document.getElementById('rc-required-speed');
 
   if (remainingPages <= 0) {
-    speedDisplayEl.innerText = "已讀完設定頁數！";
+    speedDisplayEl.innerText = "已讀完設定頁數";
     speedDisplayEl.style.color = "var(--green)";
     return;
   } else {
@@ -655,7 +652,6 @@ function importCSV(input) {
       const parts = line.split(',');
       if (parts.length < 5) continue;
       
-      // 修正點：加上清除外層雙引號的正規表達式處理
       const subjName = parts[0].replace(/^"|"$/g, '').trim();
       const bookTitle = parts[1].replace(/^"|"$/g, '').trim();
       const total = parseInt(parts[2].replace(/^"|"$/g, '')) || 0;
