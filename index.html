@@ -145,11 +145,10 @@ h1{font-size:20px;text-align:center;color:var(--gold);
 
 <div class="card">
   <div class="card-title" style="display:flex; justify-content:space-between; align-items:center;">
-    <span>今日目標、學習統計與公路之旅</span>
+    <span>今日統計</span>
     <button class="btn btn-r btn-sm" onclick="clearTodayRecord()">清除今日紀錄</button>
   </div>
   
-  <!-- 今日目標與學習統計 -->
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px;">
     <div style="background:var(--lb);border:3px solid var(--border);padding:10px 8px;text-align:center;border-radius:4px;">
       <div style="font-size:10px;font-weight:700;color:#888;margin-bottom:5px;">🎯 今日目標</div>
@@ -176,144 +175,159 @@ h1{font-size:20px;text-align:center;color:var(--gold);
     </div>
   </div>
 
-  <!-- 今日全日累計（跨所有衝刺） -->
-  <div style="background:#f0fdf4;border:3px solid #16a34a;border-radius:4px;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+  <div style="display:flex;align-items:center;background:#f0fdf4;border:3px solid #16a34a;padding:8px 14px;border-radius:4px;flex-wrap:wrap;gap:14px;">
     <span style="font-size:11px;font-weight:900;color:#15803d;background:#dcfce7;padding:2px 8px;border-radius:10px;border:1px solid #16a34a;white-space:nowrap;">今日全日累計</span>
-    <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;flex:1;">
-      <div style="font-size:13px;font-weight:700;color:var(--green);">⏱️ 讀書時數：<span id="stat-hours" style="font-size:15px;font-weight:900;">0時00分</span></div>
-      <div style="font-size:13px;font-weight:700;color:#0891b2;">🚶 相當步行：<span id="stat-walk-km" style="font-size:15px;font-weight:900;">0.00</span> 公里　<span id="stat-walk-steps" style="font-size:12px;color:#555;">0 步</span></div>
-    </div>
+    <div style="font-weight:900;font-size:13px;color:var(--green);">⏱️ 讀書時數：<span id="stat-hours" style="font-size:15px;font-weight:900;">00:00:00</span></div>
+    <div style="font-weight:900;font-size:13px;color:#0891b2;">🚶 相當步行：<span id="stat-walk-km" style="font-size:15px;font-weight:900;">0.00</span> 公里　<span style="font-size:12px;font-weight:700;color:#555;">(<span id="stat-walk-steps">0</span> 步)</span></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">🏎️ 公路之旅</div>
+
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px;">
+    <label style="font-size:12px;font-weight:700;color:#555;display:flex;align-items:center;gap:5px;">🗺️ 季節
+      <select id="track-style-select" onchange="trackUserStyle=+this.value" style="border:2px solid var(--border);padding:3px 6px;font-size:12px;font-weight:700;font-family:'Noto Sans TC';background:#fff;">
+        <option value="-1">自動</option>
+        <option value="0">🌸 春</option>
+        <option value="1">🌿 夏</option>
+        <option value="2">🍁 秋</option>
+        <option value="3">❄️ 冬</option>
+      </select>
+    </label>
+    <label style="font-size:12px;font-weight:700;color:#555;display:flex;align-items:center;gap:5px;">🚗 車色
+      <select id="car-color-select" onchange="trackUserCar=this.value" style="border:2px solid var(--border);padding:3px 6px;font-size:12px;font-weight:700;font-family:'Noto Sans TC';background:#fff;">
+        <option value="auto">🎨 預設</option>
+        <option value="red">🔴 紅</option>
+        <option value="blue">🔵 藍</option>
+        <option value="yellow">🟡 黃</option>
+        <option value="green">🟢 綠</option>
+        <option value="purple">🟣 紫</option>
+        <option value="pink">🩷 粉</option>
+        <option value="white">⬜ 白</option>
+        <option value="black">⬛ 黑</option>
+      </select>
+    </label>
+    <label style="font-size:12px;font-weight:700;color:#555;display:flex;align-items:center;gap:5px;">🏡 房屋
+      <select id="house-style-select" onchange="trackUserHouse=+this.value" style="border:2px solid var(--border);padding:3px 6px;font-size:12px;font-weight:700;font-family:'Noto Sans TC';background:#fff;">
+        <option value="0">經典木屋</option>
+        <option value="1">紅磚別墅</option>
+        <option value="2">藍海小屋</option>
+        <option value="3">現代白屋</option>
+      </select>
+    </label>
+    <span style="font-size:11px;color:#888;margin-left:4px;">💡 點圖可控制旅途，點車子可閃燈</span>
   </div>
 
-  <div style="margin-top:18px; border-top:3px dashed var(--stripe); padding-top:14px;">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:8px;">
-      <div style="font-weight:900; font-size:14px; color:var(--wood);">🏎️ 公路之旅<span style="font-size:11px;color:#666;font-weight:normal;margin-left:8px;">💡 點擊圖片可控制旅途，點擊車子可手動閃燈</span></div>
-      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-        <label style="font-size:12px;font-weight:700;color:#555;display:flex;align-items:center;gap:5px;">
-          🗺️ 季節風格
-          <select id="track-style-select" onchange="trackUserStyle=+this.value" style="border:2px solid var(--border);padding:3px 6px;font-size:12px;font-weight:700;font-family:'Noto Sans TC';background:#fff;">
-            <option value="-1">自動 (依現實月份)</option>
-            <option value="0">🌸 春季櫻花</option>
-            <option value="1">🌿 夏季綠野</option>
-            <option value="2">🍁 秋季楓紅</option>
-            <option value="3">❄️ 冬季雪地</option>
-          </select>
-        </label>
-        <label style="font-size:12px;font-weight:700;color:#555;display:flex;align-items:center;gap:5px;">
-          🚗 車身顏色
-          <select id="car-color-select" onchange="trackUserCar=this.value" style="border:2px solid var(--border);padding:3px 6px;font-size:12px;font-weight:700;font-family:'Noto Sans TC';background:#fff;">
-            <option value="auto">🎨 主題預設</option>
-            <option value="red">🔴 紅色</option>
-            <option value="blue">🔵 藍色</option>
-            <option value="yellow">🟡 黃色</option>
-            <option value="green">🟢 綠色</option>
-            <option value="purple">🟣 紫色</option>
-            <option value="pink">🩷 粉紅</option>
-            <option value="white">⬜ 白色</option>
-            <option value="black">⬛ 黑色</option>
-          </select>
-        </label>
-        <label style="font-size:12px;font-weight:700;color:#555;display:flex;align-items:center;gap:5px;">
-          🏡 房屋款式
-          <select id="house-style-select" onchange="trackUserHouse=+this.value" style="border:2px solid var(--border);padding:3px 6px;font-size:12px;font-weight:700;font-family:'Noto Sans TC';background:#fff;">
-            <option value="0">經典木屋</option>
-            <option value="1">紅磚別墅</option>
-            <option value="2">藍海小屋</option>
-            <option value="3">現代白屋</option>
-          </select>
-        </label>
-      </div>
-    </div>
-    <canvas id="pixel-track" width="800" height="240" style="width:100%;display:block;border:4px solid var(--border);border-radius:4px;image-rendering:pixelated;image-rendering:crisp-edges;box-shadow:0 4px 0 var(--border);cursor:pointer;"></canvas>
-    
-    <div style="display:flex; align-items:center; background:#eff6ff; border:3px solid #0369a1; padding:8px 12px; border-radius:4px; margin-top:8px; flex-wrap:wrap; gap:14px;">
-      <span style="font-size:11px;font-weight:900;color:#0369a1;background:#dbeafe;padding:2px 8px;border-radius:10px;border:1px solid #0369a1;white-space:nowrap;">本次旅程</span>
-      <div style="font-weight:900; font-size:13px; color:var(--blue);">
-          ⏱️ 行駛時間：<span id="live-driving-time">00:00:00</span>
-      </div>
-      <div style="font-weight:900; font-size:13px; color:var(--green);">
-          🚶 相當步行：<span id="live-driving-km">0.00</span> 公里　<span style="font-weight:700;color:#555;font-size:12px;">(<span id="live-driving-steps">0</span> 步)</span>
-      </div>
-      <button class="btn btn-sm" style="padding:2px 8px; font-size:11px; margin-left:auto;" onclick="clearDrivingRecord()">清除紀錄</button>
-    </div>
+  <canvas id="pixel-track" width="800" height="240" style="width:100%;display:block;border:4px solid var(--border);border-radius:4px;image-rendering:pixelated;image-rendering:crisp-edges;box-shadow:0 4px 0 var(--border);cursor:pointer;"></canvas>
 
+  <div style="display:flex;align-items:center;background:#eff6ff;border:3px solid #0369a1;padding:8px 14px;border-radius:4px;margin-top:8px;flex-wrap:wrap;gap:14px;">
+    <span style="font-size:11px;font-weight:900;color:#0369a1;background:#dbeafe;padding:2px 8px;border-radius:10px;border:1px solid #0369a1;white-space:nowrap;">本次旅程</span>
+    <div style="font-weight:900;font-size:13px;color:var(--blue);">⏱️ 行駛時間：<span id="live-driving-time">00:00:00</span></div>
+    <div style="font-weight:900;font-size:13px;color:#0891b2;">🚶 相當步行：<span id="live-driving-km">0.00</span> 公里　<span style="font-size:12px;font-weight:700;color:#555;">(<span id="live-driving-steps">0</span> 步)</span></div>
+    <button class="btn btn-sm" style="padding:2px 8px;font-size:11px;margin-left:auto;" onclick="clearDrivingRecord()">清除紀錄</button>
   </div>
+</div>
 
-  <div style="border-top:3px dashed var(--stripe); margin-top: 10px; padding-top:16px;">
-    <div style="font-weight:900; font-size:14px; margin-bottom:12px; color:var(--wood);">儀表板</div>
-    
-    <div class="racer-grid">
-      <div class="fld">
-        <label>起始頁碼</label>
-        <div class="num-spinner">
-          <button type="button" onclick="stepNum(this, -1)">-</button>
-          <input type="number" id="rc-start" value="1" min="1" oninput="recalcInitialSpeed()">
-          <button type="button" onclick="stepNum(this, 1)">+</button>
-        </div>
-      </div>
-      <div class="fld">
-        <label>結束頁碼</label>
-        <div class="num-spinner">
-          <button type="button" onclick="stepNum(this, -1)">-</button>
-          <input type="number" id="rc-end" value="50" min="1" oninput="recalcInitialSpeed()">
-          <button type="button" onclick="stepNum(this, 1)">+</button>
-        </div>
-      </div>
-      <div class="fld">
-        <label>預計開多久(分)</label>
-        <div class="num-spinner">
-          <button type="button" onclick="stepNum(this, -1)">-</button>
-          <input type="number" id="rc-min" value="60" min="1" oninput="recalcInitialSpeed()">
-          <button type="button" onclick="stepNum(this, 1)">+</button>
-        </div>
-      </div>
-      <div class="fld">
-        <label>初始預估速度</label>
-        <div id="rc-speed-input" style="padding:10px 9px; font-size:13px; font-weight:700; color:#555;">3.00 分/頁</div>
-      </div>
-    </div>
+<div class="card">
+  <div class="card-title">🎮 儀表板</div>
 
-    <div style="display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap;">
-      <button class="btn btn-g" id="rc-btn-start" onclick="startRacer()">開始旅程</button>
-      <button class="btn btn-y" id="rc-btn-pause" onclick="togglePauseRacer()" disabled>臨時停車</button>
-      <button class="btn btn-r" id="rc-btn-stop" onclick="stopRacer()" disabled>開去休息站</button>
-      <button class="btn" id="rc-btn-cancel" onclick="cancelRacer()" disabled style="background:#6b7280; color:white; border-color:#4b5563;">取消旅程</button>
-    </div>
-
-    <div class="racer-panel" id="rc-panel" style="display:none;">
-      <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); font-weight:700; font-size:13px; gap:14px; margin-bottom:10px; align-items:center;">
-        <div>鎖定結束時間：<span id="rc-deadline-text" style="color:var(--blue); font-size:14px;">--:--:--</span></div>
-        <div>剩餘總時間：<span id="rc-time-left" style="color:var(--red); font-size:15px; font-weight:900;">--:--</span></div>
-        <div class="fld" style="margin:0; display:flex; align-items:center; gap:8px;">
-          <label style="color:var(--blue); font-weight:900; margin:0;">更新當前推進頁碼：</label>
-          <div class="num-spinner" style="border-color:var(--blue);">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;">
+    <div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px;">
+        <div class="fld">
+          <label>起始頁碼</label>
+          <div class="num-spinner">
             <button type="button" onclick="stepNum(this, -1)">-</button>
-            <input type="number" id="rc-live-current" value="1" min="1" oninput="updateRacerTicks()">
+            <input type="number" id="rc-start" value="1" min="1" oninput="calcExpected()" onchange="calcExpected()">
             <button type="button" onclick="stepNum(this, 1)">+</button>
           </div>
         </div>
+        <div class="fld">
+          <label>結束頁碼</label>
+          <div class="num-spinner">
+            <button type="button" onclick="stepNum(this, -1)">-</button>
+            <input type="number" id="rc-end" value="50" min="1" oninput="calcExpected()" onchange="calcExpected()">
+            <button type="button" onclick="stepNum(this, 1)">+</button>
+          </div>
+        </div>
+        <div class="fld">
+          <label>總共頁數</label>
+          <div id="rc-total-pages" style="height:40px; display:flex; align-items:center; font-weight:900; color:var(--wood); font-size:18px;">
+            --
+          </div>
+        </div>
+        <div class="fld">
+          <label>預計每頁(分)</label>
+          <div class="num-spinner">
+            <button type="button" onclick="stepNum(this, -0.5)">-</button>
+            <input type="number" id="rc-min-per-page" value="1.5" min="0.1" step="0.5" oninput="calcExpected()" onchange="calcExpected()">
+            <button type="button" onclick="stepNum(this, 0.5)">+</button>
+          </div>
+        </div>
+        <div class="fld" style="grid-column: span 2;">
+          <label>預計所需時間</label>
+          <div id="rc-expected-total" style="height:40px; display:flex; align-items:center; font-weight:900; color:var(--blue); font-size:18px;">
+            --:--:--
+          </div>
+        </div>
       </div>
-      <div style="background:#fff; padding:8px; border:2px dashed var(--border); border-radius:3px; font-weight:700; font-size:13px; margin-bottom:10px;">
-        後續配速要求：<span id="rc-required-speed" style="color:var(--red); font-size:16px; font-weight:900;">--</span> <span id="rc-pause-status" style="color:var(--wood); display:none;">(已臨時停車，死線持續逼近中)</span>
-      </div>
-      <div class="racer-bar-container">
-        <div class="racer-bar-fill" id="rc-bar"></div>
-        <div class="racer-bar-text" id="rc-bar-text">總時間已流逝：0%</div>
-      </div>
-      <div class="racer-bar-container" style="margin-top:8px;">
-        <div class="racer-bar-fill" id="rc-page-bar" style="background:linear-gradient(90deg, #16a34a, #4ade80); width:0%;"></div>
-        <div class="racer-bar-text" id="rc-page-bar-text">頁碼推進進度：0%</div>
+      <input type="hidden" id="rc-live-current" value="1">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-g" id="rc-btn-start" onclick="startRacer()">開始旅程</button>
+        <button class="btn btn-y" id="rc-btn-pause" onclick="togglePauseRacer()" disabled>臨時停車</button>
+        <button class="btn btn-r" id="rc-btn-stop" onclick="stopRacer()" disabled>開去休息站</button>
+        <button class="btn" id="rc-btn-cancel" onclick="cancelRacer()" disabled style="background:#6b7280;color:white;border-color:#4b5563;">取消旅程</button>
       </div>
     </div>
 
-    <div id="rc-result" style="margin-top:12px; font-size:13px; font-weight:700; color:var(--green); display:none; padding:10px; background:#e2f0d9; border:2px dashed var(--border); position:relative;">
-      <div id="rc-result-text"></div>
-      <div style="text-align:right; margin-top:8px;">
-        <button class="btn btn-w btn-sm" onclick="clearRacerResult()">清除報告 / 取消</button>
+    <div>
+      <div id="rc-panel" style="display:none;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+          <div style="background:#eff6ff;border:2px solid #93c5fd;border-radius:4px;padding:8px 10px;text-align:center;">
+            <div id="rc-deadline-label" style="font-size:10px;font-weight:700;color:#3b82f6;margin-bottom:2px;">🔒 預計結束時間</div>
+            <div id="rc-deadline-text" style="font-size:16px;font-weight:900;color:var(--blue);">--:--:--</div>
+          </div>
+          <div style="background:#fff7ed;border:2px solid #fdba74;border-radius:4px;padding:8px 10px;text-align:center;">
+            <div style="font-size:10px;font-weight:700;color:#ea580c;margin-bottom:2px;">⏳ 剩餘時間</div>
+            <div id="rc-time-left" style="font-size:16px;font-weight:900;color:var(--red);">--:--:--</div>
+            <div id="rc-overtime-label" style="font-size:10px;color:#dc2626;font-weight:700;display:none;margin-top:4px;">
+               ⏱ 逾時時間: <span id="rc-overtime-time" style="font-size:12px;">00:00:00</span>
+            </div>
+            <div id="rc-pause-status" style="font-size:10px;color:var(--wood);font-weight:700;display:none;margin-top:4px;">
+               🚧 暫停時間: <span id="rc-pause-time" style="font-size:12px;">00:00:00</span>
+            </div>
+          </div>
+        </div>
+        <div style="background:#f0fdf4;border:2px solid #86efac;border-radius:4px;padding:8px 10px;margin-bottom:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:120px;">
+            <div style="font-size:10px;font-weight:700;color:#15803d;margin-bottom:2px;">📍 目前應看到第幾頁</div>
+            <div id="rc-expected-page" style="font-size:20px;font-weight:900;color:var(--green);">--</div>
+          </div>
+          <div style="font-size:10px;color:#555;line-height:1.5;">
+            依時間比例自動計算<br>
+            <span style="color:#aaa;">（起始→結束）</span>
+          </div>
+        </div>
+        <div style="margin-bottom:6px;">
+          <div style="font-size:10px;font-weight:700;color:#555;margin-bottom:3px;">⏱ 時間流逝</div>
+          <div class="racer-bar-container" style="margin:0;">
+            <div class="racer-bar-fill" id="rc-bar"></div>
+            <div class="racer-bar-text" id="rc-bar-text">0%</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
+  <div id="rc-result" style="margin-top:12px; font-size:13px; font-weight:700; color:var(--green); display:none; padding:10px; background:#e2f0d9; border:2px dashed var(--border); position:relative;">
+    <div id="rc-result-text"></div>
+    <div style="text-align:right; margin-top:8px;">
+      <button class="btn btn-w btn-sm" onclick="clearRacerResult()">清除報告 / 取消</button>
+    </div>
+  </div>
 </div>
+
 <div class="card">
   <div class="card-title">綜合資料庫：書本進度與章節目錄（支援拖曳排序與層級縮放）</div>
   <div style="font-size:12px;color:#666;margin-bottom:10px;">整合科目、書本與章節結構。依序設定章節位階，系統將自動判讀層級並提供展開/收合功能。支援大量資料結構化匯入。</div>
@@ -397,27 +411,6 @@ const SESSIONS = [
 const LEVEL_ORDER = ['大章','章','節','小節','次節','迷你節'];
 const INDENT_MAP = { '大章':0, '章':1, '節':2, '小節':3, '次節':4, '迷你節':5 };
 
-const MOTTOS = [
-  "孤獨是優秀的伴侶，挨得住寂寞，才撐得起未來的法律正義。",
-  "讀書沒有捷徑，你翻過的每一頁法典、寫過的每一題考古，都是上榜的基石。",
-  "把焦慮轉化為翻閱法條的動力，只要賽車手還在推進，你就沒有落後。"
-];
-
-const DRIVING_QUOTES = [
-  "穩紮穩打，終點就在不遠處！",
-  "每一次的推進，都是實力的累積。",
-  "保持配速，你是這條路上的主宰！",
-  "不要急，我們一步一腳印往前走。",
-  "專注當下，前方的風景會越來越美。",
-  "繼續堅持，你一定可以達成目標的！"
-];
-
-function refreshMotto() {
-  const idx = Math.floor(Math.random() * MOTTOS.length);
-  document.getElementById('motto-display').innerText = MOTTOS[idx];
-}
-
-
 function makeSlot(hours){ return {subject:'休息', hours}; }
 function makeDefaultSchedule(){
   const sched = {};
@@ -443,11 +436,20 @@ let S = {
     }
   ]
 };
-window._S = S; // expose for canvas animation
+window._S = S; 
 
-// 用來追蹤與同步行車數據的全域變數
 window.sessionDrivingMs = 0;
 window.todayTotalDrivingMs = 0;
+window.currentTodayPct = 0;
+
+function formatDuration(ms) {
+    if (ms < 0) ms = 0;
+    let totalSec = Math.floor(ms / 1000);
+    let h = String(Math.floor(totalSec / 3600)).padStart(2, '0');
+    let m = String(Math.floor((totalSec % 3600) / 60)).padStart(2, '0');
+    let s = String(totalSec % 60).padStart(2, '0');
+    return `${h}:${m}:${s}`;
+}
 
 function stepNum(btn, step) {
   const input = btn.parentElement.querySelector('input[type="number"]');
@@ -796,18 +798,6 @@ function cycleChapterLight(si,bi,ci){
   ch.light = cycle[ch.light] || 'red'; save();run();
 }
 
-// ── 行車資料同步邏輯 ──
-function syncDrivingTime() {
-  let stats = getTodayStats();
-  const addedMs = window.sessionDrivingMs;
-  // 將本段行駛時間累積至今日總行駛時間（用於今日相當步行換算）
-  stats.drivingMs = (stats.drivingMs || 0) + addedMs;
-  // 同步後重置本段累積行駛數據，todayTotalDrivingMs 從 localStorage 讀取
-  localStorage.setItem('td', JSON.stringify(stats));
-  window.sessionDrivingMs = 0;
-  renderTodayStats(); // renderTodayStats 會更新 window.todayTotalDrivingMs
-}
-
 window.clearDrivingRecord = function() {
   if(!confirm('確定要歸零今日的累積行駛時間嗎？')) return;
   let stats = getTodayStats();
@@ -815,53 +805,84 @@ window.clearDrivingRecord = function() {
   localStorage.setItem('td', JSON.stringify(stats));
   window.todayTotalDrivingMs = 0;
   window.sessionDrivingMs = 0;
+  renderTodayStats();
 };
 
-// 賽車手狀態變數
-let racerInterval = null, racerStartTime = null, racerEndTime = null, isRacerPaused = false;
-let totalDurationMs = 0;
-let rcLogCounter = 0; 
+let racerInterval = null;
+let racerStartTime = null;
+let expectedTotalMs = 0;
+let isRacerPaused = false;
+let pauseStartTime = null;
+let totalPauseMs = 0;
 
-// 檢查賽車手是否處於「正在衝刺（且未暫停）」的狀態
+let rcLogCounter = 0; 
+let pendingRacerPages = 0;
+let pendingRacerMinutes = 0;
+let pendingDrivingMs = 0;
+
 function isRacerActive() {
-  return typeof racerInterval !== 'undefined' && racerInterval !== null && !isRacerPaused;
+  return racerInterval !== null && !isRacerPaused;
 }
 
-function recalcInitialSpeed() {
-  const startPage = +document.getElementById('rc-start').value, endPage = +document.getElementById('rc-end').value, totalMin = +document.getElementById('rc-min').value;
-  const pages = endPage - startPage;
-  document.getElementById('rc-speed-input').innerText = (pages > 0 && totalMin > 0) ? (totalMin / pages).toFixed(2) + ' 分/頁' : '-- 分/頁';
+function calcExpected() {
+  let start = +document.getElementById('rc-start').value;
+  let end = +document.getElementById('rc-end').value;
+  let mpp = +document.getElementById('rc-min-per-page').value;
+  
+  let totalPages = end - start + 1;
+  document.getElementById('rc-total-pages').innerText = totalPages > 0 ? totalPages : '--';
+
+  if(totalPages > 0 && mpp > 0) {
+      let ms = totalPages * mpp * 60000;
+      document.getElementById('rc-expected-total').innerText = formatDuration(ms);
+  } else {
+      document.getElementById('rc-expected-total').innerText = '--:--:--';
+  }
 }
 
 function startRacer() {
-  const startPage = +document.getElementById('rc-start').value, endPage = +document.getElementById('rc-end').value, totalMin = +document.getElementById('rc-min').value;
-  if (endPage <= startPage) return alert('錯誤：結束頁碼必須大於起始頁碼！');
-  if (totalMin <= 0) return alert('錯誤：預計時間必須大於 0 分鐘！');
+  const startPage = +document.getElementById('rc-start').value;
+  const endPage = +document.getElementById('rc-end').value;
+  const mpp = +document.getElementById('rc-min-per-page').value;
+  
+  if (endPage < startPage) return alert('錯誤：結束頁碼不能小於起始頁碼！');
+  if (mpp <= 0) return alert('錯誤：預計每頁分鐘數必須大於 0！');
+  
   document.getElementById('rc-live-current').value = startPage;
-  document.getElementById('rc-panel').style.display = 'block'; document.getElementById('rc-result').style.display = 'none';
+  document.getElementById('rc-panel').style.display = 'block'; 
+  document.getElementById('rc-result').style.display = 'none';
   
   document.getElementById('rc-btn-start').disabled = true; 
   document.getElementById('rc-btn-pause').disabled = false; 
   document.getElementById('rc-btn-cancel').disabled = false;
   document.getElementById('rc-btn-stop').disabled = false;
   
+  let totalPages = endPage - startPage + 1;
+  expectedTotalMs = totalPages * mpp * 60000;
   racerStartTime = Date.now(); 
-  totalDurationMs = totalMin * 60 * 1000;
-  racerEndTime = racerStartTime + totalDurationMs; 
+  totalPauseMs = 0;
+  pauseStartTime = null;
   isRacerPaused = false;
+  
   document.getElementById('rc-btn-pause').innerText = '臨時停車';
   
-  const endD = new Date(racerEndTime);
-  document.getElementById('rc-deadline-text').innerText = endD.toLocaleTimeString('zh-TW', {hour12: false});
-  
   if (racerInterval) clearInterval(racerInterval);
-  racerInterval = setInterval(updateRacerTicks, 1000); updateRacerTicks();
+  racerInterval = setInterval(updateRacerTicks, 1000); 
+  updateRacerTicks();
 }
 
 function togglePauseRacer() {
-  isRacerPaused = !isRacerPaused;
-  document.getElementById('rc-pause-status').style.display = isRacerPaused ? 'inline' : 'none';
-  document.getElementById('rc-btn-pause').innerText = isRacerPaused ? '繼續上路' : '臨時停車';
+  if (isRacerPaused) {
+      totalPauseMs += (Date.now() - pauseStartTime);
+      pauseStartTime = null;
+      isRacerPaused = false;
+      document.getElementById('rc-btn-pause').innerText = '臨時停車';
+  } else {
+      pauseStartTime = Date.now();
+      isRacerPaused = true;
+      document.getElementById('rc-btn-pause').innerText = '繼續上路';
+  }
+  updateRacerTicks();
 }
 
 function cancelRacer() {
@@ -869,69 +890,85 @@ function cancelRacer() {
   if(racerInterval) clearInterval(racerInterval);
   racerInterval = null;
   racerStartTime = null;
-  racerEndTime = null;
-  totalDurationMs = 0;
   isRacerPaused = false;
-  
-  // 取消旅程：捨棄本段行駛時間，不寫入儲存
-  window.sessionDrivingMs = 0;
   
   document.getElementById('rc-btn-start').disabled = false; 
   document.getElementById('rc-btn-pause').disabled = true; 
   document.getElementById('rc-btn-cancel').disabled = true;
   document.getElementById('rc-btn-stop').disabled = true;
   
-  document.getElementById('rc-panel').style.display = 'none';
-  document.getElementById('rc-result').style.display = 'none';
+  clearRacerResult();
 }
 
 function updateRacerTicks() {
-  if (!racerStartTime || !racerEndTime) return;
+  if (!racerStartTime) return;
   
   const now = Date.now();
-  const remainingMs = Math.max(0, racerEndTime - now);
-  const elapsedMs = Math.max(0, now - racerStartTime);
+  const currentPauseMs = isRacerPaused ? (now - pauseStartTime) : 0;
+  const effectivePauseMs = totalPauseMs + currentPauseMs;
+  const elapsedActiveMs = now - racerStartTime - effectivePauseMs;
 
-  document.getElementById('rc-time-left').innerText = `${String(Math.floor(remainingMs / 60000)).padStart(2,'0')}:${String(Math.floor((remainingMs % 60000) / 1000)).padStart(2,'0')}`;
+  const remainingMs = expectedTotalMs - elapsedActiveMs;
+  const isOvertime = remainingMs < 0;
+
+  const expectedEndTime = new Date(racerStartTime + effectivePauseMs + expectedTotalMs);
+  const endHHMMSS = expectedEndTime.toLocaleTimeString('zh-TW', {hour12: false});
+  document.getElementById('rc-deadline-text').innerText = endHHMMSS;
+
+  if (isOvertime) {
+    document.getElementById('rc-time-left').innerText = '00:00:00';
+    document.getElementById('rc-overtime-label').style.display = 'block';
+    document.getElementById('rc-overtime-time').innerText = formatDuration(-remainingMs);
+    document.getElementById('rc-deadline-label').innerText = '🔒 預計逾時結束時間';
+  } else {
+    document.getElementById('rc-time-left').innerText = formatDuration(remainingMs);
+    document.getElementById('rc-overtime-label').style.display = 'none';
+    document.getElementById('rc-deadline-label').innerText = '🔒 預計結束時間';
+  }
+  
+  if (effectivePauseMs > 0) {
+    document.getElementById('rc-pause-status').style.display = 'block';
+    document.getElementById('rc-pause-time').innerText = formatDuration(effectivePauseMs);
+  } else {
+    document.getElementById('rc-pause-status').style.display = 'none';
+  }
   
   const startPage = +document.getElementById('rc-start').value;
-  const liveCurrent = +document.getElementById('rc-live-current').value;
   const endPage = +document.getElementById('rc-end').value;
-  const speedEl = document.getElementById('rc-required-speed');
+  const totalPages = endPage - startPage + 1;
   
-  if (endPage - liveCurrent <= 0) { 
-    speedEl.innerText = "已達標"; 
-    speedEl.style.color = "var(--green)"; 
-  } else if (remainingMs <= 0) { 
-    speedEl.innerText = "時間截止"; 
-    stopRacer(); 
-    return;
-  } else { 
-    const reqMins = (remainingMs / 60000) / (endPage - liveCurrent); 
-    speedEl.innerText = `${Math.floor(reqMins)} 分 ${Math.round((reqMins % 1)*60)} 秒 / 頁`; 
-    speedEl.style.color = "var(--red)";
-  }
+  const timeRatio = expectedTotalMs > 0 ? Math.min(1, elapsedActiveMs / expectedTotalMs) : 0;
+  const expectedPage = isOvertime ? endPage : Math.min(endPage, Math.floor(startPage + totalPages * timeRatio));
+  document.getElementById('rc-expected-page').innerText = expectedPage;
+  document.getElementById('rc-live-current').value = expectedPage;
 
-  const timeProgressPct = totalDurationMs > 0 ? Math.min(100, (elapsedMs / totalDurationMs) * 100) : 0;
+  const timeProgressPct = expectedTotalMs > 0 ? Math.min(100, (elapsedActiveMs / expectedTotalMs) * 100) : 0;
   document.getElementById('rc-bar').style.width = `${timeProgressPct}%`;
-  document.getElementById('rc-bar-text').innerText = `總時間已流逝：${Math.round(timeProgressPct)}%`;
-
-  const totalPagesToRead = endPage - startPage;
-  const currentPagesRead = liveCurrent - startPage;
-  const pageProgressPct = totalPagesToRead > 0 ? Math.min(100, Math.max(0, (currentPagesRead / totalPagesToRead) * 100)) : 0;
-  document.getElementById('rc-page-bar').style.width = `${pageProgressPct}%`;
-  document.getElementById('rc-page-bar-text').innerText = `頁碼推進進度：${Math.round(pageProgressPct)}%`;
+  document.getElementById('rc-bar-text').innerText = `${Math.round(timeProgressPct)}%`;
 }
 
 function stopRacer() {
   if (racerInterval) clearInterval(racerInterval);
-  racerInterval = null; // 重置狀態
+  racerInterval = null;
+
+  const now = Date.now();
+  const currentPauseMs = isRacerPaused ? (now - pauseStartTime) : 0;
+  const effectivePauseMs = totalPauseMs + currentPauseMs;
+  const elapsedActiveMs = now - racerStartTime - effectivePauseMs;
+
   isRacerPaused = false;
 
-  const readPages = +document.getElementById('rc-live-current').value - +document.getElementById('rc-start').value;
-  const actualElapsed = (Math.min(Date.now(), racerEndTime) - racerStartTime) / 60000;
+  const startPage = +document.getElementById('rc-start').value;
+  const endPage = +document.getElementById('rc-end').value;
+  const totalPages = endPage - startPage + 1;
+  const actualElapsed = elapsedActiveMs / 60000;
   
-  syncDrivingTime(); // 將暫存行車數據寫入本地儲存
+  const timeRatio = expectedTotalMs > 0 ? Math.min(1, elapsedActiveMs / expectedTotalMs) : 0;
+  const readPages = Math.round(totalPages * timeRatio);
+  
+  pendingRacerPages = readPages;
+  pendingRacerMinutes = actualElapsed;
+  pendingDrivingMs = window.sessionDrivingMs;
 
   document.getElementById('rc-btn-start').disabled = false; 
   document.getElementById('rc-btn-pause').disabled = true; 
@@ -946,35 +983,66 @@ function stopRacer() {
       <div id="rc-log-list"></div>
       
       <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
-        <button class="btn btn-sm" style="background:#e5e7eb; border:2px solid #ccc;" onclick="addRcLogItem(0)">＋ 增加要紀錄的書本</button>
+        <button class="btn btn-sm" style="background:#e5e7eb; border:2px solid #ccc;" onclick="addRcLogItem()">＋ 增加要紀錄的書本</button>
         <button class="btn btn-g btn-sm" onclick="submitRcLog()">全部送出同步</button>
       </div>
     </div>`;
 
-  document.getElementById('rc-result-text').innerHTML = `本次旅程共推進 <strong>${readPages}</strong> 頁，耗時 <strong>${actualElapsed.toFixed(1)}</strong> 分鐘。` + logHtml;
-  
-  if (readPages > 0) addTodayRecord(readPages, actualElapsed);
+  document.getElementById('rc-result-text').innerHTML = logHtml;
   
   document.getElementById('rc-log-list').innerHTML = '';
-  addRcLogItem(Math.max(0, readPages));
+  addRcLogItem(startPage, endPage);
 }
 
-function clearRacerResult() { document.getElementById('rc-result').style.display = 'none'; document.getElementById('rc-panel').style.display = 'none'; }
+function clearRacerResult() { 
+  document.getElementById('rc-result').style.display = 'none'; 
+  document.getElementById('rc-panel').style.display = 'none'; 
+  
+  pendingRacerPages = 0;
+  pendingRacerMinutes = 0;
+  pendingDrivingMs = 0;
+  window.sessionDrivingMs = 0;
+  if(window.resetSessionDrivingAnimation) window.resetSessionDrivingAnimation();
+  
+  document.getElementById('live-driving-time').innerText = '00:00:00';
+  document.getElementById('live-driving-km').innerText = '0.00';
+  document.getElementById('live-driving-steps').innerText = '0';
+}
 
-window.addRcLogItem = function(defaultPages = 0) {
+window.addRcLogItem = function(defaultStart, defaultReached) {
   const id = rcLogCounter++;
   const subjOptions = `<option value="">-選擇科目-</option>` + S.subjects.map((s,i)=>`<option value="${i}">${esc(s.name)}</option>`).join('');
+
+  if (defaultStart === undefined) defaultStart = parseInt(document.getElementById('rc-start').value) || 1;
+  if (defaultReached === undefined) defaultReached = parseInt(document.getElementById('rc-end').value) || 1;
+
+  let defaultAdded = defaultReached - defaultStart + 1;
+  if (defaultAdded < 0) defaultAdded = 0;
+
   const html = `
     <div class="rc-log-row" id="rc-log-row-${id}" style="border:2px solid #d4c9a8; padding:8px; margin-bottom:8px; background:#fafaf5; border-radius:4px;">
       <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:8px;">
         <select class="rc-log-subj" onchange="updateRcLogBooks(${id})" style="padding:4px; font-weight:700;">${subjOptions}</select>
         <select class="rc-log-book" onchange="updateRcLogChaps(${id})" style="padding:4px; font-weight:700; max-width:180px;"><option value="">-選擇書本-</option></select>
         
-        <div style="display:flex; align-items:center; gap:4px; font-size:12px; font-weight:900; color:var(--blue); background:#e0f2fe; padding:4px 6px; border-radius:3px;">
-          增加頁數:
+        <div style="display:flex; align-items:center; gap:4px; font-size:12px; font-weight:900; color:#555; background:#f3f4f6; padding:4px 6px; border-radius:3px;">
+          起始: <input type="number" class="rc-log-start" value="${defaultStart}" onchange="calcRcLogAdded(${id})" style="width:45px; padding:2px; font-size:12px; font-weight:bold; border:1px solid #ccc; text-align:center;">
+        </div>
+
+        <div style="display:flex; align-items:center; gap:4px; font-size:12px; font-weight:900; color:#0369a1; background:#e0f2fe; padding:4px 6px; border-radius:3px;">
+          達到:
+          <div class="num-spinner ns-sm">
+            <button type="button" onclick="stepNum(this, -1); calcRcLogAdded(${id})">-</button>
+            <input type="number" class="rc-log-reached" value="${defaultReached}" min="0" onchange="calcRcLogAdded(${id})">
+            <button type="button" onclick="stepNum(this, 1); calcRcLogAdded(${id})">+</button>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:4px; font-size:12px; font-weight:900; color:var(--green); background:#dcfce7; padding:4px 6px; border-radius:3px;">
+          增加:
           <div class="num-spinner ns-sm">
             <button type="button" onclick="stepNum(this, -1)">-</button>
-            <input type="number" class="rc-log-pages" value="${defaultPages}" min="0">
+            <input type="number" class="rc-log-pages" value="${defaultAdded}" min="0">
             <button type="button" onclick="stepNum(this, 1)">+</button>
           </div>
         </div>
@@ -984,6 +1052,16 @@ window.addRcLogItem = function(defaultPages = 0) {
       <div id="rc-log-chaps-container-${id}" style="display:none; max-height:160px; overflow-y:auto; background:#fff; border:1px solid #ccc; padding:6px; font-size:12px;"></div>
     </div>`;
   document.getElementById('rc-log-list').insertAdjacentHTML('beforeend', html);
+};
+
+window.calcRcLogAdded = function(id) {
+  const row = document.getElementById(`rc-log-row-${id}`);
+  if(!row) return;
+  const startVal = parseInt(row.querySelector('.rc-log-start').value) || 0;
+  const reachedVal = parseInt(row.querySelector('.rc-log-reached').value) || 0;
+  let addedVal = reachedVal - startVal + 1;
+  if (addedVal < 0) addedVal = 0;
+  row.querySelector('.rc-log-pages').value = addedVal;
 };
 
 window.updateRcLogBooks = function(id) {
@@ -1062,10 +1140,22 @@ window.submitRcLog = function() {
      return alert("請至少完整填寫一筆包含科目與書本的紀錄");
   }
   
+  if (pendingRacerPages > 0 || pendingRacerMinutes > 0 || pendingDrivingMs > 0) {
+      let stats = getTodayStats();
+      stats.pages += pendingRacerPages;
+      stats.minutes += pendingRacerMinutes;
+      if (pendingRacerPages > 0 || pendingRacerMinutes > 0) {
+          stats.sessions += 1;
+      }
+      stats.drivingMs = (stats.drivingMs || 0) + pendingDrivingMs;
+      localStorage.setItem('td', JSON.stringify(stats));
+  }
+  
   save(); run();
-  syncDrivingTime(); // 送出同步時，將累積行駛時間折算入今日總時數並重置
+  
   alert(`成功同步 ${successCount} 本書的進度與狀態至資料庫！`);
   clearRacerResult();
+  renderTodayStats();
 };
 
 function computeWeeklyHoursPerSubject(){
@@ -1295,33 +1385,30 @@ function updateTodayTarget() {
   renderTodayStats();
 }
 
-function addTodayRecord(pages, min) {
-  let stats = getTodayStats();
-  stats.pages+=pages; stats.minutes+=min; stats.sessions+=1;
-  localStorage.setItem('td', JSON.stringify(stats)); 
-  renderTodayStats();
-}
-
 function renderTodayStats(){
   let stats = getTodayStats();
   document.getElementById('stat-target').value = stats.target;
   document.getElementById('stat-pages').innerText = stats.pages;
-  const _h = Math.floor(stats.minutes / 60);
-  const _m = Math.round(stats.minutes % 60);
-  document.getElementById('stat-hours').innerText = _h + '時' + String(_m).padStart(2,'0') + '分';
+  
+  let totalReadSec = Math.floor((stats.minutes || 0) * 60);
+  let rh = String(Math.floor(totalReadSec / 3600)).padStart(2, '0');
+  let rm = String(Math.floor((totalReadSec % 3600) / 60)).padStart(2, '0');
+  let rs = String(totalReadSec % 60).padStart(2, '0');
+  document.getElementById('stat-hours').innerText = `${rh}:${rm}:${rs}`;
+  
   document.getElementById('stat-sessions').innerText = stats.sessions;
   
   let rate = stats.target > 0 ? Math.round((stats.pages / stats.target) * 100) : 0;
   document.getElementById('stat-rate').innerText = rate + '%';
+  window.currentTodayPct = rate;
   
-  // 今日步行換算（與公路旅途欄位同邏輯：4.5 km/h，步幅 0.7 m）
   const totalDrivingMs = stats.drivingMs || 0;
   window.todayTotalDrivingMs = totalDrivingMs;
   const totalDrivingSec = totalDrivingMs / 1000;
   const walkKm = (totalDrivingSec * 4.5) / 3600;
   const walkSteps = Math.floor((walkKm * 1000) / 0.7);
   document.getElementById('stat-walk-km').innerText = walkKm.toFixed(2);
-  document.getElementById('stat-walk-steps').innerText = walkSteps.toLocaleString() + ' 步';
+  document.getElementById('stat-walk-steps').innerText = walkSteps.toLocaleString();
 }
 
 function clearTodayRecord() {
@@ -1332,13 +1419,13 @@ function clearTodayRecord() {
   window.todayTotalDrivingMs = 0;
   window.sessionDrivingMs = 0;
   renderTodayStats();
-  // 重置公路旅途的累積行駛顯示
+  
   document.getElementById('live-driving-time').innerText = '00:00:00';
   document.getElementById('live-driving-km').innerText = '0.00';
   document.getElementById('live-driving-steps').innerText = '0';
 }
 
-load(); run(); recalcInitialSpeed(); renderTodayStats();
+load(); run(); calcExpected(); renderTodayStats();
 
 var trackUserStyle = -1;
 var trackUserCar = 'auto';
@@ -1351,6 +1438,7 @@ var trackUserHouse = 0;
   let manualFlashEndTime = 0;
   let currentCarBounds = {x:0, y:0, w:0, h:0};
   let drivingTime = 0; 
+  let cloudOffset = 0, roadOffset = 0, lastTs = 0;
 
   document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('pixel-track');
@@ -1460,8 +1548,6 @@ var trackUserHouse = 0;
       dusk: (h>=16.5 && h<19) || (h>=5 && h<7.5),
     };
   }
-
-  let cloudOffset = 0, roadOffset = 0, lastTs = 0;
 
   function px(ctx, x,y,w,h,c){ 
     ctx.fillStyle=c; 
@@ -2011,18 +2097,7 @@ var trackUserHouse = 0;
   }
 
   function getProgressPct(){
-    let totalPages = 0, totalCurrent = 0;
-    if(window._S && window._S.subjects) {
-      window._S.subjects.forEach(function(subj) {
-        subj.books.forEach(function(b) {
-          var t = Number(b.total) || 0;
-          var c = Math.min(Number(b.current) || 0, t);
-          totalPages += t;
-          totalCurrent += c;
-        });
-      });
-    }
-    return totalPages > 0 ? Math.min(100, (totalCurrent / totalPages) * 100) : 0;
+    return window.currentTodayPct || 0;
   }
 
   function animate(ts){
@@ -2040,7 +2115,7 @@ var trackUserHouse = 0;
     lastTs = ts;
     drawTrack(pct, ts, drivingTime);
     
-    let totalMs = window.todayTotalDrivingMs + window.sessionDrivingMs;
+    let totalMs = window.sessionDrivingMs;
     let totalSec = Math.floor(totalMs / 1000);
     
     let hStr = String(Math.floor(totalSec / 3600)).padStart(2, '0');
@@ -2055,6 +2130,11 @@ var trackUserHouse = 0;
 
     requestAnimationFrame(animate);
   }
+
+  window.resetSessionDrivingAnimation = function() {
+    drivingTime = 0;
+    roadOffset = 0;
+  };
 
   if(document.readyState==='loading'){
     document.addEventListener('DOMContentLoaded',()=>requestAnimationFrame(animate));
