@@ -814,7 +814,7 @@ h1 { display: none; }
 
 .sess-am { background: #c87820; }
 .sess-pm { background: #2060a0; }
-.sess-eve { background: #6828b0; }
+.sess-eve { background: #1a5c38; }
 .sess-flex { background: #486058; }
 
 /* ═══════════════════════════════
@@ -1096,7 +1096,7 @@ h1 { display: none; }
   <div class="card-body">
 
   <div class="screen-frame screen-scanline">
-    <canvas id="pixel-track" width="800" height="290"></canvas>
+    <canvas id="pixel-track" width="800" height="314"></canvas>
   </div>
 
   <div style="display:flex; flex-direction:column; border:4px solid var(--border-dark); margin-top:14px; box-shadow:var(--shadow-sz) var(--shadow-sz) 0 var(--border-dark);">
@@ -1116,13 +1116,14 @@ h1 { display: none; }
       </div>
     </div>
 
-    <div style="flex:1; background:var(--panel); padding:12px; display:flex; flex-direction:column;">
+    <div style="flex:1; background:var(--panel); padding:8px; display:flex; flex-direction:column;">
       
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:16px; flex:1;">
-        <div style="display:flex; flex-direction:column; gap:10px;">
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:8px; flex:1;">
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <!-- 起始頁、結束頁、配速 三欄並排 -->
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px;">
             <div class="fld">
-              <label style="font-weight:bold; margin-bottom:4px; font-size:13px;">起始頁</label>
+              <label style="font-weight:bold; margin-bottom:2px; font-size:11px;">起始頁</label>
               <div class="num-spinner ns-sm" style="width:100%; display:flex;">
                 <button type="button" onclick="stepNum(this, -1)">-</button>
                 <input type="number" id="rc-start" value="1" min="1" oninput="calcExpected()" onchange="calcExpected()" style="flex:1; width:100%;">
@@ -1130,7 +1131,7 @@ h1 { display: none; }
               </div>
             </div>
             <div class="fld">
-              <label style="font-weight:bold; margin-bottom:4px; font-size:13px;">結束頁</label>
+              <label style="font-weight:bold; margin-bottom:2px; font-size:11px;">結束頁</label>
               <div class="num-spinner ns-sm" style="width:100%; display:flex;">
                 <button type="button" onclick="stepNum(this, -1)">-</button>
                 <input type="number" id="rc-end" value="50" min="1" oninput="calcExpected()" onchange="calcExpected()" style="flex:1; width:100%;">
@@ -1138,68 +1139,69 @@ h1 { display: none; }
               </div>
             </div>
             <div class="fld">
-              <label style="font-weight:bold; margin-bottom:4px; font-size:13px;">配速 (分/頁)</label>
+              <label style="font-weight:bold; margin-bottom:2px; font-size:11px;">配速(分/頁)</label>
               <div class="num-spinner ns-sm" style="width:100%; display:flex;">
                 <button type="button" onclick="stepNum(this, -0.5)">-</button>
                 <input type="number" id="rc-min-per-page" value="1.5" min="0.1" step="0.5" oninput="calcExpected()" onchange="calcExpected()" style="flex:1; width:100%;">
                 <button type="button" onclick="stepNum(this, 0.5)">+</button>
               </div>
             </div>
-            <div class="fld">
-              <label style="font-weight:bold; margin-bottom:4px; font-size:13px;">總需時間</label>
-              <div id="rc-expected-total" style="height:32px; display:flex; align-items:center; justify-content:center; background:var(--panel-dim); border:2px solid var(--border-dark); color:var(--neon-cyan); font-size:18px; text-shadow:0 0 var(--neon-glow) currentColor; box-shadow:inset 2px 2px 0 rgba(0,0,0,0.1);">--:--:--</div>
-            </div>
+          </div>
+          <!-- 總需時間 + 按鈕行 -->
+          <div style="display:flex; gap:6px; align-items:center;">
+            <div style="font-size:11px; color:var(--text-dim); white-space:nowrap;">總需：</div>
+            <div id="rc-expected-total" style="height:28px; flex:1; display:flex; align-items:center; justify-content:center; background:var(--panel-dim); border:2px solid var(--border-dark); color:var(--neon-cyan); font-size:15px; box-shadow:inset 2px 2px 0 rgba(0,0,0,0.1);">--:--:--</div>
           </div>
           <input type="hidden" id="rc-live-current" value="1">
-          <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:auto; padding-top:4px;">
-            <button class="btn btn-g btn-sm" id="rc-btn-start" onclick="startRacer()" style="flex:1; padding:6px 4px; letter-spacing:0px;">▶ START</button>
-            <button class="btn btn-y btn-sm" id="rc-btn-pause" onclick="togglePauseRacer()" disabled style="flex:1; padding:6px 4px; letter-spacing:0px;">⏸ PAUSE</button>
-            <button class="btn btn-r btn-sm" id="rc-btn-stop" onclick="stopRacer()" disabled style="flex:1; padding:6px 4px; letter-spacing:0px;">⏹ FINISH</button>
-            <button class="btn btn-w btn-sm" id="rc-btn-cancel" onclick="cancelRacer()" disabled style="flex:1; padding:6px 4px; letter-spacing:0px;">CANCEL</button>
+          <div style="display:flex; flex-wrap:wrap; gap:4px;">
+            <button class="btn btn-g btn-sm" id="rc-btn-start" onclick="startRacer()" style="flex:1; padding:5px 2px; font-size:12px; letter-spacing:0;">▶ START</button>
+            <button class="btn btn-y btn-sm" id="rc-btn-pause" onclick="togglePauseRacer()" disabled style="flex:1; padding:5px 2px; font-size:12px; letter-spacing:0;">⏸ PAUSE</button>
+            <button class="btn btn-r btn-sm" id="rc-btn-stop" onclick="stopRacer()" disabled style="flex:1; padding:5px 2px; font-size:12px; letter-spacing:0;">⏹ FINISH</button>
+            <button class="btn btn-w btn-sm" id="rc-btn-cancel" onclick="cancelRacer()" disabled style="flex:1; padding:5px 2px; font-size:12px; letter-spacing:0;">CANCEL</button>
           </div>
         </div>
 
         <div style="display:flex; flex-direction:column;">
-          <div id="rc-panel-placeholder" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--panel-dim); border:3px dashed var(--border-dark); color:var(--text-dim); text-align:center; padding:12px; box-shadow:inset 2px 2px 0 rgba(0,0,0,0.05);">
-             <div style="font-size:24px; margin-bottom:8px; opacity:0.6; filter:grayscale(1);">🏁</div>
-             <div style="font-size:14px; font-weight:bold; margin-bottom:4px; color:var(--text-bright);">任務尚未啟動</div>
-             <div style="font-size:12px; opacity:0.8; line-height:1.4;">點擊 <strong>START</strong> 開始專注衝刺</div>
+          <div id="rc-panel-placeholder" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--panel-dim); border:3px dashed var(--border-dark); color:var(--text-dim); text-align:center; padding:8px; box-shadow:inset 2px 2px 0 rgba(0,0,0,0.05);">
+             <div style="font-size:20px; margin-bottom:4px; opacity:0.6; filter:grayscale(1);">🏁</div>
+             <div style="font-size:13px; font-weight:bold; margin-bottom:2px; color:var(--text-bright);">任務尚未啟動</div>
+             <div style="font-size:11px; opacity:0.8;">點擊 <strong>START</strong> 開始</div>
           </div>
 
-          <div id="rc-panel" style="display:none; flex:1; flex-direction:column; background:var(--panel-dim); border:3px solid var(--border-dark); padding:10px; box-shadow:inset 2px 2px 0 rgba(0,0,0,0.1); justify-content:space-between; gap:10px;">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-              <div class="info-panel" style="padding:6px 4px; border-width:2px;">
-                <div id="rc-deadline-label" class="info-panel-label" style="font-size:11px; margin-bottom:2px;">預計結束</div>
-                <div id="rc-deadline-text" class="info-panel-value" style="font-size:16px;">--:--:--</div>
+          <div id="rc-panel" style="display:none; flex:1; flex-direction:column; background:var(--panel-dim); border:3px solid var(--border-dark); padding:8px; box-shadow:inset 2px 2px 0 rgba(0,0,0,0.1); justify-content:space-between; gap:6px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+              <div class="info-panel" style="padding:4px; border-width:2px;">
+                <div id="rc-deadline-label" class="info-panel-label" style="font-size:10px; margin-bottom:1px;">預計結束</div>
+                <div id="rc-deadline-text" class="info-panel-value" style="font-size:14px;">--:--:--</div>
               </div>
-              <div class="info-panel" style="padding:6px 4px; border-width:2px; border-color:var(--neon-pink); background:var(--panel-bright);">
-                <div class="info-panel-label" style="color:var(--neon-pink); font-size:11px; margin-bottom:2px;">剩餘時間</div>
-                <div id="rc-time-left" class="info-panel-value" style="color:var(--neon-pink);font-size:16px;">--:--:--</div>
-                <div id="rc-overtime-label" style="font-size:10px;color:var(--neon-pink);display:none;margin-top:2px;">逾時: <span id="rc-overtime-time">00:00:00</span></div>
-                <div id="rc-pause-status" style="font-size:10px;color:var(--neon-yellow);display:none;margin-top:2px;">暫停: <span id="rc-pause-time">00:00:00</span></div>
+              <div class="info-panel" style="padding:4px; border-width:2px; border-color:var(--neon-pink); background:var(--panel-bright);">
+                <div class="info-panel-label" style="color:var(--neon-pink); font-size:10px; margin-bottom:1px;">剩餘時間</div>
+                <div id="rc-time-left" class="info-panel-value" style="color:var(--neon-pink);font-size:14px;">--:--:--</div>
+                <div id="rc-overtime-label" style="font-size:9px;color:var(--neon-pink);display:none;margin-top:1px;">逾時: <span id="rc-overtime-time">00:00:00</span></div>
+                <div id="rc-pause-status" style="font-size:9px;color:var(--neon-yellow);display:none;margin-top:1px;">暫停: <span id="rc-pause-time">00:00:00</span></div>
               </div>
             </div>
             
-            <div style="display:flex;align-items:center;justify-content:space-between; background:var(--panel-bright); border:2px solid var(--border-dark); padding:6px 10px; box-shadow:calc(var(--shadow-sz)*0.5) calc(var(--shadow-sz)*0.5) 0 var(--border-dark);">
-              <div style="display:flex; flex-direction:column; gap:2px;">
-                <span style="font-size:10px;color:var(--text-dim); font-weight:bold;">CURRENT</span>
-                <span style="font-size:13px;color:var(--text-bright); font-weight:bold;">📍 目標頁碼</span>
+            <div style="display:flex;align-items:center;justify-content:space-between; background:var(--panel-bright); border:2px solid var(--border-dark); padding:4px 8px; box-shadow:calc(var(--shadow-sz)*0.5) calc(var(--shadow-sz)*0.5) 0 var(--border-dark);">
+              <div style="display:flex; flex-direction:column; gap:1px;">
+                <span style="font-size:9px;color:var(--text-dim); font-weight:bold;">CURRENT</span>
+                <span style="font-size:12px;color:var(--text-bright); font-weight:bold;">📍 目前應看到頁碼</span>
               </div>
-              <div id="rc-expected-page" class="info-panel-value" style="font-size:26px;color:var(--neon-cyan);text-shadow:0 0 var(--neon-glow) currentColor; line-height:1;">--</div>
+              <div id="rc-expected-page" class="info-panel-value" style="font-size:24px;color:var(--neon-cyan);text-shadow:0 0 var(--neon-glow) currentColor; line-height:1;">--</div>
             </div>
             
-            <div style="margin-top:auto;">
-              <div class="racer-bar-container" style="margin:0; height:18px; border-width:2px;">
+            <div>
+              <div class="racer-bar-container" style="margin:0; height:16px; border-width:2px;">
                 <div class="racer-bar-fill" id="rc-bar" style="transition: width 0.5s linear;"></div>
-                <div class="racer-bar-text" id="rc-bar-text" style="line-height:14px; font-size:12px; top:2px;">0%</div>
+                <div class="racer-bar-text" id="rc-bar-text" style="line-height:12px; font-size:11px; top:2px;">0%</div>
               </div>
             </div>
           </div>
         </div>
 
-        <div id="rc-result" style="display:none; margin-top:12px; border:2px dashed var(--border-dark); padding:10px; background:var(--panel-dim);">
+        <div id="rc-result" style="display:none; margin-top:6px; border:2px dashed var(--border-dark); padding:8px; background:var(--panel-dim);">
           <div id="rc-result-text"></div>
-          <div style="text-align:right; margin-top:8px;">
+          <div style="text-align:right; margin-top:6px;">
             <button class="btn btn-w btn-sm" onclick="clearRacerResult()" style="padding:4px 10px;">🧹 清除</button>
           </div>
         </div>
@@ -1208,37 +1210,37 @@ h1 { display: none; }
     </div>
   </div>
 
-  <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:12px; padding:10px; background:var(--panel-dim); border:2px solid var(--border-dark); font-size:14px;">
-    <label>🎮 模式
-      <select id="track-mode-select" onchange="changeTrackMode(this.value)" style="width:auto; height:32px; font-size:14px; margin-left:6px; border:2px solid var(--border-dark); background:var(--panel-bright); color:var(--text-bright); font-family:'Cubic 11',monospace; font-weight:bold; padding:0 6px; box-shadow: inset 1px 1px 3px rgba(0,0,0,0.15);">
-        <option value="road">🏎️ 公路之旅</option>
-        <option value="pikmin">🌱 皮克敏探險</option>
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px; padding:8px; background:var(--panel-dim); border:2px solid var(--border-dark); font-size:13px;">
+    <label>🎮
+      <select id="track-mode-select" onchange="changeTrackMode(this.value)" style="width:auto; height:28px; font-size:13px; margin-left:4px; border:2px solid var(--border-dark); background:var(--panel-bright); color:var(--text-bright); font-family:'Cubic 11',monospace; font-weight:bold; padding:0 4px;">
+        <option value="road">🏎️ 公路</option>
+        <option value="pikmin">🌱 皮克敏</option>
       </select>
     </label>
 
-    <label>🗺️ 季節
-      <select id="track-style-select" onchange="trackUserStyle=+this.value" style="width:auto; height:32px; font-size:14px; margin-left:6px; border:2px solid var(--border-dark); background:var(--panel-bright); color:var(--text-bright); font-family:'Cubic 11',monospace; font-weight:bold; padding:0 6px;">
+    <label>🗺️
+      <select id="track-style-select" onchange="trackUserStyle=+this.value" style="width:auto; height:28px; font-size:13px; margin-left:4px; border:2px solid var(--border-dark); background:var(--panel-bright); color:var(--text-bright); font-family:'Cubic 11',monospace; font-weight:bold; padding:0 4px;">
         <option value="-1">自動</option><option value="0">🌸 春</option><option value="1">🌿 夏</option><option value="2">🍁 秋</option><option value="3">❄️ 冬</option>
       </select>
     </label>
 
-    <div id="settings-road" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
-      <label>🚗 車色
-        <select id="car-color-select" onchange="trackUserCar=this.value" style="width:auto; height:32px; font-size:14px; margin-left:6px; border:2px solid var(--border-dark); background:var(--panel-bright); color:var(--text-bright); font-family:'Cubic 11',monospace; font-weight:bold; padding:0 6px;">
+    <div id="settings-road" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <label>🚗
+        <select id="car-color-select" onchange="trackUserCar=this.value" style="width:auto; height:28px; font-size:13px; margin-left:4px; border:2px solid var(--border-dark); background:var(--panel-bright); color:var(--text-bright); font-family:'Cubic 11',monospace; font-weight:bold; padding:0 4px;">
           <option value="auto">🎨 預設</option><option value="red">🔴 紅</option><option value="blue">🔵 藍</option><option value="yellow">🟡 黃</option><option value="green">🟢 綠</option><option value="purple">🟣 紫</option><option value="pink">🩷 粉</option><option value="white">⬜ 白</option><option value="black">⬛ 黑</option>
         </select>
       </label>
-      <label>🏡 房屋
-        <select id="house-style-select" onchange="trackUserHouse=+this.value" style="width:auto; height:32px; font-size:14px; margin-left:6px; border:2px solid var(--border-dark); background:var(--panel-bright); color:var(--text-bright); font-family:'Cubic 11',monospace; font-weight:bold; padding:0 6px;">
+      <label>🏡
+        <select id="house-style-select" onchange="trackUserHouse=+this.value" style="width:auto; height:28px; font-size:13px; margin-left:4px; border:2px solid var(--border-dark); background:var(--panel-bright); color:var(--text-bright); font-family:'Cubic 11',monospace; font-weight:bold; padding:0 4px;">
           <option value="0">經典木屋</option><option value="1">紅磚別墅</option><option value="2">藍海小屋</option><option value="3">現代白屋</option>
         </select>
       </label>
     </div>
 
-    <div id="settings-pikmin" style="display:none;gap:12px;align-items:center;flex-wrap:wrap;">
-      <label>🌱 種類
-        <select id="pikmin-type-select" onchange="trackPikminType=this.value" style="width:auto; height:32px; font-size:14px; margin-left:6px; border:2px solid var(--border-dark); background:var(--panel-bright); color:var(--text-bright); font-family:'Cubic 11',monospace; font-weight:bold; padding:0 6px;">
-          <option value="red">🔴 紅色</option><option value="yellow">🟡 黃色</option><option value="blue">🔵 藍色</option><option value="purple">🟣 紫色</option><option value="white">⚪ 白色</option><option value="rock">🪨 岩石</option><option value="winged">🩷 羽翅</option><option value="ice">🧊 冰凍</option>
+    <div id="settings-pikmin" style="display:none;gap:8px;align-items:center;flex-wrap:wrap;">
+      <label>🌱
+        <select id="pikmin-type-select" onchange="trackPikminType=this.value" style="width:auto; height:28px; font-size:13px; margin-left:4px; border:2px solid var(--border-dark); background:var(--panel-bright); color:var(--text-bright); font-family:'Cubic 11',monospace; font-weight:bold; padding:0 4px;">
+          <option value="red">🔴 紅</option><option value="yellow">🟡 黃</option><option value="blue">🔵 藍</option><option value="purple">🟣 紫</option><option value="white">⚪ 白</option><option value="rock">🪨 岩石</option><option value="winged">🩷 羽翅</option><option value="ice">🧊 冰凍</option>
         </select>
       </label>
     </div>
@@ -1253,7 +1255,7 @@ h1 { display: none; }
   <div style="font-size:13px;color:var(--text-dim);margin-bottom:16px;">整合科目、書本與章節。支援拖曳排序。</div>
   <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center;">
     <button class="btn btn-g btn-sm" onclick="addSubject()">＋ 新增科目</button>
-    <button class="btn btn-w btn-sm" onclick="downloadCSVTemplate()">下載 CSV</button>
+    <button class="btn btn-w btn-sm" onclick="downloadCSVTemplate()">下載CSV範例</button>
     <label class="btn btn-w btn-sm" style="cursor:pointer;">📂 匯入 CSV <input type="file" accept=".csv" id="csv-file" style="display:none;" onchange="importChaptersData(this)"></label>
     <button class="btn btn-w btn-sm" onclick="exportChaptersCSV()">匯出 CSV</button>
   </div>
@@ -1267,11 +1269,17 @@ h1 { display: none; }
   <div class="sched-wrap" style="overflow-x:auto;">
     <table class="sched-table" id="sched-table"></table>
   </div>
+  <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+    <button class="btn btn-w btn-sm" onclick="downloadSchedCSVTemplate()">下載CSV範例</button>
+    <label class="btn btn-w btn-sm" style="cursor:pointer;">📂 匯入 CSV <input type="file" accept=".csv" id="sched-csv-file" style="display:none;" onchange="importSchedCSV(this)"></label>
+    <button class="btn btn-w btn-sm" onclick="exportSchedCSV()">匯出 CSV</button>
+  </div>
   <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
     <span style="font-size:14px;">批次套用：</span>
     <label style="font-size:14px; display:flex; align-items:center; gap:6px;">早 <div class="num-spinner ns-sm"><button type="button" onclick="stepNum(this, -1)">-</button><input type="number" id="def-am" value="2" min="0" step="0.5" onchange="applyDefaultHours('am',this.value)"><button type="button" onclick="stepNum(this, 1)">+</button></div></label>
     <label style="font-size:14px; display:flex; align-items:center; gap:6px;">中 <div class="num-spinner ns-sm"><button type="button" onclick="stepNum(this, -1)">-</button><input type="number" id="def-pm" value="3" min="0" step="0.5" onchange="applyDefaultHours('pm',this.value)"><button type="button" onclick="stepNum(this, 1)">+</button></div></label>
     <label style="font-size:14px; display:flex; align-items:center; gap:6px;">晚 <div class="num-spinner ns-sm"><button type="button" onclick="stepNum(this, -1)">-</button><input type="number" id="def-eve" value="2" min="0" step="0.5" onchange="applyDefaultHours('eve',this.value)"><button type="button" onclick="stepNum(this, 1)">+</button></div></label>
+    <label style="font-size:14px; display:flex; align-items:center; gap:6px;">彈性 <div class="num-spinner ns-sm"><button type="button" onclick="stepNum(this, -1)">-</button><input type="number" id="def-flex" value="1" min="0" step="0.5" onchange="applyDefaultHours('flex',this.value)"><button type="button" onclick="stepNum(this, 1)">+</button></div></label>
     <button class="btn btn-y btn-sm" onclick="fillAllSlots()">全部套用</button>
   </div>
   </div>
@@ -1345,14 +1353,7 @@ function makeDefaultSchedule(){
 let S = {
   examDate:'',
   schedule: makeDefaultSchedule(),
-  subjects: [
-    {
-      name:'預設科目',
-      books:[
-        {title:'預設書本', total:500, current:0, speed:4, chapters:[], isExpanded:false}
-      ]
-    }
-  ]
+  subjects: []
 };
 window._S = S; 
 
@@ -1402,6 +1403,47 @@ function stepNum(btn, step) {
   input.dispatchEvent(new Event('input'));
 }
 
+// 長按連續加減功能
+(function(){
+  let longPressTimer = null;
+  let longPressInterval = null;
+  function startLongPress(btn, step) {
+    stopLongPress();
+    longPressTimer = setTimeout(function(){
+      longPressInterval = setInterval(function(){
+        stepNum(btn, step);
+      }, 80);
+    }, 400);
+  }
+  function stopLongPress() {
+    if(longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
+    if(longPressInterval) { clearInterval(longPressInterval); longPressInterval = null; }
+  }
+  document.addEventListener('mousedown', function(e){
+    const btn = e.target.closest('.num-spinner button');
+    if(!btn) return;
+    // Determine step direction from onclick attribute
+    const onclickAttr = btn.getAttribute('onclick') || '';
+    const stepMatch = onclickAttr.match(/stepNum\(this,\s*([-\d.]+)/);
+    if(!stepMatch) return;
+    const step = parseFloat(stepMatch[1]);
+    startLongPress(btn, step);
+  });
+  document.addEventListener('mouseup', stopLongPress);
+  document.addEventListener('mouseleave', stopLongPress);
+  document.addEventListener('touchstart', function(e){
+    const btn = e.target.closest('.num-spinner button');
+    if(!btn) return;
+    const onclickAttr = btn.getAttribute('onclick') || '';
+    const stepMatch = onclickAttr.match(/stepNum\(this,\s*([-\d.]+)/);
+    if(!stepMatch) return;
+    const step = parseFloat(stepMatch[1]);
+    startLongPress(btn, step);
+  }, {passive: true});
+  document.addEventListener('touchend', stopLongPress);
+  document.addEventListener('touchcancel', stopLongPress);
+})();
+
 function load(){
   const r=localStorage.getItem('SDv11_unified');
   if(r){
@@ -1440,6 +1482,16 @@ function resetAll(){
 }
 
 function ds(d){ return d.toLocaleDateString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit'}); }
+function formatLastRead(dateStr){
+  if(!dateStr) return '';
+  const today = new Date(); today.setHours(0,0,0,0);
+  const d = new Date(dateStr); d.setHours(0,0,0,0);
+  const diff = Math.round((today - d) / 86400000);
+  const month = d.getMonth()+1, day = d.getDate();
+  if(diff === 0) return `${month}月${day}號（今天）`;
+  if(diff === 1) return `${month}月${day}號（昨天）`;
+  return `${month}月${day}號（${diff}天前）`;
+}
 function showToday(){ document.getElementById('today-display').innerText = "今天是：" + ds(new Date()); }
 function addDays(d,n){ const r=new Date(d);r.setDate(r.getDate()+n);return r; }
 function diffDays(a,b){ return Math.ceil((b-a)/86400000); }
@@ -1502,7 +1554,8 @@ function renderCombinedDB() {
             
             <div style="flex:1; min-width:160px;">
               <div class="mini-bar"><div class="mini-fill" style="width:${pct}%;"></div></div>
-              <div style="font-size:12px;text-align:right;margin-top:4px;">剩 ${rem} 頁 / 需 ${estHrs} h</div>
+              <div style="font-size:12px;text-align:right;margin-top:4px;">剩 ${rem} 頁 (已${pct}%) / 尚需 ${estHrs} h</div>
+              <div style="font-size:11px;text-align:right;margin-top:2px;color:var(--text-dim);">${b.lastRead ? '上次：' + formatLastRead(b.lastRead) : '尚未閱讀'}</div>
             </div>
             
             <div style="display:flex;gap:8px;">
@@ -1571,12 +1624,12 @@ function drop(e, targetType, targetSi, targetBi=null, targetCi=null) {
 
 function downloadCSVTemplate() {
   const rows = [
-    ['科目','書名','章節位階','章節名稱','熟悉度','總頁數','已讀頁數','速度(分/頁)'],
-    ['行政法','行政法總論','大章','第一編 行政法通則','none','300','0','4'],
-    ['行政法','行政法總論','章','第一章 行政與行政法','green','300','0','4'],
-    ['行政法','行政法總論','節','第一節 行政之概念','red','300','50','4'],
-    ['民法','民法概論','大章','第一編 總則','yellow','250','100','3'],
-    ['民法','民法概論','章','第一章 法例','none','250','100','3'],
+    ['科目','書名','章節位階','章節名稱','熟悉度','總頁數','已讀頁數','速度(分/頁)','上次閱讀日期'],
+    ['行政法','行政法總論','大章','第一編 行政法通則','none','300','0','4',''],
+    ['行政法','行政法總論','章','第一章 行政與行政法','green','300','0','4','2025-05-01'],
+    ['行政法','行政法總論','節','第一節 行政之概念','red','300','50','4','2025-05-10'],
+    ['民法','民法概論','大章','第一編 總則','yellow','250','100','3',''],
+    ['民法','民法概論','章','第一章 法例','none','250','100','3','2025-04-20'],
   ];
   const csvContent = '\ufeff' + rows.map(r => r.map(c => `"${c}"`).join(',')).join('\r\n');
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -1659,12 +1712,13 @@ function importChaptersData(input) {
 }
 
 function exportChaptersCSV() {
-  let csv = "\ufeff科目,書名,章節位階,章節名稱,熟悉度\n";
+  let csv = "\ufeff科目,書名,上次閱讀日期,章節位階,章節名稱,熟悉度\n";
   S.subjects.forEach(subj => {
     subj.books.forEach(bk => {
+      const lastRead = bk.lastRead || '';
       bk.chapters.forEach(ch => {
         let lightStr = ch.light === 'green' ? '🟢 通過' : ch.light === 'yellow' ? '🟡 半熟' : ch.light === 'red' ? '🔴 不熟' : '未讀';
-        csv += `"${subj.name}","${bk.title}","${ch.level}","${ch.name}","${lightStr}"\n`;
+        csv += `"${subj.name}","${bk.title}","${lastRead}","${ch.level}","${ch.name}","${lightStr}"\n`;
       });
     });
   });
@@ -1682,6 +1736,47 @@ function addChapter(si,bi){ S.subjects[si].books[bi].chapters.push({id:makeId(),
 function removeChapter(si,bi,ci){ S.subjects[si].books[bi].chapters.splice(ci,1); save();run(); }
 function updChapter(si,bi,ci,field,val){ S.subjects[si].books[bi].chapters[ci][field]=val; save();run(); }
 function cycleChapterLight(si,bi,ci){ const ch = S.subjects[si].books[bi].chapters[ci]; const cycle={none:'red',red:'yellow',yellow:'green',green:'none'}; ch.light = cycle[ch.light] || 'red'; save();run(); }
+
+function downloadSchedCSVTemplate() {
+  const rows = [['星期','時段','時數','科目']];
+  DAYS.forEach(d => { SESSIONS.forEach(s => { rows.push([d, s.label, '2', '休息']); }); });
+  const csv = '\ufeff' + rows.map(r => r.map(c => `"${c}"`).join(',')).join('\r\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = '排程表範本.csv'; a.click();
+}
+
+function exportSchedCSV() {
+  const rows = [['星期','時段','時數','科目']];
+  DAYS.forEach(d => { SESSIONS.forEach(s => { const slot = S.schedule[d][s.key]; rows.push([d, s.label, slot.hours, slot.subject]); }); });
+  const csv = '\ufeff' + rows.map(r => r.map(c => `"${c}"`).join(',')).join('\r\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = '排程表匯出.csv'; a.click();
+}
+
+function importSchedCSV(input) {
+  const file = input.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    let text = e.target.result.replace(/^\uFEFF/, '');
+    const lines = text.split(/\r?\n/);
+    let count = 0;
+    for(let i = 1; i < lines.length; i++) {
+      const line = lines[i].trim(); if(!line) continue;
+      const parts = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/^"|"$/g,'').trim());
+      const [dayStr, sessLabel, hoursStr, subj] = parts;
+      const dayObj = DAYS.find(d => d === dayStr);
+      const sessObj = SESSIONS.find(s => s.label === sessLabel);
+      if(!dayObj || !sessObj) continue;
+      S.schedule[dayObj][sessObj.key].hours = parseFloat(hoursStr) || 0;
+      S.schedule[dayObj][sessObj.key].subject = subj || '休息';
+      count++;
+    }
+    save(); run();
+    alert(`排程表匯入完成！更新 ${count} 筆。`);
+    input.value = '';
+  };
+  reader.readAsText(file, 'UTF-8');
+}
 
 window.clearDrivingRecord = function() {
   if(!confirm('確定要歸零累積活動時間？')) return;
@@ -1867,6 +1962,7 @@ window.submitRcLog = function() {
     const pagesRead = parseInt(row.querySelector('.rc-log-pages').value, 10) || 0;
     if (pagesRead > 0) {
       S.subjects[si].books[bi].current = Math.min(S.subjects[si].books[bi].total, parseInt(S.subjects[si].books[bi].current, 10) + pagesRead);
+      S.subjects[si].books[bi].lastRead = new Date().toISOString().slice(0,10);
       totalPagesSubmitted += pagesRead;
     }
     row.querySelectorAll('.rc-chap-cb:checked').forEach(cb => { S.subjects[si].books[bi].chapters[cb.value].light = row.querySelector(`.rc-chap-light[data-ci="${cb.value}"]`).value; });
@@ -1924,7 +2020,7 @@ function renderTimelineTable(weeklyHrs, examDate){
   const el=document.getElementById('timeline-area'); const now = new Date();
   if(!S.subjects.length){el.innerHTML='<div style="color:var(--text-dim); font-size:14px;">請先新增資料。</div>';return;}
 
-  let html=`<table class="timeline-table"><thead><tr><th>科目</th><th>書名</th><th>剩餘時數</th><th>完成日期</th><th>狀態</th></tr></thead><tbody>`;
+  let html=`<table class="timeline-table"><thead><tr><th>科目</th><th>書名</th><th>尚需時數</th><th>完成日期</th><th>狀態</th></tr></thead><tbody>`;
   S.subjects.forEach((subj, si) => {
     const color = subjColor(si), stat = weeklyHrs[subj.name] || { hours: 0 }, hpd = stat.hours / 7;
     let cursor = new Date(now);
@@ -2056,18 +2152,29 @@ load(); run(); calcExpected(); renderTodayStats();
 
 // ── CANVAS 繪圖核心保持原樣 (原本就是像素風) ──
 (function(){
-  const P = 4; const W = 800, H = 290;
+  const P = 4; const W = 800, H = 314;
   let drivingTime = 0; let cloudOffset = 0, roadOffset = 0, lastTs = 0;
 
   // ── Easter egg system ──
   let eggTimer = 0, activeEgg = null, eggX = W+100, eggY = 30, eggAlpha = 0, ufoBeam = 0;
   let ufoEscaping = false;
-  // 蟑螂亂飛系統
-  let roachWander = false, roachWanderTimer = 0, roachVX = 0, roachVY = 0, roachWanderDuration = 0;
   // 飛行物款式種子（每次spawn隨機選）
   let eggVariant = 0;
+  // 愛心特效系統（皮克敏與動物接觸時）
+  let heartEffects = []; // [{x, y, startTs, duration, slotIdx, jumpStartTs, jumpDur}]
+  // 公路模式動物反應（車子接近時）
+  let roadAnimalEffects = []; // [{slotIdx, startTs, jumpDur, heartDur}]
   // 車頂鳥系統
-  let roofBird = null; // {type, seed, perchTimer}
+  let roofBird = null; // {type, perchTimer, maxPerch, flyState, flyX, flyY}
+  // flyState: 'landing'=飛入(右上→車頂), 'perching'=停棲, 'leaving'=飛走(車頂→左上)
+  // 像素喇叭特效系統（車子靠近動物時右上方出現喇叭+音波）
+  let hornEffects = []; // [{slotIdx, startTs, dur, isRoad}]
+  // 螢火蟲系統（晚上，非冬季）
+  let fireflies = []; // [{x,y,phase,speed,glow,vy,vx}]
+  let firefliesInit = false;
+  // 蝴蝶系統（白天，非冬季）
+  let butterflies = []; // [{x,y,wx,wy,phase,colorIdx,flip}]
+  let butterfliesInit = false;
   const EGG_INTERVAL = 18000;
   
   function spawnEgg(){ 
@@ -2078,73 +2185,140 @@ load(); run(); calcExpected(); renderTodayStats();
     
     let availableTypes = ['airplane','airplane','balloon','balloon'];
     if(sky.t < 0.4) availableTypes.push('ufo','meteor','comet');
-    // pct<10 蟑螂機率大增
-    if(pct < 10) {
-      for(let i=0;i<5;i++) availableTypes.push('flyroach');
-    } else if(pct < 30) {
-      availableTypes.push('flyroach');
-    }
     
     activeEgg = availableTypes[Math.floor(Math.random()*availableTypes.length)]; 
     eggX = W+100; 
     eggAlpha = 0; 
     ufoBeam = 0; 
     ufoEscaping = false;
-    roachWander = false;
-    roachWanderTimer = 0;
 
-    if (activeEgg === 'flyroach') {
-      eggY = H - P*Math.floor(8 + Math.random()*15);
-      // pct<10有50%機率啟動亂飛模式
-      if(pct < 10 && Math.random() < 0.5) {
-        roachWander = true;
-        roachWanderDuration = 4000 + Math.random()*5000;
-        roachVX = -(0.06 + Math.random()*0.08);
-        roachVY = (Math.random()-0.5)*0.08;
-      }
-    } else {
+    if (activeEgg === 'balloon') {
       eggY = 10 + Math.random()*40; 
+    } else {
+      eggY = 10 + Math.random()*40;
     }
   }
 
   // 鳥出沒在車頂（達成率>=50%時生效）
+  const ROOF_BIRD_TYPES = ['sparrow','pigeon','crow','mejiro','bulbul','heron'];
   function maybeSpawnRoofBird(pct) {
     if(pct < 50) { roofBird = null; return; }
     if(!roofBird && Math.random() < 0.004) {
-      const birdTypes = ['sparrow','crow','owl','parrot','pigeon','swallow','toucan','flamingo'];
-      roofBird = { type: birdTypes[Math.floor(Math.random()*birdTypes.length)], seed: Math.random(), perchTimer: 0, maxPerch: 8000+Math.random()*12000 };
+      const type = ROOF_BIRD_TYPES[Math.floor(Math.random()*ROOF_BIRD_TYPES.length)];
+      roofBird = {
+        type,
+        perchTimer: 0,
+        maxPerch: 10000,
+        flyState: 'landing',
+        flyX: 120,
+        flyY: -70,
+        wingTimer: 0, // 翅膀拍動計時器
+      };
     }
     if(roofBird) {
       roofBird.perchTimer += 16;
-      if(roofBird.perchTimer > roofBird.maxPerch) roofBird = null;
+      roofBird.wingTimer += 16;
+      if(roofBird.flyState === 'landing') {
+        // 慢速飛入（原速的40%）
+        const speed = 1.4;
+        roofBird.flyX = Math.max(0, roofBird.flyX - speed);
+        roofBird.flyY = Math.min(0, roofBird.flyY + speed * 0.577);
+        if(roofBird.flyX <= 0 && roofBird.flyY >= 0) { roofBird.flyX = 0; roofBird.flyY = 0; roofBird.flyState = 'perching'; }
+      } else if(roofBird.flyState === 'perching') {
+        if(roofBird.perchTimer > roofBird.maxPerch) { roofBird.flyState = 'leaving'; }
+      } else { // leaving：慢速飛出
+        const speed = 1.4;
+        roofBird.flyX -= speed;
+        roofBird.flyY -= speed * 0.577;
+        const u2 = P, scaleX = 1.19;
+        const pct2 = getProgressPct();
+        const goalX2 = W - u2*25, carMinX2 = u2*8, carMaxX2 = goalX2 - u2*10;
+        const carX2 = Math.round((carMinX2 + (carMaxX2-carMinX2)*Math.max(0,Math.min(pct2,100))/100)/u2)*u2;
+        const birdWorldX = carX2 * scaleX + (u2*12 + roofBird.flyX);
+        if(birdWorldX < -u2*20) roofBird = null;
+      }
     }
   }
 
   function drawUFO(ctx, x, y, ts){
     const u=P;
     const roadY = H - u*30;
-    // 飛碟整體下移：陰影剛好在上方車道中間（roadY + u*8）
-    const ufoShiftY = u*30; // 整體下移量，讓飛碟本體在天空偏低位置
-    const uy = y + ufoShiftY; // 實際繪製Y
-    // 地面橢圓陰影在上方車道中間
-    const upperLaneCenterY = roadY + u*8;
-    const shadowScale = Math.max(0.5, Math.min(1.2, (H - uy) / H));
-    const shadowW = u*16*shadowScale, shadowH = u*2.5*shadowScale;
-    ctx.save();
-    ctx.globalAlpha *= 0.4 * shadowScale;
-    ctx.beginPath(); ctx.ellipse(x, upperLaneCenterY, shadowW, shadowH, 0, 0, Math.PI*2);
-    ctx.fillStyle='#000'; ctx.fill();
-    ctx.restore();
+    const ufoShiftY = u*30;
+    const uy = y + ufoShiftY;
+    
+    // Use eggVariant to pick between original and new pixel UFO style
+    const useNewStyle = eggVariant > 0.5;
+    
     if(ufoBeam>0){
       const bh=u*25*ufoBeam;
       const beamBottomY = uy+u*5+bh;
-      const g=ctx.createLinearGradient(x,uy+u*5,x,beamBottomY); g.addColorStop(0,'rgba(80,255,80,0.55)'); g.addColorStop(1,'rgba(80,255,80,0)'); ctx.fillStyle=g; ctx.beginPath(); ctx.moveTo(x-u*2,uy+u*5); ctx.lineTo(x-u*8,beamBottomY); ctx.lineTo(x+u*8,beamBottomY); ctx.lineTo(x+u*2,uy+u*5); ctx.closePath(); ctx.fill();
+      const beamW = u*14;
+      const g=ctx.createLinearGradient(x,uy+u*5,x,beamBottomY); 
+      g.addColorStop(0,'rgba(80,255,80,0.55)'); 
+      g.addColorStop(1,'rgba(80,255,80,0)'); 
+      ctx.fillStyle=g; 
+      ctx.beginPath(); 
+      ctx.moveTo(x-u*2,uy+u*5); 
+      ctx.lineTo(x-beamW,beamBottomY); 
+      ctx.lineTo(x+beamW,beamBottomY); 
+      ctx.lineTo(x+u*2,uy+u*5); 
+      ctx.closePath(); 
+      ctx.fill();
+      
+      // Fix 17: Shadow at beam bottom (illuminated ground area), grey-yellow color
+      ctx.save();
+      ctx.globalAlpha *= 0.55 * ufoBeam;
+      ctx.beginPath(); 
+      ctx.ellipse(x, beamBottomY, beamW*0.85, u*3, 0, 0, Math.PI*2);
+      ctx.fillStyle='rgba(200,180,80,0.5)'; 
+      ctx.fill();
+      ctx.beginPath(); 
+      ctx.ellipse(x, beamBottomY, beamW*0.5, u*1.8, 0, 0, Math.PI*2);
+      ctx.fillStyle='rgba(180,160,60,0.4)'; 
+      ctx.fill();
+      ctx.restore();
     }
-    px(ctx,x-u*8,uy+u*3,u*16,u*3,'#9ca3af'); px(ctx,x-u*10,uy+u*4,u*20,u*2,'#6b7280');
-    px(ctx,x-u*4,uy-u*2,u*8,u*5,'#bfdbfe'); px(ctx,x-u*3,uy-u,u*6,u*2,'#93c5fd');
-    const lightColors=['#ef4444','#facc15','#22c55e','#3b82f6'];
-    [-u*6,-u*2,u*2,u*6].forEach((lx,i)=>{ const on=Math.floor(ts/250+i)%2===0; px(ctx,x+lx,uy+u*5,u*2,u,on?lightColors[i]:'#1f2937'); });
-    px(ctx, x-u*3, uy-u*2, u*2, u, 'rgba(255,255,255,0.5)');
+
+    if(useNewStyle){
+      // New pixel UFO style (like the uploaded image: blue saucer, orange ring, dome, lights)
+      // Dome (glass, white/blue)
+      px(ctx, x-u*2, uy-u*6, u*4, u*2, '#e8f4ff');
+      px(ctx, x-u*4, uy-u*5, u*8, u*3, '#bfdbfe');
+      px(ctx, x-u*3, uy-u*6, u*6, u*2, 'rgba(255,255,255,0.5)');
+      // Dome border (dark)
+      px(ctx, x-u*4, uy-u*7, u*8, u, '#2d3748');
+      px(ctx, x-u*6, uy-u*5, u, u*3, '#2d3748');
+      px(ctx, x+u*5, uy-u*5, u, u*3, '#2d3748');
+      // Alien head inside dome (green)
+      px(ctx, x-u*2, uy-u*5, u*4, u*3, '#4ade80');
+      px(ctx, x-u*3, uy-u*4, u, u*2, '#22c55e');  // head shadow left
+      px(ctx, x-u, uy-u*5, u*2, u*2, '#86efac');   // highlight
+      // Alien eyes (dark)
+      px(ctx, x-u*2, uy-u*4, u, u, '#111827');
+      px(ctx, x+u, uy-u*4, u, u, '#111827');
+      // Orange ring (between dome and saucer)
+      px(ctx, x-u*6, uy-u*2, u*12, u*2, '#f97316');
+      px(ctx, x-u*7, uy-u, u*14, u, '#ea580c');
+      // Saucer body (blue)
+      px(ctx, x-u*10, uy, u*20, u*3, '#3b82f6');
+      px(ctx, x-u*12, uy+u, u*24, u*2, '#2563eb');
+      // Saucer highlight
+      px(ctx, x-u*8, uy, u*6, u, '#93c5fd');
+      // Lights on saucer bottom (red dots blinking)
+      const lightColors2=['#ef4444','#facc15','#22c55e','#f97316','#ef4444'];
+      [-u*8,-u*4,0,u*4,u*8].forEach((lx,i)=>{ const on=Math.floor(ts/300+i)%2===0; px(ctx,x+lx,uy+u*2,u*2,u*2,on?lightColors2[i]:'#1e293b'); });
+      // Saucer bottom curve
+      px(ctx, x-u*10, uy+u*3, u*20, u, '#1d4ed8');
+    } else {
+      // Original UFO style
+      px(ctx,x-u*8,uy+u*3,u*16,u*3,'#9ca3af'); 
+      px(ctx,x-u*10,uy+u*4,u*20,u*2,'#6b7280');
+      px(ctx,x-u*4,uy-u*2,u*8,u*5,'#bfdbfe'); 
+      px(ctx,x-u*3,uy-u,u*6,u*2,'#93c5fd');
+      const lightColors=['#ef4444','#facc15','#22c55e','#3b82f6'];
+      [-u*6,-u*2,u*2,u*6].forEach((lx,i)=>{ const on=Math.floor(ts/250+i)%2===0; px(ctx,x+lx,uy+u*5,u*2,u,on?lightColors[i]:'#1f2937'); });
+      px(ctx, x-u*3, uy-u*2, u*2, u, 'rgba(255,255,255,0.5)');
+    }
   }
   function drawMeteor(ctx, x, y, ts){
     const u=P*0.5; // 縮小為一半
@@ -2156,11 +2330,28 @@ load(); run(); calcExpected(); renderTodayStats();
     for(let i=0;i<10;i++){ const a=1-i*0.09; px(ctx,x+i*u*5,y+i*u*3,Math.max(1,u*3-Math.floor(i/4)),u*2,`rgba(160,${210-i*8},255,${a})`); }
     px(ctx,x-u*2,y-u*2,u*5,u*5,'#fffbff'); px(ctx,x-u,y-u,u*3,u*3,'#bfdbfe');
   }
+  function drawAirplanContrail(ctx, x, y) {
+    const u=P;
+    // 尾端飛機雲（更靠近機身，從 x+u*4 開始）
+    for(let i=1;i<=10;i++){
+      const alpha = (1-i/11)*0.55;
+      const spread = i*u*0.8;
+      px(ctx, x+u*4+i*u*4, y+u-spread*0.3, u*3, u*2, `rgba(255,255,255,${alpha})`);
+      px(ctx, x+u*4+i*u*4, y+u+spread*0.2, u*3, u*1.5, `rgba(255,255,255,${alpha*0.7})`);
+    }
+  }
   function drawAirplane(ctx, x, y, ts) {
     const u=P;
     const v = Math.floor(eggVariant*5); // 0-4 款式
+    // 先畫尾跡（在飛機右邊，飛行方向為向左所以尾跡在右）
+    drawAirplanContrail(ctx, x, y);
+    // 縮小飛機：用 ctx.scale 統一縮小到 0.7
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(0.7, 0.7);
+    ctx.translate(-x, -y);
     if(v===0){
-      // 客機（原版，白色）
+      // 客機（白色）
       px(ctx, x-u*10, y, u*20, u*3, '#e5e7eb');
       px(ctx, x-u*12, y+u, u*2, u*2, '#e5e7eb');
       px(ctx, x+u*8, y-u*4, u*3, u*4, '#ef4444');
@@ -2171,34 +2362,47 @@ load(); run(); calcExpected(); renderTodayStats();
     } else if(v===1){
       // 戰鬥機（深灰，尖細）
       px(ctx, x-u*14, y+u, u*24, u*2, '#374151');
-      px(ctx, x-u*14, y+u, u*5, u*2, '#1f2937'); // 機鼻（深）
-      px(ctx, x+u*8, y-u*3, u*2, u*5, '#6b7280'); // 尾翼
+      px(ctx, x-u*14, y+u, u*5, u*2, '#1f2937');
+      px(ctx, x+u*8, y-u*3, u*2, u*5, '#6b7280');
       px(ctx, x+u*4, y-u*2, u*2, u, '#9ca3af');
-      px(ctx, x-u*4, y+u*3, u*6, u, '#4b5563'); // 下翼
-      px(ctx, x-u*12, y+u*2, u*4, u, '#60a5fa'); // 引擎噴射
-      px(ctx, x-u*13, y+u, u*2, u*2, '#fde047'); // 火焰
-      px(ctx, x-u*8, y, u*6, u, 'rgba(200,230,255,0.4)'); // 駕駛艙
+      px(ctx, x-u*4, y+u*3, u*6, u, '#4b5563');
+      px(ctx, x-u*12, y+u*2, u*4, u, '#60a5fa');
+      px(ctx, x-u*13, y+u, u*2, u*2, '#fde047');
+      px(ctx, x-u*8, y, u*6, u, 'rgba(200,230,255,0.4)');
     } else if(v===2){
-      // 雙翼老式飛機（棕色木質）
-      px(ctx, x-u*8, y, u*16, u*2, '#92400e');
-      px(ctx, x-u*10, y+u*4, u*16, u*2, '#92400e'); // 下翼
-      for(let i=0;i<3;i++) px(ctx, x-u*6+i*u*4, y, u, u*4, '#78350f'); // 支柱
-      px(ctx, x-u*2, y-u*2, u*4, u*4, '#d97706'); // 駕駛艙圈
-      px(ctx, x-u, y-u, u*2, u*2, '#60a5fa');
-      px(ctx, x+u*6, y-u*2, u*2, u*4, '#b45309'); // 尾翼
-      px(ctx, x+u*8, y-u*5, u*3, u*4, '#a16207');
-      // 螺旋槳
-      const prop = Math.floor(ts/80)%2;
-      px(ctx, x-u*9, y+prop*u*3-u*3, u, u*6, '#1f2937');
+      // 雙翼老式飛機（簡潔版）
+      // 機身
+      px(ctx, x-u*9, y+u, u*18, u*3, '#92400e');
+      // 上翼
+      px(ctx, x-u*10, y-u*2, u*18, u*2, '#b45309');
+      // 下翼
+      px(ctx, x-u*8, y+u*4, u*14, u*2, '#92400e');
+      // 支柱（2根）
+      px(ctx, x-u*5, y-u*2, u, u*6, '#78350f');
+      px(ctx, x+u*2, y-u*2, u, u*6, '#78350f');
+      // 尾翼
+      px(ctx, x+u*7, y-u*3, u*2, u*5, '#7c2d12');
+      // 駕駛艙
+      px(ctx, x-u*2, y-u, u*4, u*3, '#92400e');
+      // 螺旋槳（旋轉動畫）
+      const propAngle = (ts/60) % (Math.PI*2);
+      const propLen = u*6;
+      for(let p=0;p<2;p++) {
+        const a = propAngle + p * Math.PI;
+        const bx2 = Math.round(Math.cos(a)*propLen);
+        const by2 = Math.round(Math.sin(a)*propLen);
+        px(ctx, x-u*10+bx2-u, y+u*2+by2-u, u*2, u*2, '#1f2937');
+        px(ctx, x-u*10+bx2-u, y+u*2+by2-u, u, u, '#374151');
+      }
     } else if(v===3){
       // 小型私人機（黃色）
       px(ctx, x-u*8, y+u, u*14, u*2, '#fde047');
       px(ctx, x-u*10, y+u*2, u*3, u*2, '#fde047');
       px(ctx, x+u*4, y-u*2, u*2, u*3, '#ca8a04');
       px(ctx, x-u*4, y+u*3, u*6, u, '#fbbf24');
-      px(ctx, x-u*2, y, u*4, u*2, '#7dd3fc'); // 駕駛艙
+      px(ctx, x-u*2, y, u*4, u*2, '#92400e');
       px(ctx, x+u*6, y-u*3, u*2, u*5, '#ca8a04');
-      px(ctx, x-u*9, y+u, u*2, u*2, '#f97316'); // 螺旋槳
+      px(ctx, x-u*9, y+u, u*2, u*2, '#f97316');
     } else {
       // 貨機（灰綠軍用色）
       px(ctx, x-u*10, y, u*22, u*4, '#4b5563');
@@ -2207,134 +2411,107 @@ load(); run(); calcExpected(); renderTodayStats();
       px(ctx, x-u*6, y+u*4, u*10, u*2, '#6b7280');
       px(ctx, x-u*2, y-u, u*5, u*2, '#9ca3af');
       px(ctx, x-u*10, y, u*4, u*2, '#60a5fa');
-      // 雙引擎
       px(ctx, x-u*4, y+u*5, u*3, u*2, '#1f2937');
       px(ctx, x+u*2, y+u*5, u*3, u*2, '#1f2937');
     }
+    ctx.restore(); // 結束飛機縮小
   }
   function drawBalloon(ctx, x, y, ts, roadY) {
     const u=P;
-    const v = Math.floor(eggVariant*5);
+    const v = Math.floor(eggVariant*5); // 0-4 款式
     if(v===0){
-      // 彩色條紋（原版）
-      px(ctx, x-u*6, y-u*12, u*12, u*10, '#ef4444');
-      px(ctx, x-u*4, y-u*12, u*4, u*10, '#facc15');
-      px(ctx, x+u*2, y-u*12, u*4, u*10, '#3b82f6');
-      px(ctx, x-u*8, y-u*10, u*16, u*6, '#ef4444');
-      px(ctx, x-u*4, y-u*10, u*4, u*6, '#facc15');
-      px(ctx, x+u*2, y-u*10, u*4, u*6, '#3b82f6');
+      // 彩色條紋圓球——用像素圓輪廓（每行寬度：4,8,12,14,16,16,16,14,12,8,4）
+      // 底色紅，黃藍條疊上，三色條寬均等、同高同Y，完全無縫
+      const rows = [4,8,12,14,16,16,16,14,12,8,4]; // 每行像素寬（單位u）
+      const balloonTop = y - u*12; // 球頂
+      rows.forEach((w, i) => {
+        const rx = x - w*u/2;
+        const ry = balloonTop + i*u;
+        // 紅底（整行）
+        px(ctx, rx, ry, w*u, u, '#ef4444');
+        // 黃條（中間1/3）
+        const yellStart = x - u*2, yellW = u*4;
+        if(yellStart > rx && yellStart < rx+w*u) px(ctx, yellStart, ry, Math.min(yellW, rx+w*u-yellStart), u, '#facc15');
+        // 藍條（右側1/3）
+        const blueStart = x + u*2, blueW = u*4;
+        if(blueStart > rx && blueStart < rx+w*u) px(ctx, blueStart, ry, Math.min(blueW, rx+w*u-blueStart), u, '#3b82f6');
+      });
+      // 繩子
       px(ctx, x-u*3, y-u*2, u, u*2, '#d1d5db');
       px(ctx, x+u*2, y-u*2, u, u*2, '#d1d5db');
+      // 籃子
       px(ctx, x-u*3, y, u*6, u*3, '#b45309');
     } else if(v===1){
       // 愛心氣球（粉紅）
       px(ctx, x-u*7, y-u*11, u*14, u*9, '#f472b6');
-      px(ctx, x-u*9, y-u*9, u*18, u*6, '#f472b6');
-      px(ctx, x-u*5, y-u*14, u*4, u*3, '#f472b6');
-      px(ctx, x+u, y-u*14, u*4, u*3, '#f472b6');
-      px(ctx, x-u*3, y-u*13, u*6, u*2, '#f472b6');
-      px(ctx, x-u*2, y-u*8, u*4, u*2, '#fda4af'); // 高光
-      px(ctx, x-u*3, y-u*2, u, u*2, '#d1d5db');
-      px(ctx, x+u*2, y-u*2, u, u*2, '#d1d5db');
-      px(ctx, x-u*3, y, u*6, u*3, '#92400e');
+      px(ctx, x-u*9, y-u*9,  u*18, u*6, '#f472b6');
+      px(ctx, x-u*5, y-u*14, u*4,  u*3, '#f472b6');
+      px(ctx, x+u,   y-u*14, u*4,  u*3, '#f472b6');
+      px(ctx, x-u*3, y-u*13, u*6,  u*2, '#f472b6');
+      px(ctx, x-u*2, y-u*8,  u*4,  u*2, '#fda4af');
+      px(ctx, x-u*3, y-u*2,  u,    u*2, '#d1d5db');
+      px(ctx, x+u*2, y-u*2,  u,    u*2, '#d1d5db');
+      px(ctx, x-u*3, y,      u*6,  u*3, '#92400e');
     } else if(v===2){
-      // 格子氣球（黃黑）
-      for(let gy=0;gy<3;gy++) for(let gx=0;gx<3;gx++){
-        const gc=(gy+gx)%2===0?'#fde047':'#1f2937';
-        px(ctx, x-u*6+gx*u*4, y-u*12+gy*u*3, u*4, u*3, gc);
-      }
-      px(ctx, x-u*8, y-u*10, u*16, u*6, 'rgba(0,0,0,0.1)');
+      // 綠色圓球氣球（補上缺少的綠色）
+      const rows = [4,8,12,14,16,16,16,14,12,8,4];
+      const balloonTop = y - u*12;
+      rows.forEach((w, i) => {
+        const rx = x - w*u/2;
+        const ry = balloonTop + i*u;
+        px(ctx, rx, ry, w*u, u, '#16a34a');
+        // 淺綠高光條
+        const hiStart = x - u*2, hiW = u*3;
+        if(hiStart > rx && hiStart < rx+w*u) px(ctx, hiStart, ry, Math.min(hiW, rx+w*u-hiStart), u, '#4ade80');
+      });
+      // 繩子
       px(ctx, x-u*3, y-u*2, u, u*2, '#d1d5db');
       px(ctx, x+u*2, y-u*2, u, u*2, '#d1d5db');
-      px(ctx, x-u*3, y, u*6, u*3, '#78350f');
+      // 籃子
+      px(ctx, x-u*3, y, u*6, u*3, '#b45309');
     } else if(v===3){
-      // 南瓜造型（秋天限定感，橘色圓鼓）
-      px(ctx, x-u*8, y-u*10, u*16, u*8, '#ea580c');
-      px(ctx, x-u*6, y-u*12, u*12, u*10, '#f97316');
-      px(ctx, x-u*4, y-u*14, u*8, u*4, '#f97316');
-      px(ctx, x-u*3, y-u*9, u*2, u*4, '#16a34a'); // 條紋
-      px(ctx, x+u, y-u*9, u*2, u*4, '#16a34a');
-      px(ctx, x-u, y-u*13, u*2, u*3, '#15803d'); // 蒂頭
+      // 汽艇（白色加灰色，橢圓形狀）
+      // 船體橢圓（白底灰邊）
+      px(ctx, x-u*14, y-u*3, u*28, u*6, '#e5e7eb'); // 主體
+      px(ctx, x-u*15, y-u, u*30, u*4, '#d1d5db');   // 橢圓加寬
+      px(ctx, x-u*13, y-u*4, u*26, u*2, '#f9fafb'); // 頂部高光
+      px(ctx, x-u*14, y+u*2, u*28, u, '#9ca3af');   // 底部陰影線
+      // 駕駛艙（灰色小方塊）
+      px(ctx, x-u*4, y-u*7, u*8, u*5, '#9ca3af');
+      px(ctx, x-u*3, y-u*7, u*6, u*3, '#bfdbfe'); // 玻璃窗
+      // 煙囪
+      px(ctx, x+u*2, y-u*9, u*3, u*4, '#6b7280');
+      px(ctx, x+u, y-u*10, u*5, u, '#4b5563'); // 煙囪頂
+      // 浮桿（側面裝飾）
+      px(ctx, x-u*14, y, u*3, u*2, '#9ca3af');
+      px(ctx, x+u*11, y, u*3, u*2, '#9ca3af');
+      // 繩子
+      px(ctx, x-u*3, y-u*2, u, u*2, '#9ca3af');
+      px(ctx, x+u*2, y-u*2, u, u*2, '#9ca3af');
+    } else {
+      // 格子氣球（藍白棋盤，逐行無縫）
+      const rows = [4,8,12,14,16,16,16,14,12,8,4];
+      const balloonTop = y - u*12;
+      rows.forEach((w, i) => {
+        const rx = x - w*u/2;
+        const ry = balloonTop + i*u;
+        // 底色藍
+        px(ctx, rx, ry, w*u, u, '#3b82f6');
+        // 白格（每隔u*4一格，依行奇偶偏移）
+        const offset = (i % 2) * u*4;
+        for(let gx = rx + offset; gx < rx + w*u; gx += u*8) {
+          const gw = Math.min(u*4, rx + w*u - gx);
+          if(gw > 0) px(ctx, gx, ry, gw, u, '#e0f2fe');
+        }
+      });
+      // 繩子
       px(ctx, x-u*3, y-u*2, u, u*2, '#d1d5db');
       px(ctx, x+u*2, y-u*2, u, u*2, '#d1d5db');
+      // 籃子
       px(ctx, x-u*3, y, u*6, u*3, '#92400e');
-    } else {
-      // 飛艇（長橢圓形）
-      px(ctx, x-u*12, y-u*6, u*24, u*8, '#6b7280');
-      px(ctx, x-u*10, y-u*8, u*20, u*10, '#9ca3af');
-      px(ctx, x-u*8, y-u*6, u*8, u*4, '#bfdbfe'); // 艙窗
-      px(ctx, x+u*4, y-u*9, u*8, u*2, '#374151'); // 尾翼
-      px(ctx, x+u*8, y-u*4, u*4, u*4, '#374151');
-      px(ctx, x-u*12, y-u*3, u*3, u*3, '#4b5563'); // 引擎
-      px(ctx, x+u*10, y-u*3, u*3, u*3, '#4b5563');
-      px(ctx, x-u*3, y+u*2, u*6, u*3, '#78350f'); // 吊籃
     }
   }
-  function drawFlyingCockroach(ctx, x, y, ts) {
-    const u=P;
-    const walk = Math.floor(ts/100) % 2;
-    const wingFlap = Math.floor(ts/80) % 2;
-    const legColor = '#3a2810';
-    const bodyColor1 = '#4a1e08';
-    const bodyColor2 = '#6b2d0e';
-    const bodyShine = '#8a4020';
-    const wingColor1 = 'rgba(90,50,10,0.75)';
-    const wingColor2 = 'rgba(120,70,20,0.55)';
-    // 翅膀（展開，上下拍動）
-    if(wingFlap === 0){
-      // 翅膀展開（上揚）
-      px(ctx, x-u*14, y-u*6, u*10, u*4, wingColor2); // 左翅外
-      px(ctx, x-u*10, y-u*5, u*8, u*3, wingColor1);  // 左翅內
-      px(ctx, x+u*2,  y-u*6, u*10, u*4, wingColor2); // 右翅外
-      px(ctx, x+u*2,  y-u*5, u*8, u*3, wingColor1);  // 右翅內
-      // 翅膀紋路
-      px(ctx, x-u*12, y-u*5, u*6, u, 'rgba(0,0,0,0.25)');
-      px(ctx, x+u*4,  y-u*5, u*6, u, 'rgba(0,0,0,0.25)');
-    } else {
-      // 翅膀收合（下壓）
-      px(ctx, x-u*12, y-u*2, u*10, u*3, wingColor2);
-      px(ctx, x-u*8,  y-u,   u*7,  u*2, wingColor1);
-      px(ctx, x+u*2,  y-u*2, u*10, u*3, wingColor2);
-      px(ctx, x+u,    y-u,   u*7,  u*2, wingColor1);
-      px(ctx, x-u*10, y-u,   u*6,  u,   'rgba(0,0,0,0.25)');
-      px(ctx, x+u*4,  y-u,   u*6,  u,   'rgba(0,0,0,0.25)');
-    }
-    // 六隻腳（飛行姿態，腳向下懸掛）
-    if(walk === 0){
-      px(ctx, x-u*5, y+u*2, u*2, u*3, legColor); px(ctx, x-u*5, y+u*5, u*3, u, legColor); // 左前腳
-      px(ctx, x-u*4, y+u*2, u*2, u*3, legColor); px(ctx, x-u*6, y+u*4, u*3, u, legColor); // 左中腳
-      px(ctx, x-u*3, y+u*2, u*2, u*3, legColor); // 左後腳
-      px(ctx, x+u*2, y+u*2, u*2, u*3, legColor); px(ctx, x+u*4,  y+u*5, u*3, u, legColor); // 右前腳
-      px(ctx, x+u*1, y+u*2, u*2, u*3, legColor); px(ctx, x+u*3,  y+u*4, u*3, u, legColor); // 右中腳
-      px(ctx, x+u,   y+u*2, u*2, u*3, legColor); // 右後腳
-    } else {
-      px(ctx, x-u*5, y+u*3, u*2, u*3, legColor); px(ctx, x-u*6, y+u*6, u*3, u, legColor);
-      px(ctx, x-u*4, y+u*3, u*2, u*3, legColor); px(ctx, x-u*4, y+u*5, u*3, u, legColor);
-      px(ctx, x-u*3, y+u*3, u*2, u*3, legColor);
-      px(ctx, x+u*2, y+u*3, u*2, u*3, legColor); px(ctx, x+u*5, y+u*6, u*3, u, legColor);
-      px(ctx, x+u,   y+u*3, u*2, u*3, legColor); px(ctx, x+u*2, y+u*5, u*3, u, legColor);
-      px(ctx, x+u,   y+u*3, u*2, u*3, legColor);
-    }
-    // 身體（三節）
-    px(ctx, x+u*2,  y-u,    u*4, u*3, bodyColor1); // 頭盾
-    px(ctx, x-u*2,  y-u,    u*5, u*3, bodyColor2); // 胸節
-    px(ctx, x-u*5,  y,      u*4, u*3, bodyColor1); // 腹節
-    // 光澤
-    px(ctx, x-u,    y-u,    u*3, u,   bodyShine);
-    px(ctx, x+u*2,  y-u,    u*2, u,   bodyShine);
-    // 眼睛（紅色，向左飛所以眼睛在右邊）
-    px(ctx, x+u*4,  y,      u,   u,   '#ff2020');
-    px(ctx, x+u*4,  y+u,    u,   u,   '#ff2020');
-    // 觸鬚
-    const antennaWave = Math.sin(ts/180) * u;
-    px(ctx, x+u*5,  y-u,    u*2, u,   legColor);
-    px(ctx, x+u*6,  y-u*2,  u*2, u,   legColor);
-    px(ctx, x+u*7,  y-u*3+Math.round(antennaWave/u)*u, u*2, u, legColor);
-    px(ctx, x+u*8,  y-u*4+Math.round(antennaWave/u)*u, u*2, u, legColor);
-    px(ctx, x+u*5,  y+u*2,  u*2, u,   legColor);
-    px(ctx, x+u*6,  y+u*3,  u*2, u,   legColor);
-    px(ctx, x+u*7,  y+u*4-Math.round(antennaWave/u)*u, u*2, u, legColor);
-  }
+
 
   document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('pixel-track'); if(!canvas) return;
@@ -2366,8 +2543,8 @@ load(); run(); calcExpected(); renderTodayStats();
 
   function drawTree(ctx, cx, groundY, style, variant){ 
     const u=P, s=1.3, th=Math.round(u*8*s), tw=Math.round(u*2*s), tx=cx-tw/2, ty=groundY-th;
-    // 陰影：寬度與葉片最寬一致（u*14s），與蘑菇/大花相同邏輯
-    px(ctx, cx-u*7*s, groundY, u*14*s, u*1.5, 'rgba(0,0,0,0.18)');
+    // 陰影：縮小至合理寬度
+    px(ctx, cx-u*4*s, groundY, u*8*s, u*1.5, 'rgba(0,0,0,0.18)');
     px(ctx, tx, ty, tw, th, style.trunk2); 
     px(ctx, tx, ty, tw/2, th, style.trunk1); 
     
@@ -2448,18 +2625,32 @@ load(); run(); calcExpected(); renderTodayStats();
   }
   function drawPig(ctx, cx, groundY, facingRight) {
     const u=P; const f=facingRight?1:-1;
+    // 陰影
     px(ctx, cx-u*3, groundY, u*6, u, 'rgba(0,0,0,0.1)');
+    // 腿
     px(ctx, cx-f*u*2, groundY-u*2, u, u*2, '#f9a8d4');
     px(ctx, cx-f*u, groundY-u*2, u, u*2, '#f9a8d4');
     px(ctx, cx+f*u, groundY-u*2, u, u*2, '#f9a8d4');
     px(ctx, cx+f*u*2, groundY-u*2, u, u*2, '#f9a8d4');
+    // 身體
     px(ctx, cx-u*3, groundY-u*5, u*6, u*3, '#fbcfe8');
+    // 頭部
     px(ctx, cx-f*u*3, groundY-u*5, u*3, u*3, '#fbcfe8');
-    px(ctx, cx-f*u*5, groundY-u*4, u*2, u*2, '#f472b6');
-    px(ctx, cx-f*u*5, groundY-u*4, u, u, '#be185d');
-    px(ctx, cx-f*u*6, groundY-u*4, u, u, '#be185d');
-    px(ctx, cx-f*u*3, groundY-u*6, u*2, u, '#f9a8d4');
+    // 耳朵（更高、更明顯）
+    px(ctx, cx-f*u*4, groundY-u*7, u*2, u*2, '#f472b6');
+    px(ctx, cx-f*u*4, groundY-u*7, u, u, '#be185d'); // 耳朵深色
+    // 尾巴（捲曲）
     px(ctx, cx+f*u*3, groundY-u*4, u*2, u, '#f472b6');
+    // 鼻子（橢圓形，比頭部顏色深一點的粉紅）
+    const noseX = cx - f*u*5;
+    const noseY = groundY - u*4;
+    px(ctx, noseX, noseY, u*2, u, '#f9a8d4'); // 鼻子主體橢圓（稍深）
+    px(ctx, noseX-u, noseY, u*4, u, '#fbb6ce'); // 鼻子外擴（橫向橢圓感）
+    // 鼻孔（兩個黑點）
+    px(ctx, noseX-u*0.5, noseY, u, u, '#be185d');
+    px(ctx, noseX+u, noseY, u, u, '#be185d');
+    // 眼睛
+    px(ctx, cx-f*u*3, groundY-u*6, u, u, '#1c1917');
   }
   function drawDog(ctx, cx, groundY, facingRight) {
     const u=P; const f=facingRight?1:-1;
@@ -2476,16 +2667,28 @@ load(); run(); calcExpected(); renderTodayStats();
   }
   function drawChicken(ctx, cx, groundY, facingRight) {
     const u=P; const f=facingRight?1:-1;
-    px(ctx, cx-u*2, groundY, u*4, u, 'rgba(0,0,0,0.15)'); 
-    px(ctx, cx-f*u, groundY-u, u, u, '#d97706'); 
-    px(ctx, cx+f*u, groundY-u, u, u, '#d97706'); 
-    px(ctx, cx-u*2, groundY-u*4, u*4, u*3, '#fff'); 
-    px(ctx, cx-f*u*2, groundY-u*3, u, u, '#ef4444'); 
-    px(ctx, cx-f*u*2, groundY-u*4, u, u, '#facc15'); 
-    px(ctx, cx-f*u, groundY-u*5, u*2, u*2, '#fff'); 
-    px(ctx, cx-f*u*2, groundY-u*5, u, u, '#000'); 
-    px(ctx, cx-f*u, groundY-u*6, u*2, u, '#ef4444'); 
-    px(ctx, cx+f*u*3, groundY-u*3, u, u*2, '#fff'); 
+    // 陰影
+    px(ctx, cx-u*2, groundY, u*5, u, 'rgba(0,0,0,0.15)');
+    // 腳（兩隻，置中在身體下方）
+    px(ctx, cx-u,   groundY-u, u, u, '#d97706');
+    px(ctx, cx+u,   groundY-u, u, u, '#d97706');
+    // 身體（固定矩形，不隨方向變）
+    px(ctx, cx-u*2, groundY-u*4, u*4, u*3, '#fff');
+    // 翅膀（與身體對齊）
+    px(ctx, cx+f*u, groundY-u*4, u*2, u*2, '#f0f0f0');
+    // 肉垂（面朝方向前端）
+    px(ctx, cx+f*u*2, groundY-u*3, u, u, '#ef4444');
+    // 嘴（面朝方向最前端）
+    px(ctx, cx+f*u*2, groundY-u*4, u, u, '#facc15');
+    // 頭（面朝方向）
+    px(ctx, cx+f*u,   groundY-u*5, u*2, u*2, '#fff');
+    // 眼（頭上偏前）
+    px(ctx, cx+f*u*2, groundY-u*5, u, u, '#000');
+    // 冠（紅色）
+    px(ctx, cx+f*u,   groundY-u*6, u*2, u, '#ef4444');
+    // 尾羽（反方向）
+    px(ctx, cx-f*u*2, groundY-u*4, u, u*2, '#f5f5f5');
+    px(ctx, cx-f*u*3, groundY-u*3, u, u*2, '#e0e0e0');
   }
   function drawDuck(ctx, cx, groundY, facingRight) {
     const u=P; const f=facingRight?1:-1;
@@ -2499,24 +2702,96 @@ load(); run(); calcExpected(); renderTodayStats();
     px(ctx, cx-f*u*3, groundY-u*5, u, u, '#000'); 
   }
   function drawFarmhouse(ctx, cx, groundY, style) { const u=P; px(ctx, cx-u*8, groundY, u*16, u*2, 'rgba(0,0,0,0.2)'); px(ctx, cx-u*8, groundY-u*8, u*16, u*8, '#fef3c7'); px(ctx, cx-u*10, groundY-u*12, u*20, u*4, '#b91c1c'); px(ctx, cx-u*8, groundY-u*14, u*16, u*2, '#991b1b'); px(ctx, cx-u*2, groundY-u*5, u*4, u*5, '#78350f'); }
-  function drawShop(ctx, cx, groundY) { const u=P; px(ctx, cx-u*7, groundY, u*14, u*2, 'rgba(0,0,0,0.2)'); px(ctx, cx-u*7, groundY-u*6, u*14, u*6, '#d1d5db'); px(ctx, cx-u*6, groundY-u*4, u*12, u*4, '#9ca3af'); for(let i=0; i<7; i++) { px(ctx, cx-u*7 + i*u*2, groundY-u*9, u*2, u*3, i%2===0 ? '#ef4444' : '#ffffff'); } px(ctx, cx-u*7, groundY-u*11, u*14, u*2, '#1f2937'); }
-  function drawBarn(ctx, cx, groundY) {
+  function drawShop(ctx, cx, groundY, slotIdx) { 
     const u=P;
+    const shopColors = [
+      ['#d1d5db','#9ca3af','#ef4444','#ffffff'], // 灰牆紅條（保留）
+      ['#fef3c7','#f59e0b','#92400e','#fde047'], // 奶黃棕條（鄉村）
+      ['#e8d5b0','#c8a870','#7a3b1e','#f0e0b0'], // 土黃深棕條（農舍感）
+      ['#f0e8d0','#d4b880','#5a3e28','#e8d4a0'], // 米色木條（穀倉感）
+    ];
+    const ci = Math.floor(Math.abs(Math.sin((slotIdx||0)*13.7))*40) % shopColors.length;
+    const [wallC, wallC2, stripC1, stripC2] = shopColors[ci];
+    px(ctx, cx-u*7, groundY, u*14, u*2, 'rgba(0,0,0,0.2)'); 
+    px(ctx, cx-u*7, groundY-u*6, u*14, u*6, wallC); 
+    px(ctx, cx-u*6, groundY-u*4, u*12, u*4, wallC2); 
+    for(let i=0; i<7; i++) { px(ctx, cx-u*7 + i*u*2, groundY-u*9, u*2, u*3, i%2===0 ? stripC1 : stripC2); } 
+    px(ctx, cx-u*7, groundY-u*11, u*14, u*2, '#4a2e18'); 
+  }
+  function drawBarn(ctx, cx, groundY, slotIdx) {
+    const u=P;
+    const barnWalls = ['#991b1b','#7a3b1e','#166534','#92400e','#6b4c2a'];
+    const barnRoofs = ['#451a03','#3d1a0a','#14532d','#713f12','#3a2010'];
+    const bi = Math.floor(Math.abs(Math.sin((slotIdx||0)*17.3))*40) % barnWalls.length;
+    const wallC = barnWalls[bi], roofC = barnRoofs[bi];
     px(ctx, cx-u*12, groundY, u*24, u*2, 'rgba(0,0,0,0.2)');
-    px(ctx, cx-u*10, groundY-u*12, u*20, u*12, '#991b1b'); 
-    px(ctx, cx-u*12, groundY-u*16, u*24, u*4, '#451a03'); 
-    px(ctx, cx-u*8, groundY-u*20, u*16, u*4, '#451a03'); 
+    px(ctx, cx-u*10, groundY-u*12, u*20, u*12, wallC); 
+    px(ctx, cx-u*12, groundY-u*16, u*24, u*4, roofC); 
+    px(ctx, cx-u*8, groundY-u*20, u*16, u*4, roofC); 
     px(ctx, cx-u*3, groundY-u*6, u*6, u*6, '#171717'); 
     px(ctx, cx-u*3, groundY-u*6, u*6, u*6, 'rgba(255,255,255,0.2)'); 
     px(ctx, cx-u*4, groundY-u*10, u*8, u*4, '#fde047'); 
   }
-  function drawSilo(ctx, cx, groundY) {
+  function drawSilo(ctx, cx, groundY, slotSeed) {
     const u=P;
+    // 依 seed 決定筒身色與屋頂色
+    const siloBodyColors = ['#d4a05a','#e8c080','#c8b090','#b8a888','#d8c0a0','#c8a870','#d0b8a0'];
+    const siloRoofColors = ['#7a3b1e','#6b4c2a','#3d6b1e','#207040','#8a5a28','#a06020','#5a3e28'];
+    const siloStripeColors = ['#b08040','#c09060','#a89070','#9a9080','#b8a080','#b09060','#b09880'];
+    const si = Math.floor((slotSeed||0)*100) % siloBodyColors.length;
+    const bodyC  = siloBodyColors[si];
+    const stripeC= siloStripeColors[si];
+    const roofC  = siloRoofColors[si];
+    const roofC2 = siloRoofColors[(si+3)%siloRoofColors.length];
     px(ctx, cx-u*5, groundY, u*10, u*2, 'rgba(0,0,0,0.2)');
-    px(ctx, cx-u*4, groundY-u*24, u*8, u*24, '#d1d5db'); 
-    px(ctx, cx-u*5, groundY-u*28, u*10, u*4, '#64748b'); 
-    px(ctx, cx-u*3, groundY-u*32, u*6, u*4, '#475569'); 
-    px(ctx, cx-u, groundY-u*24, u*2, u*20, '#9ca3af'); 
+    // 筒身（咖啡黃/各色）
+    px(ctx, cx-u*4, groundY-u*24, u*8, u*24, bodyC);
+    // 筒身高光條紋
+    px(ctx, cx-u, groundY-u*24, u*2, u*20, stripeC);
+    // 圓頂屋頂（階梯式，紅/彩色）
+    px(ctx, cx-u*5, groundY-u*26, u*10, u*3, roofC2);
+    px(ctx, cx-u*4, groundY-u*28, u*8, u*3, roofC);
+    px(ctx, cx-u*3, groundY-u*30, u*6, u*3, roofC);
+    px(ctx, cx-u*2, groundY-u*32, u*4, u*2, roofC2);
+    // 頂帽
+    px(ctx, cx-u, groundY-u*34, u*2, u*2, roofC2);
+  }
+  function drawBellTower(ctx, cx, groundY, slotSeed) {
+    const u=P;
+    const towerColors = [
+      ['#e8d8b0','#c8b880','#b85028','#8a3018'], // 暖米色+紅頂（保留）
+      ['#c0d0e0','#a0b4c8','#3060a0','#184070'], // 灰藍+深藍頂（保留）
+      ['#d8c0a0','#b8a080','#208040','#145828'], // 米色+綠頂（保留）
+      ['#e8d8b0','#c8a870','#8a4018','#5a2808'], // 土黃+深棕頂（取代紫色）
+    ];
+    const ti = Math.floor((slotSeed||0)*40) % towerColors.length;
+    const [bodyC, bodyC2, roofC, roofC2] = towerColors[ti];
+    px(ctx, cx-u*4, groundY, u*8, u*2, 'rgba(0,0,0,0.2)');
+    // 塔身
+    px(ctx, cx-u*4, groundY-u*20, u*8, u*20, bodyC);
+    px(ctx, cx-u*3, groundY-u*20, u, u*18, bodyC2); // 側光
+    // 拱窗
+    px(ctx, cx-u*2, groundY-u*8, u*4, u*4, '#1a1410');
+    px(ctx, cx-u,   groundY-u*8, u*2, u*2, '#403020');
+    // 鐘樓上部寬台
+    px(ctx, cx-u*5, groundY-u*20, u*10, u*3, bodyC2);
+    px(ctx, cx-u*5, groundY-u*20, u*10, u, 'rgba(0,0,0,0.2)');
+    // 開放鐘樓格
+    px(ctx, cx-u*4, groundY-u*25, u*8, u*5, bodyC);
+    px(ctx, cx-u*3, groundY-u*24, u*2, u*4, '#1a1410'); // 鐘洞左
+    px(ctx, cx+u,   groundY-u*24, u*2, u*4, '#1a1410'); // 鐘洞右
+    // 鐘（懸掛感）
+    px(ctx, cx-u,   groundY-u*23, u*2, u*2, '#c8a020'); // 鐘體
+    px(ctx, cx-u,   groundY-u*22, u*2, u,   '#a88010'); // 鐘底
+    // 尖頂
+    px(ctx, cx-u*4, groundY-u*28, u*8, u*3, roofC2);
+    px(ctx, cx-u*3, groundY-u*30, u*6, u*2, roofC);
+    px(ctx, cx-u*2, groundY-u*32, u*4, u*2, roofC);
+    px(ctx, cx-u,   groundY-u*34, u*2, u*2, roofC2);
+    px(ctx, cx-u/2, groundY-u*36, u, u*2, roofC2); // 尖帽
+    // 十字
+    px(ctx, cx-u/2, groundY-u*38, u, u*3, '#c8a020');
+    px(ctx, cx-u,   groundY-u*37, u*3, u,  '#c8a020');
   }
   function drawField(ctx, cx, groundY, style) { 
     const u=P; 
@@ -2576,106 +2851,77 @@ load(); run(); calcExpected(); renderTodayStats();
 
   function drawRoofBird(ctx, bird, time) {
     const u=P;
-    const { type, seed, perchTimer } = bird;
-    // 鳥停在車頂中央（車頂大約在 y=0 scaled，但我們在已translate/scale的ctx中）
-    // 車身頂部大約在 scaleY坐標 0（見drawCar中 px(ctx,u*8,-u,...)）
-    // 鳥繪製在 (u*11, -u*4) 車頂中央稍前
-    const bx = u*11, by = -u*5;
-    // 偶爾拍翅（每隔幾秒）
-    const flapCycle = Math.floor(perchTimer / 800) % 8;
-    const isFlapping = flapCycle < 2;
+    const { type, perchTimer, flyState, flyX, flyY, wingTimer } = bird;
+    const cx = u*12 + flyX;
+    const groundY = -u + flyY;
 
-    if(type === 'sparrow') {
-      // 麻雀（棕色小鳥）
-      px(ctx, bx-u, by-u*2, u*3, u*2, '#92400e'); // 頭
-      px(ctx, bx-u*2, by, u*5, u*2, '#b45309'); // 身
-      px(ctx, bx-u*2, by, u*2, u*2, '#78350f'); // 翅
-      px(ctx, bx+u, by, u*2, u*2, '#78350f');
-      if(isFlapping){ px(ctx, bx-u*3, by-u, u*2, u, '#a16207'); px(ctx, bx+u*2, by-u, u*2, u, '#a16207'); }
-      px(ctx, bx, by+u*2, u*2, u, '#fbbf24'); // 腳
-      px(ctx, bx+u, by-u*2, u, u, '#000'); // 眼
-      px(ctx, bx-u*2, by-u, u, u, '#d97706'); // 嘴
-    } else if(type === 'crow') {
-      // 烏鴉（全黑大鳥）
-      px(ctx, bx-u, by-u*3, u*4, u*2, '#1f2937');
-      px(ctx, bx-u*3, by-u, u*7, u*3, '#111827');
-      px(ctx, bx-u*4, by-u*2, u*2, u*2, '#374151'); // 翅膀
-      px(ctx, bx+u*2, by-u*2, u*2, u*2, '#374151');
-      if(isFlapping){ px(ctx, bx-u*5, by-u*3, u*3, u*2, '#1f2937'); px(ctx, bx+u*3, by-u*3, u*3, u*2, '#1f2937'); }
-      px(ctx, bx, by+u*2, u*2, u, '#4b5563');
-      px(ctx, bx+u*2, by-u*2, u, u, '#fff'); // 眼白
-      px(ctx, bx+u*2, by-u*2, u, u, '#60a5fa'); // 眼睛
-      px(ctx, bx-u*2, by-u, u*2, u, '#374151'); // 嘴
-    } else if(type === 'owl') {
-      // 貓頭鷹（圓胖）
-      px(ctx, bx-u*2, by-u*4, u*5, u*4, '#d97706'); // 頭
-      px(ctx, bx-u*2, by, u*5, u*3, '#92400e'); // 身
-      if(isFlapping){ px(ctx, bx-u*4, by-u*2, u*3, u*2, '#b45309'); px(ctx, bx+u*2, by-u*2, u*3, u*2, '#b45309'); }
-      px(ctx, bx-u, by-u*4, u, u, '#374151'); // 耳朵
-      px(ctx, bx+u*2, by-u*4, u, u, '#374151');
-      px(ctx, bx-u, by-u*2, u*2, u*2, '#fef3c7'); // 眼白大
-      px(ctx, bx+u, by-u*2, u*2, u*2, '#fef3c7');
-      px(ctx, bx-u, by-u*2, u, u, '#1f2937'); // 瞳孔
-      px(ctx, bx+u, by-u*2, u, u, '#1f2937');
-      px(ctx, bx, by+u*3, u*2, u, '#fbbf24'); // 腳
-      px(ctx, bx, by-u, u*2, u, '#f59e0b'); // 嘴
-    } else if(type === 'parrot') {
-      // 鸚鵡（彩色）
-      const pc = ['#16a34a','#dc2626','#f59e0b'][Math.floor(seed*3)];
-      px(ctx, bx-u, by-u*3, u*3, u*3, pc); // 頭
-      px(ctx, bx-u*2, by, u*5, u*2, '#15803d'); // 身
-      px(ctx, bx-u*3, by-u, u*2, u*3, '#f97316'); // 翅
-      px(ctx, bx+u*2, by-u, u*2, u*3, '#f97316');
-      if(isFlapping){ px(ctx, bx-u*4, by-u*2, u*2, u*2, pc); px(ctx, bx+u*3, by-u*2, u*2, u*2, pc); }
-      px(ctx, bx-u*2, by+u*2, u, u*2, '#b45309'); // 尾羽
-      px(ctx, bx+u*2, by+u*2, u, u*2, '#b45309');
-      px(ctx, bx, by+u*2, u*2, u, '#fbbf24');
-      px(ctx, bx+u, by-u*2, u, u, '#000');
-      px(ctx, bx-u*2, by-u, u*2, u, '#f97316'); // 彎嘴
-    } else if(type === 'pigeon') {
-      // 鴿子（灰白）
-      px(ctx, bx-u, by-u*2, u*3, u*2, '#e5e7eb'); // 頭
-      px(ctx, bx-u*2, by, u*5, u*2, '#9ca3af'); // 身
-      px(ctx, bx-u*3, by-u, u*2, u*2, '#6b7280');
-      px(ctx, bx+u*2, by-u, u*2, u*2, '#6b7280');
-      if(isFlapping){ px(ctx, bx-u*4, by-u*2, u*3, u, '#d1d5db'); px(ctx, bx+u*3, by-u*2, u*3, u, '#d1d5db'); }
-      px(ctx, bx, by+u*2, u*2, u, '#f97316'); // 腳
-      px(ctx, bx+u, by-u, u, u, '#374151'); // 眼
-      px(ctx, bx-u*2, by-u, u*2, u, '#d1d5db'); // 嘴
-    } else if(type === 'swallow') {
-      // 燕子（黑白，長尾）
-      px(ctx, bx-u, by-u*2, u*2, u*2, '#1f2937');
-      px(ctx, bx-u*3, by, u*6, u*2, '#1f2937'); // 身（長）
-      px(ctx, bx-u*4, by-u, u*2, u*2, '#374151'); // 翅
-      px(ctx, bx+u*3, by-u, u*2, u*2, '#374151');
-      if(isFlapping){ px(ctx, bx-u*5, by-u*2, u*3, u, '#1f2937'); px(ctx, bx+u*4, by-u*2, u*3, u, '#1f2937'); }
-      px(ctx, bx-u*4, by+u*2, u*2, u*2, '#111'); // 分叉尾
-      px(ctx, bx+u*3, by+u*2, u*2, u*2, '#111');
-      px(ctx, bx-u, by-u, u*3, u, '#fef3c7'); // 腹白
-      px(ctx, bx-u, by-u*2, u, u, '#ef4444'); // 嘴
-    } else if(type === 'toucan') {
-      // 巨嘴鳥
-      px(ctx, bx-u, by-u*3, u*3, u*3, '#1f2937'); // 頭
-      px(ctx, bx-u*2, by, u*5, u*2, '#1f2937'); // 身
-      px(ctx, bx-u*3, by-u, u*2, u*2, '#374151');
-      px(ctx, bx+u*2, by-u, u*2, u*2, '#374151');
-      if(isFlapping){ px(ctx, bx-u*4, by-u*2, u*3, u, '#1f2937'); px(ctx, bx+u*3, by-u*2, u*3, u, '#1f2937'); }
-      // 大嘴（橘黃漸層）
-      px(ctx, bx-u*3, by-u*3, u*3, u*2, '#f97316');
-      px(ctx, bx-u*4, by-u*2, u*2, u, '#fbbf24');
-      px(ctx, bx, by+u*2, u*2, u, '#fbbf24');
-      px(ctx, bx+u, by-u*2, u, u, '#fff'); // 眼
+    const facingRight = flyState !== 'perching';
+    const f = facingRight ? 1 : -1;
+
+    const colors = {
+      sparrow: ['#b45309', '#facc15'],
+      pigeon:  ['#9ca3af', '#d1d5db'],
+      crow:    ['#1f2937', '#4b5563'],
+      mejiro:  ['#22c55e', '#ca8a04'],
+      bulbul:  ['#6b7280', '#374151'],
+      heron:   ['#78350f', '#b45309'],
+    };
+    const [bodyC, billC] = colors[type] || colors.sparrow;
+    const footC = '#c4956a';
+
+    // 飛行中翅膀快速拍動，停棲時緩慢擺動
+    let wingUp;
+    if(flyState === 'perching'){
+      wingUp = Math.floor(perchTimer / 400) % 2 === 0;
     } else {
-      // 紅鶴（flamingo 粉紅細腳）
-      px(ctx, bx, by-u*4, u*2, u*2, '#f9a8d4'); // 頭
-      px(ctx, bx-u, by-u*2, u*3, u*3, '#f472b6'); // 身
-      px(ctx, bx-u*2, by-u, u*2, u*2, '#f9a8d4'); // 翅
-      px(ctx, bx+u*2, by-u, u*2, u*2, '#f9a8d4');
-      if(isFlapping){ px(ctx, bx-u*3, by-u*2, u*2, u, '#f472b6'); px(ctx, bx+u*3, by-u*2, u*2, u, '#f472b6'); }
-      px(ctx, bx, by+u*2, u, u*2, '#f9a8d4'); // 細腳
-      px(ctx, bx+u, by+u*2, u, u*2, '#f9a8d4');
-      px(ctx, bx, by-u*4, u, u, '#1f2937'); // 眼
-      px(ctx, bx-u, by-u*3, u*2, u, '#fbbf24'); // 彎嘴
+      // 飛行中翅膀拍動（快，每300ms）
+      wingUp = Math.floor((wingTimer || 0) / 300) % 2 === 0;
+    }
+
+    px(ctx, cx-u*2,   groundY,     u*4, u,   'rgba(0,0,0,0.15)');
+    px(ctx, cx-f*u,   groundY-u,   u,   u,   footC);
+    px(ctx, cx+f*u,   groundY-u,   u,   u,   footC);
+
+    if(flyState !== 'perching'){
+      // 飛行中：翅膀大幅展開或向下扇動
+      if(wingUp){
+        // 翅膀上揚
+        px(ctx, cx-u*3, groundY-u*5, u*6, u*2, bodyC);
+        px(ctx, cx-u*4, groundY-u*6, u*3, u,   bodyC);
+        px(ctx, cx+u,   groundY-u*6, u*3, u,   bodyC);
+      } else {
+        // 翅膀下扇
+        px(ctx, cx-u*3, groundY-u*2, u*6, u*2, bodyC);
+        px(ctx, cx-u*4, groundY-u*3, u*3, u,   bodyC);
+        px(ctx, cx+u,   groundY-u*3, u*3, u,   bodyC);
+      }
+    } else {
+      // 停棲時：小幅翅膀擺動（原有邏輯）
+      const wingY = wingUp ? groundY-u*4 : groundY-u*3;
+      const wx1 = cx-u*2, wx2 = cx+u*3;
+      ctx.beginPath();
+      ctx.moveTo(wx1, wingY+u);
+      ctx.lineTo(wx2, wingY+u);
+      ctx.lineTo(wx1, wingY);
+      ctx.closePath();
+      ctx.fillStyle = bodyC;
+      ctx.fill();
+    }
+
+    px(ctx, cx-u*2,   groundY-u*3, u*5, u*2, bodyC);
+    if(type === 'mejiro') {
+      px(ctx, cx-u*2, groundY-u*2, u*5, u, '#f8fafc');
+    }
+    px(ctx, cx+f*u*3, groundY-u*2, u,   u,   bodyC);
+    px(ctx, cx-f*u*2, groundY-u*5, u*2, u*2, bodyC);
+    px(ctx, cx-f*u*4, groundY-u*4, u*2, u,   billC);
+    px(ctx, cx-f*u*3, groundY-u*5, u,   u,   '#000');
+    if(type === 'bulbul') {
+      px(ctx, cx-f*u*2, groundY-u*6, u*2, u, '#f4f4f5');
+    }
+    if(type === 'heron') {
+      px(ctx, cx-f*u*2, groundY-u*6, u*2, u,   '#111');
+      px(ctx, cx-f*u*2, groundY-u*7, u,   u,   '#111');
     }
   }
 
@@ -2707,9 +2953,191 @@ load(); run(); calcExpected(); renderTodayStats();
   function drawLighthouse(ctx, cx, groundY) { const u=P; px(ctx, cx-u*3, groundY, u*6, u*2, 'rgba(0,0,0,0.2)'); px(ctx, cx-u*3, groundY-u*28, u*6, u*28, '#e5e7eb'); for(let i=0;i<7;i++) px(ctx, cx-u*3, groundY-u*4*i-u*4, u*6, u*2, '#ef4444'); px(ctx, cx-u*4, groundY-u*28, u*8, u*4, '#fde047'); px(ctx, cx-u*3, groundY-u*32, u*6, u*4, '#374151'); px(ctx, cx-u*2, groundY-u*29, u*4, u*2, 'rgba(255,255,200,0.8)'); }
   function drawWindmill(ctx, cx, groundY, ts) { const u=P; px(ctx, cx-u*2, groundY, u*4, u*2, 'rgba(0,0,0,0.2)'); px(ctx, cx-u*2, groundY-u*20, u*4, u*20, '#d97706'); px(ctx, cx-u*4, groundY-u*22, u*8, u*4, '#92400e'); // 旋轉葉片
     const ang = (ts/2000) % (Math.PI*2); for(let i=0;i<4;i++){ const a=ang+i*Math.PI/2; const bx=Math.round(Math.cos(a)*u*10), by=Math.round(Math.sin(a)*u*10); px(ctx, cx+bx-u, groundY-u*20+by-u*3, u*2, u*6, '#e5e7eb'); } }
-  function drawLibrary(ctx, cx, groundY) { const u=P; px(ctx, cx-u*10, groundY, u*20, u*2, 'rgba(0,0,0,0.2)'); px(ctx, cx-u*10, groundY-u*10, u*20, u*10, '#d1d5db'); px(ctx, cx-u*12, groundY-u*12, u*24, u*2, '#9ca3af'); px(ctx, cx-u*8, groundY-u*14, u*16, u*2, '#6b7280'); for(let i=0;i<4;i++){ px(ctx, cx-u*8+i*u*5, groundY-u*8, u*3, u*8, '#60a5fa'); px(ctx, cx-u*8+i*u*5, groundY-u*8, u*3, u, '#1d4ed8'); } px(ctx, cx-u*3, groundY-u*7, u*6, u*7, '#78350f'); }
-  function drawMarket(ctx, cx, groundY) { const u=P; px(ctx, cx-u*10, groundY, u*20, u*2, 'rgba(0,0,0,0.2)'); px(ctx, cx-u*10, groundY-u*8, u*20, u*8, '#fefce8'); px(ctx, cx-u*12, groundY-u*9, u*24, u*3, '#16a34a'); for(let i=0;i<4;i++) px(ctx, cx-u*10+i*u*6, groundY-u*9, u*3, u*3, i%2?'#fde047':'#ef4444'); px(ctx, cx-u*4, groundY-u*6, u*8, u*6, '#78350f'); px(ctx, cx-u*3, groundY-u*6, u*6, u, '#92400e'); // 攤位掛旗
-    for(let i=0;i<5;i++) px(ctx, cx-u*10+i*u*5, groundY-u*12, u*2, u*3, ['#ef4444','#3b82f6','#fde047','#22c55e','#f472b6'][i]); }
+  function drawLibrary(ctx, cx, groundY) { const u=P; px(ctx, cx-u*10, groundY, u*20, u*2, 'rgba(0,0,0,0.2)'); px(ctx, cx-u*10, groundY-u*10, u*20, u*10, '#e8d8b0'); px(ctx, cx-u*12, groundY-u*12, u*24, u*2, '#c8a870'); px(ctx, cx-u*8, groundY-u*14, u*16, u*2, '#8a5a28'); for(let i=0;i<4;i++){ px(ctx, cx-u*8+i*u*5, groundY-u*8, u*3, u*8, '#c8a040'); px(ctx, cx-u*8+i*u*5, groundY-u*8, u*3, u, '#8a6820'); } px(ctx, cx-u*3, groundY-u*7, u*6, u*7, '#6a3a18'); }
+  function drawMarket(ctx, cx, groundY) { const u=P; px(ctx, cx-u*10, groundY, u*20, u*2, 'rgba(0,0,0,0.2)'); px(ctx, cx-u*10, groundY-u*8, u*20, u*8, '#fef3c7'); px(ctx, cx-u*12, groundY-u*9, u*24, u*3, '#92400e'); for(let i=0;i<4;i++) px(ctx, cx-u*10+i*u*6, groundY-u*9, u*3, u*3, i%2?'#fde047':'#ef4444'); px(ctx, cx-u*4, groundY-u*6, u*8, u*6, '#78350f'); px(ctx, cx-u*3, groundY-u*6, u*6, u, '#92400e'); // 攤位掛旗
+    for(let i=0;i<5;i++) px(ctx, cx-u*10+i*u*5, groundY-u*12, u*2, u*3, ['#ef4444','#d97706','#fde047','#22c55e','#f472b6'][i]); }
+
+  function drawSupermarket(ctx, cx, groundY) {
+    const u=P;
+    // 超市：大型建築，高度接近樹木，大地色系，無側窗
+    px(ctx, cx-u*14, groundY, u*28, u*2, 'rgba(0,0,0,0.22)');
+    // 主體牆面（沙土米色）
+    px(ctx, cx-u*13, groundY-u*18, u*26, u*18, '#e8d5b0');
+    px(ctx, cx-u*12, groundY-u*18, u, u*16, '#d4c090'); // 側光
+    // 砌磚紋路（橫條）
+    for(let i=0;i<9;i++) px(ctx, cx-u*13, groundY-u*2-i*u*2, u*26, u, '#c8b888');
+    // 屋頂平頂壓線
+    px(ctx, cx-u*14, groundY-u*19, u*28, u*2, '#7a5a28');
+    px(ctx, cx-u*13, groundY-u*20, u*26, u, '#8a6a30');
+    // 大型招牌橫條（深棕大地色）
+    px(ctx, cx-u*12, groundY-u*22, u*24, u*3, '#6b4c2a');
+    px(ctx, cx-u*11, groundY-u*22, u*22, u, '#8a6030'); // 招牌高光
+    // 招牌文字（小方塊像素，奶油色）
+    for(let i=0;i<6;i++) px(ctx, cx-u*10+i*u*4, groundY-u*21, u*2, u, '#e8c870');
+    // 大玻璃門（雙扇，木框）
+    px(ctx, cx-u*6, groundY-u*10, u*12, u*10, '#c8d8b0'); // 門框底色（淡綠灰）
+    px(ctx, cx-u, groundY-u*10, u, u*9, '#a8b890'); // 門縫
+    px(ctx, cx-u*6, groundY-u*10, u*12, u, '#5a3e28'); // 門上橫檻
+    px(ctx, cx-u*6, groundY-u*2, u*12, u*2, '#5a3e28'); // 門檻
+    // 門把
+    px(ctx, cx-u*2, groundY-u*5, u, u, '#c8a020');
+    px(ctx, cx+u, groundY-u*5, u, u, '#c8a020');
+    // 地面條紋
+    px(ctx, cx-u*14, groundY, u*28, u, '#d4c8a0');
+  }
+
+  function drawFarmhouseBuilding(ctx, cx, groundY, style, ts) {
+    const u=P;
+    // 農舍：寬大穀倉式建築，無窗戶，厚重木造感
+    // 地面陰影（更寬）
+    px(ctx, cx-u*16, groundY, u*32, u*2, 'rgba(0,0,0,0.22)');
+
+    // 左側低翼（倉庫延伸）
+    px(ctx, cx-u*16, groundY-u*10, u*8, u*10, '#6b3010');
+    px(ctx, cx-u*15, groundY-u*10, u, u*8, '#7a3a18'); // 側光
+    for(let i=0;i<5;i++) px(ctx, cx-u*16, groundY-u*2-i*u*2, u*8, u, '#52220a');
+    // 左翼屋頂（斜面）
+    px(ctx, cx-u*17, groundY-u*11, u*10, u*2, '#3a2010');
+    px(ctx, cx-u*16, groundY-u*13, u*8, u*2, '#2e1808');
+
+    // 主屋身（深赭土，加寬加高）
+    px(ctx, cx-u*12, groundY-u*20, u*24, u*20, '#8b3a0c');
+    px(ctx, cx-u*11, groundY-u*20, u*2, u*18, '#a04818'); // 左側光
+    // 木板橫紋（更多）
+    for(let i=0;i<10;i++) px(ctx, cx-u*12, groundY-u*2-i*u*2, u*24, u, '#6b2808');
+
+    // 右側低翼
+    px(ctx, cx+u*8, groundY-u*10, u*8, u*10, '#6b3010');
+    px(ctx, cx+u*9, groundY-u*10, u, u*8, '#7a3a18');
+    for(let i=0;i<5;i++) px(ctx, cx+u*8, groundY-u*2-i*u*2, u*8, u, '#52220a');
+    // 右翼屋頂
+    px(ctx, cx+u*7, groundY-u*11, u*10, u*2, '#3a2010');
+    px(ctx, cx+u*8, groundY-u*13, u*8, u*2, '#2e1808');
+
+    // 主屋屋頂（大人字形，加寬）
+    px(ctx, cx-u*14, groundY-u*22, u*28, u*3, '#4a3020');
+    px(ctx, cx-u*12, groundY-u*24, u*24, u*2, '#3a2414');
+    px(ctx, cx-u*9,  groundY-u*26, u*18, u*2, '#2e1c10');
+    px(ctx, cx-u*6,  groundY-u*28, u*12, u*2, '#241408');
+    px(ctx, cx-u*3,  groundY-u*30, u*6,  u*2, '#1c0e04');
+    // 屋脊裝飾條
+    px(ctx, cx-u,    groundY-u*31, u*2,  u,   '#5a3818');
+
+    // 大型雙開門（正面，比例更大）
+    px(ctx, cx-u*5, groundY-u*14, u*10, u*14, '#2a1004');
+    px(ctx, cx-u*4, groundY-u*13, u*4,  u*12, '#3a1a08'); // 左扇
+    px(ctx, cx,     groundY-u*13, u*4,  u*12, '#3a1a08'); // 右扇
+    px(ctx, cx-u,   groundY-u*8,  u*2,  u*3,  '#7a4818'); // 門閂橫條
+    // 門框裝飾
+    px(ctx, cx-u*5, groundY-u*15, u*10, u, '#5a3010'); // 門楣
+
+    // 煙囪（左中位置，更粗）
+    px(ctx, cx-u*4, groundY-u*32, u*5, u*12, '#5a3a1a');
+    px(ctx, cx-u*5, groundY-u*33, u*7, u,    '#7a5028'); // 煙囪頂沿
+    px(ctx, cx-u*4, groundY-u*32, u, u*10, '#6b4420'); // 側光
+    if(ts !== undefined) drawChimneySmoke(ctx, cx-u*2, groundY-u*33, ts);
+
+    // 右側第二煙囪（較細）
+    px(ctx, cx+u*6, groundY-u*30, u*3, u*10, '#5a3a1a');
+    px(ctx, cx+u*5, groundY-u*31, u*5, u,    '#7a5028');
+    if(ts !== undefined) drawChimneySmoke(ctx, cx+u*7, groundY-u*31, ts);
+  }
+
+  function drawSmallHouse(ctx, cx, groundY, slotSeed, ts) {
+    const u=P;
+    // 小房子：可愛小屋，大地色系（5種），高度接近樹木
+    const houseWalls = ['#e8d5b0','#d4c09a','#c8b888','#dcc8a0','#e0c8a8'];
+    const houseRoofs = ['#7a3b1e','#6b4c2a','#5a3e28','#8a5028','#4a3020'];
+    const houseAccents = ['#c8a020','#b89010','#a87818','#d4a828','#b89820'];
+    const hi = Math.floor(Math.abs(Math.sin((slotSeed||0)*23.1))*40) % houseWalls.length;
+    const wallC = houseWalls[hi], roofC = houseRoofs[hi], accC = houseAccents[hi];
+    px(ctx, cx-u*7, groundY, u*14, u*2, 'rgba(0,0,0,0.2)');
+    // 屋身（素面大地色，不帶磚紋）
+    px(ctx, cx-u*7, groundY-u*14, u*14, u*14, '#c8a878');
+    px(ctx, cx-u*6, groundY-u*14, u, u*12, 'rgba(255,255,255,0.15)'); // 側光
+    // 三角屋頂（大）
+    px(ctx, cx-u*9, groundY-u*16, u*18, u*3, roofC);
+    px(ctx, cx-u*7, groundY-u*18, u*14, u*2, roofC);
+    px(ctx, cx-u*5, groundY-u*20, u*10, u*2, roofC);
+    px(ctx, cx-u*3, groundY-u*22, u*6, u*2, roofC);
+    px(ctx, cx-u,   groundY-u*24, u*2, u*2, roofC);
+    // 煙囪
+    px(ctx, cx+u*3, groundY-u*24, u*3, u*8, '#5a3e28');
+    px(ctx, cx+u*2, groundY-u*25, u*5, u, '#6b4c2a');
+    // 冒煙特效
+    if(ts !== undefined) drawChimneySmoke(ctx, cx+u*4, groundY-u*25, ts);
+    // 大門
+    px(ctx, cx-u*2, groundY-u*8, u*4, u*8, '#5a3020');
+    px(ctx, cx-u, groundY-u*7, u*2, u*6, '#6b3a28');
+    px(ctx, cx, groundY-u*5, u, u, accC); // 門把
+    // 窗戶（縮小、木框，大地色）
+    const winLight = (new Date().getHours()<7||new Date().getHours()>18) ? '#ffee88' : '#9ad4e8';
+    px(ctx, cx-u*6, groundY-u*11, u*3, u*3, '#3a2010'); // 左窗框
+    px(ctx, cx-u*5, groundY-u*11, u*2, u*2, winLight);   // 左窗玻璃
+    px(ctx, cx+u*3, groundY-u*11, u*3, u*3, '#3a2010'); // 右窗框
+    px(ctx, cx+u*4, groundY-u*11, u*2, u*2, winLight);   // 右窗玻璃
+    // 小柵欄（兩側，大地色）
+    for(let fi=0;fi<8;fi++){
+      const fx = cx - u*11 + fi*u*3;
+      px(ctx, fx, groundY-u*5, u, u*5, '#c8a870');
+      px(ctx, fx, groundY-u*5, u, u, '#8a6030');
+      // 柵欄柱子陰影（緊接柱子下方，斜向右偏移一格）
+      px(ctx, fx+u, groundY-u*4, u, u*4, 'rgba(0,0,0,0.13)');
+    }
+    px(ctx, cx-u*11, groundY-u*4, u*24, u, '#b89050'); // 上橫檻
+    px(ctx, cx-u*11, groundY-u*2, u*24, u, '#b89050'); // 下橫檻
+    // 橫檻陰影（緊接橫檻下方）
+    px(ctx, cx-u*10, groundY-u*3, u*24, u, 'rgba(0,0,0,0.10)');
+    px(ctx, cx-u*10, groundY-u, u*24, u, 'rgba(0,0,0,0.10)');
+  }
+
+  function drawFruitShop(ctx, cx, groundY) {
+    const u=P;
+    // 水果店：中型建築，大地色系，橙褐遮陽棚
+    px(ctx, cx-u*10, groundY, u*20, u*2, 'rgba(0,0,0,0.22)');
+    // 店面主體（赭土色）
+    px(ctx, cx-u*10, groundY-u*14, u*20, u*14, '#c8a870');
+    px(ctx, cx-u*9, groundY-u*14, u, u*12, '#d4b880'); // 側光
+    // 磚紋
+    for(let i=0;i<7;i++) px(ctx, cx-u*10, groundY-u*2-i*u*2, u*20, u, '#b09060');
+    // 遮陽棚（橙褐條紋，大地色）
+    px(ctx, cx-u*11, groundY-u*16, u*22, u*3, '#92400e');
+    for(let i=0;i<6;i++) px(ctx, cx-u*11+i*u*4, groundY-u*16, u*2, u*3, i%2?'#c8740a':'#92400e');
+    px(ctx, cx-u*11, groundY-u*17, u*22, u, '#7a3010'); // 棚緣暗影
+    // 招牌（深棕底，奶油字）
+    px(ctx, cx-u*9, groundY-u*18, u*18, u*2, '#5a3e28');
+    px(ctx, cx-u*8, groundY-u*18, u*16, u, '#6b4c2a'); // 高光
+    for(let i=0;i<5;i++) px(ctx, cx-u*7+i*u*3, groundY-u*18, u*2, u, '#e8c870'); // 招牌字點
+    // 木框大窗（展示水果）
+    px(ctx, cx-u*8, groundY-u*10, u*16, u*6, '#3a2010'); // 窗框
+    px(ctx, cx-u*7, groundY-u*9, u*14, u*4, '#f0e0c0'); // 內壁
+    // 水果展示架
+    px(ctx, cx-u*7, groundY-u*6, u*14, u*2, '#6b4c2a'); // 架子
+    // 各色水果像素（大地自然色為主）
+    const fruits = ['#c41818','#d97706','#e8b840','#3d8020','#b84818','#e86830'];
+    for(let i=0;i<6;i++) px(ctx, cx-u*6+i*u*2, groundY-u*7, u*2, u*2, fruits[i]);
+    // 入口
+    px(ctx, cx-u*3, groundY-u*8, u*6, u*8, '#3d1a08');
+    px(ctx, cx-u*2, groundY-u*7, u*4, u*6, '#5c2a10');
+    px(ctx, cx, groundY-u*4, u, u, '#c8a020');
+  }
+
+  function drawFence(ctx, cx, groundY, skyT) {
+    const u=P;
+    // 木製柵欄（大地色系，比房子低）
+    const postC = dimHex('#c8a870', skyT);
+    const railC = dimHex('#b89050', skyT);
+    const postDark = dimHex('#8a6030', skyT);
+    // 9根柱子，略寬
+    for(let i=0;i<9;i++){
+      const fx = cx - u*12 + i*u*3;
+      px(ctx, fx, groundY-u*7, u, u*7, postC);
+      px(ctx, fx, groundY-u*7, u, u, postDark); // 頂端暗色
+    }
+    // 兩條橫檻
+    px(ctx, cx-u*12, groundY-u*6, u*25, u, railC);
+    px(ctx, cx-u*12, groundY-u*3, u*25, u, railC);
+  }
 
   function drawTrack(pct, ts, driveTime){
     const canvas = document.getElementById('pixel-track'); if(!canvas) return; const ctx = canvas.getContext('2d'); const style = getActiveStyle(), sky = getSky(style), u = P, skyH = 150; ctx.clearRect(0,0,W,H); drawSky(ctx, skyH, u, style, sky, ts);
@@ -2749,44 +3177,119 @@ load(); run(); calcExpected(); renderTodayStats();
     px(ctx, 0, roadY, W, u*2, dimHex(style.roadEdge, skyT));
     px(ctx, 0, H-u*2, W, u*2, dimHex(style.roadEdge, skyT));
     const totalLen = u*16, centerY = roadY + roadH/2; let startX = - (roadOffset % totalLen); for(let x = startX; x < W; x += totalLen) { px(ctx, x, centerY - u/2, u*8, u*2, dimHex(style.roadLine === '#ffffff' ? '#e0e0e0' : style.roadLine, skyT)); }
-    const houseW = u*26, houseX = W - houseW - u*5, scenerySpacing = u*16;
+    const houseW = u*26, houseX = W - houseW - u*5, scenerySpacing = u*28;
     // 非飛碟的天空物件在道路物件之前畫（讓路邊元素蓋住它們）
     if(activeEgg && activeEgg !== 'ufo') drawEasterEgg(ctx, skyH, ts, false);
     
+    // 先計算車子X位置，用於偵測動物接近
+    const _houseW = u*26, _houseX = W - _houseW - u*5;
+    const _carMinX = u*8, _carMaxX = _houseX - u*26;
+    const _carX = Math.round((_carMinX + (_carMaxX-_carMinX)*Math.max(0,Math.min(pct,100))/100)/u)*u;
+    // 清除過期公路動物效果
+    roadAnimalEffects = roadAnimalEffects.filter(e => ts - e.startTs < Math.max(e.jumpDur, e.heartDur) + 100);
+    
     const scSlotScroll = Math.floor(roadOffset) % scenerySpacing;
     const scSlotBase = Math.floor(Math.floor(roadOffset) / scenerySpacing);
-    const scSlotsNeeded = Math.ceil((W + u*40) / scenerySpacing) + 2;
+    const scSlotsNeeded = Math.ceil((W + u*60) / scenerySpacing) + 2;
+
+    // 第一遍：畫建築物（不畫草叢/樹，留給第二遍在上層）
+    for(let si = -2; si < scSlotsNeeded; si++){
+      const slotIdx = scSlotBase + si;
+      // 用 slotIdx 的偶奇決定是否跳過（減少密集度），每隔一格機率出建築
+      const sparseSeed = Math.abs(Math.sin(slotIdx * 137.51) * 9999);
+      const sparseR = sparseSeed - Math.floor(sparseSeed);
+      // 建築類只在 sparseR < 0.65 的 slot 出現（35%機率跳空 slot）
+      const tx = si * scenerySpacing - scSlotScroll;
+      if (pct >= 100 && tx > houseX - u*12) continue;
+      let seed = Math.sin(slotIdx * 269.731) * 43758.5453, r = seed - Math.floor(seed);
+      // 偏移 X（讓建築不每次都在同一位置，-u*6 ~ +u*6）
+      const xOffSeed = Math.abs(Math.sin(slotIdx * 53.7) * 999);
+      const xOff = (xOffSeed - Math.floor(xOffSeed) - 0.5) * u * 10;
+      const bx = tx + xOff;
+      if (r < 0.12) { /* 樹：第二遍畫 */ }
+      else if (r < 0.18) { /* 草叢：第二遍畫 */ }
+      else if (r < 0.22) drawRock(ctx, bx, roadY, style);
+      else if (r < 0.25) drawSign(ctx, bx, roadY, style);
+      else if (r < 0.30) drawField(ctx, bx, roadY, style);
+      else if (r < 0.36) drawPasture(ctx, bx, roadY, style);
+      else if (r < 0.38 && sparseR < 0.65) drawFarmhouseBuilding(ctx, bx, roadY, style, ts);
+      else if (r < 0.40 && sparseR < 0.65) drawSmallHouse(ctx, bx, roadY, r, ts);
+      else if (r < 0.42 && sparseR < 0.65) drawSupermarket(ctx, bx, roadY);
+      else if (r < 0.44 && sparseR < 0.65) drawFruitShop(ctx, bx, roadY);
+      else if (r < 0.46 && sparseR < 0.65) drawShop(ctx, bx, roadY, slotIdx);
+      else if (r < 0.48 && sparseR < 0.65) drawBarn(ctx, bx, roadY, slotIdx);
+      else if (r < 0.495 && sparseR < 0.65) drawSilo(ctx, bx, roadY, r);
+      else if (r < 0.51 && sparseR < 0.65) drawBellTower(ctx, bx, roadY, r);
+      else if (r < 0.52) { drawFence(ctx, bx, roadY, sky.t); }
+      else if (r < 0.60) { 
+          const facingRight = Math.sin(slotIdx * 41.7) > 0;
+          // 車子接近偵測：觸發喇叭效果（愛心 + 跳躍）
+          if(pct < 100 && isRacerActive()){
+            const animalScreenX = bx;
+            const distToCar = animalScreenX - _carX;
+            // 車子從右邊接近動物（distToCar 在 P*16 ~ P*40 之間，車在左）
+            if(distToCar > P*16 && distToCar < P*40){
+              // 計算當前車道偏移（只在上方車道才觸發愛心）
+              const _cycleIdx = Math.floor(driveTime / 20000), _phaseTime = driveTime % 20000;
+              const _lp = [-30, 30, 30, -30, -30, 30];
+              const _currLane = _lp[_cycleIdx % _lp.length], _prevLane = _cycleIdx === 0 ? _currLane : _lp[(_cycleIdx - 1) % _lp.length];
+              const _carYOffset = _prevLane + (_currLane - _prevLane) * Math.min(1, _phaseTime / 2000);
+              const isUpperLane = _carYOffset < 0;
+              const alreadyTriggered = roadAnimalEffects.some(e=>e.slotIdx===slotIdx && ts - e.startTs < 1800);
+              if(!alreadyTriggered){
+                if(isUpperLane){
+                  roadAnimalEffects.push({slotIdx, startTs: ts, jumpDur: 600, heartDur: 1200});
+                  hornEffects.push({slotIdx, startTs: ts, dur: 600, isRoad: true});
+                }
+              }
+            }
+          }
+          const roadEff = roadAnimalEffects.find(e=>e.slotIdx===slotIdx);
+          let jumpY = roadY;
+          if(roadEff){
+            const jAge = ts - roadEff.startTs;
+            if(jAge >= 0 && jAge < roadEff.jumpDur){
+              jumpY = roadY - Math.sin((jAge/roadEff.jumpDur)*Math.PI)*P*8;
+            }
+          }
+          let at = Math.floor((r - 0.52) * 100) % 7; 
+          if(at===0) drawCow(ctx, bx, jumpY, facingRight); 
+          else if(at===1) drawSheep(ctx, bx, jumpY, facingRight); 
+          else if(at===2) drawHorse(ctx, bx, jumpY, facingRight); 
+          else if(at===3) drawPig(ctx, bx, jumpY, facingRight); 
+          else if(at===4) drawChicken(ctx, bx, jumpY, facingRight);
+          else if(at===5) drawDuck(ctx, bx, jumpY, facingRight);
+          else drawDog(ctx, bx, jumpY, facingRight);
+          // 公路動物愛心（喇叭結束後才出現）
+          if(roadEff){
+            const hAge = ts - roadEff.startTs;
+            if(hAge >= 400 && hAge < roadEff.heartDur){
+              const prog = (hAge-400) / (roadEff.heartDur-400);
+              const alpha = prog < 0.15 ? prog/0.15 : prog < 0.7 ? 1 : 1-(prog-0.7)/0.3;
+              drawPixelHeart(ctx, bx, roadY - P*14 - prog*P*10, alpha);
+            }
+          }
+      }
+    }
+    // 第二遍：畫草叢/樹（確保覆蓋在建築物前方）
     for(let si = -2; si < scSlotsNeeded; si++){
       const slotIdx = scSlotBase + si;
       const tx = si * scenerySpacing - scSlotScroll;
       if (pct >= 100 && tx > houseX - u*12) continue;
       let seed = Math.sin(slotIdx * 269.731) * 43758.5453, r = seed - Math.floor(seed);
-      if (r < 0.15) drawTree(ctx, tx, roadY, style, r < 0.05);
-      else if (r < 0.25) drawBush(ctx, tx, roadY, style);
-      else if (r < 0.30) drawRock(ctx, tx, roadY, style);
-      else if (r < 0.33) drawSign(ctx, tx, roadY, style);
-      else if (r < 0.40) drawField(ctx, tx, roadY, style);
-      else if (r < 0.48) drawPasture(ctx, tx, roadY, style);
-      else if (r < 0.50) drawFarmhouse(ctx, tx, roadY, style);
-      else if (r < 0.52) drawShop(ctx, tx, roadY);
-      else if (r < 0.54) drawBarn(ctx, tx, roadY);
-      else if (r < 0.56) drawSilo(ctx, tx, roadY);
-      else if (r < 0.65) { 
-          // 隨機面朝方向（用 slotIdx 作穩定隨機種子）
-          const facingRight = Math.sin(slotIdx * 41.7) > 0;
-          let at = Math.floor((r - 0.56) * 100) % 7; 
-          if(at===0) drawCow(ctx, tx, roadY, facingRight); 
-          else if(at===1) drawSheep(ctx, tx, roadY, facingRight); 
-          else if(at===2) drawHorse(ctx, tx, roadY, facingRight); 
-          else if(at===3) drawPig(ctx, tx, roadY, facingRight); 
-          else if(at===4) drawChicken(ctx, tx, roadY, facingRight);
-          else if(at===5) drawDuck(ctx, tx, roadY, facingRight);
-          else drawDog(ctx, tx, roadY, facingRight); 
-      }
+      const xOffSeed = Math.abs(Math.sin(slotIdx * 53.7) * 999);
+      const xOff = (xOffSeed - Math.floor(xOffSeed) - 0.5) * u * 10;
+      const bx = tx + xOff;
+      if (r < 0.12) drawTree(ctx, bx, roadY, style, r < 0.04);
+      else if (r < 0.18) drawBush(ctx, bx, roadY, style);
     }
     const carMinX = u*8, carMaxX = houseX - u*26, rawPct = Math.max(0, Math.min(pct, 100)), carX = Math.round((carMinX + (carMaxX-carMinX)*rawPct/100)/u)*u;
     let carYOffset = 0; if (pct < 100) { let cycleIdx = Math.floor(driveTime / 20000), phaseTime = driveTime % 20000; const lp = [-30, 30, 30, -30, -30, 30]; let currLane = lp[cycleIdx % lp.length], prevLane = cycleIdx === 0 ? currLane : lp[(cycleIdx - 1) % lp.length]; carYOffset = prevLane + (currLane - prevLane) * Math.min(1, phaseTime / 2000); } else { carYOffset = -30; }
+    // 地面垃圾/大便（在車子之前畫，排序在車後方）
+    drawGroundJunk(ctx, roadOffset, style, skyT, roadY, H - roadY);
     drawCar(ctx, carX, (centerY + carYOffset) - 36, getCarColors(style), driveTime, pct);
+    // 飛天蟑螂：在車子之後、前景草叢之前畫（遮蓋車子和背景建築物）
+    // （已移除飛天蟑螂）
     const fgSpacing = u*24;
     
     const fgScroll = Math.floor(roadOffset * 1.4);
@@ -2800,55 +3303,48 @@ load(); run(); calcExpected(); renderTodayStats();
       // 用 r2 作為次級種子（決定草叢樣式變體）
       let r2Seed = Math.sin(slotIdx * 617.3 + 7.7) * 29999.1; let r2 = r2Seed - Math.floor(r2Seed);
       if (r < 0.55) {
-        // 標準草叢：drawGrassBush
-        const bushTopY = H - u*6 - Math.floor(r * 3) * u;
-        drawGrassBush(ctx, tx - u*4, bushTopY, skyT, style.season);
+        // 標準草叢：固定在前景底部
+        drawGrassBush(ctx, tx - u*4, H - u*6, skyT, style.season);
       } else if (r < 0.65) {
-        // 高挑單株草（tallgrass 樣式）
-        const tgTopY = H - u*8 - Math.floor(r2 * 4) * u;
+        // 高挑單株草：固定在前景底部
+        const tgTopY = H - u*8;
         const tgC  = style.season===3?'#b8ccdc':style.season===2?'#b45309':style.season===1?'#15803d':'#16a34a';
         const tgC2 = style.season===3?'#8898b0':style.season===2?'#78350f':style.season===1?'#166534':'#14532d';
-        // 陰影
         px(ctx, tx-u, tgTopY+u*6, u*5, u, 'rgba(0,0,0,0.15)');
-        // 高草：多株不同高度
         px(ctx, tx,      tgTopY,      u, H-tgTopY,      dimHex(tgC, skyT));
         px(ctx, tx+u,    tgTopY+u*2,  u, H-tgTopY-u*2,  dimHex(tgC2, skyT));
         px(ctx, tx+u*2,  tgTopY-u,    u, H-tgTopY+u,    dimHex(tgC, skyT));
         px(ctx, tx+u*3,  tgTopY+u,    u, H-tgTopY-u,    dimHex(tgC2, skyT));
       } else if (r < 0.72) {
-        // 小石頭（前景點綴）
-        const rockY = H - u*3;
+        // 小石頭：固定在前景底部
+        const rockY = H - u*2;
         const rockC  = style.season===3?'#cbd5e1':'#6b7280';
         const rockC2 = style.season===3?'#e2e8f0':'#9ca3af';
-        px(ctx, tx-u,   rockY-u,   u*4, u*2, 'rgba(0,0,0,0.2)');
+        px(ctx, tx-u,   rockY,     u*4, u,   'rgba(0,0,0,0.2)');
         px(ctx, tx,     rockY-u*3, u*3, u*3, dimHex(rockC, skyT));
         px(ctx, tx-u,   rockY-u*2, u*5, u*2, dimHex(rockC, skyT));
-        px(ctx, tx,     rockY-u*3, u*2, u,   dimHex(rockC2, skyT)); // 高光
-        // 冬天加雪蓋
+        px(ctx, tx,     rockY-u*3, u*2, u,   dimHex(rockC2, skyT));
         if (style.season === 3) {
           px(ctx, tx-u, rockY-u*3, u*5, u, dimHex('#f0f4f8', skyT));
         }
       } else if (r < 0.82) {
-        // 季節特殊前景：春→掉落花瓣小堆；夏→大葉子；秋→落葉；冬→雪堆
+        // 季節特殊前景：全部固定在前景底部
         if (style.season === 0) {
           // 春：小粉花叢
-          const fy = H - u*4;
-          px(ctx, tx-u,   fy-u*2, u*2, u*2, dimHex('#f9a8d4', skyT));
-          px(ctx, tx+u,   fy-u*3, u*2, u*2, dimHex('#fda4af', skyT));
-          px(ctx, tx+u*3, fy-u,   u*2, u*2, dimHex('#fbcfe8', skyT));
-          px(ctx, tx,     fy-u,   u*5, u,   dimHex('#16a34a', skyT));
+          px(ctx, tx-u,   H-u*4, u*2, u*2, dimHex('#f9a8d4', skyT));
+          px(ctx, tx+u,   H-u*5, u*2, u*2, dimHex('#fda4af', skyT));
+          px(ctx, tx+u*3, H-u*3, u*2, u*2, dimHex('#fbcfe8', skyT));
+          px(ctx, tx,     H-u*2, u*5, u,   dimHex('#16a34a', skyT));
         } else if (style.season === 1) {
-          // 夏：寬大深綠葉
-          const ly = H - u*5;
-          px(ctx, tx-u*2, ly, u*8, u*2, dimHex('#14532d', skyT));
-          px(ctx, tx-u,   ly-u*2, u*6, u*3, dimHex('#15803d', skyT));
-          px(ctx, tx,     ly-u*3, u*4, u,   dimHex('#4ade80', skyT));
+          // 夏：大葉子
+          px(ctx, tx-u*2, H-u*3, u*8, u*2, dimHex('#14532d', skyT));
+          px(ctx, tx-u,   H-u*5, u*6, u*3, dimHex('#15803d', skyT));
+          px(ctx, tx,     H-u*6, u*4, u,   dimHex('#4ade80', skyT));
         } else if (style.season === 2) {
-          // 秋：橘黃落葉堆
-          const ly = H - u*3;
-          px(ctx, tx-u*2, ly-u, u*7, u*2, dimHex('#b45309', skyT));
-          px(ctx, tx-u,   ly-u*2, u*3, u,  dimHex('#d97706', skyT));
-          px(ctx, tx+u*3, ly-u*2, u*2, u,  dimHex('#f59e0b', skyT));
+          // 秋：落葉堆
+          px(ctx, tx-u*2, H-u*3, u*7, u*2, dimHex('#b45309', skyT));
+          px(ctx, tx-u,   H-u*4, u*3, u,   dimHex('#d97706', skyT));
+          px(ctx, tx+u*3, H-u*4, u*2, u,   dimHex('#f59e0b', skyT));
         } else {
           // 冬：雪堆
           px(ctx, tx-u*2, H-u*2, u*7, u*2, dimHex('#f3f4f6', skyT));
@@ -2856,9 +3352,9 @@ load(); run(); calcExpected(); renderTodayStats();
           px(ctx, tx,     H-u*5, u*3, u,   dimHex('#f9fafb', skyT));
         }
       } else if (r < 0.88 && style.season === 3) {
-        // 冬天額外雪堆（高頻）
+        // 冬天額外雪堆
         px(ctx, tx-u*2, H-u*2, u*5, u*2, dimHex('#f3f4f6', skyT));
-        px(ctx, tx-u, H-u*3, u*3, u, dimHex('#e5e7eb', skyT));
+        px(ctx, tx-u,   H-u*3, u*3, u,   dimHex('#e5e7eb', skyT));
       }
     }
     if (pct >= 100) { 
@@ -2871,8 +3367,38 @@ load(); run(); calcExpected(); renderTodayStats();
       ctx.font = "bold 22px 'Cubic 11', 'Zpix', sans-serif";
       ctx.fillText("可以休息了！", W/2, boxY + boxH/2); 
     }
+    // 公路晚上亮燈房子效果（在所有建築畫好後疊加燈光）
+    if(sky.t < 0.4){
+      for(let si2 = -2; si2 < scSlotsNeeded; si2++){
+        const slotIdx2 = scSlotBase + si2;
+        const sparseSeed2 = Math.abs(Math.sin(slotIdx2 * 137.51) * 9999);
+        const sparseR2 = sparseSeed2 - Math.floor(sparseSeed2);
+        const tx2 = si2 * scenerySpacing - scSlotScroll;
+        if (pct >= 100 && tx2 > houseX - u*12) continue;
+        let seed2 = Math.sin(slotIdx2 * 269.731) * 43758.5453, r2 = seed2 - Math.floor(seed2);
+        const xOffSeed2 = Math.abs(Math.sin(slotIdx2 * 53.7) * 999);
+        const xOff2 = (xOffSeed2 - Math.floor(xOffSeed2) - 0.5) * u * 10;
+        const bx2 = tx2 + xOff2;
+        // 只對有房屋的 slot 加燈光
+        if((r2 >= 0.38 && r2 < 0.40 && sparseR2 < 0.65) || (r2 >= 0.40 && r2 < 0.42 && sparseR2 < 0.65)){
+          drawNightRoadHouse(ctx, bx2, roadY, skyT, ts);
+        }
+      }
+    }
+    // 蝴蝶（白天，非冬季）
+    drawButterflies(ctx, ts, style, sky, skyH);
+    // 螢火蟲（晚上，非冬季）
+    drawFireflies(ctx, ts, style, sky, skyH);
     // 飛碟最後畫（蓋住所有物件）
     if(activeEgg === 'ufo') drawEasterEgg(ctx, skyH, ts, false);
+    // 像素喇叭特效（最後畫在最上層）
+    hornEffects = hornEffects.filter(e => ts - e.startTs < e.dur + 50);
+    if(hornEffects.length > 0){
+      const carDrawYRoad = (centerY + (pct < 100 ? (() => { let ci2=Math.floor(drivingTime/20000),pi2=drivingTime%20000; const lp2=[-30,30,30,-30,-30,30]; let cL=lp2[ci2%lp2.length],pL=ci2===0?cL:lp2[(ci2-1)%lp2.length]; return pL+(cL-pL)*Math.min(1,pi2/2000); })() : -30)) - 36;
+      const carMinX2=u*8, carMaxX2=houseX-u*26, rawPct2=Math.max(0,Math.min(pct,100));
+      const carX2=Math.round((carMinX2+(carMaxX2-carMinX2)*rawPct2/100)/u)*u;
+      drawPixelHorn(ctx, carX2, carDrawYRoad, ts, hornEffects, 1.19, 1.38);
+    }
   }
 
   function drawGiantMushroom(ctx, mx, my, seed) { 
@@ -2892,7 +3418,28 @@ load(); run(); calcExpected(); renderTodayStats();
     px(ctx, mx-u, my-u*23, u*2, u*2, dotC);
     px(ctx, mx+u*4, my-u*19, u*2, u*2, dotC);
   }
-  function drawGiantFlower(ctx, fx, fy, seed) { const u=P, pc=['#ef4444','#eab308','#3b82f6','#ffffff','#f472b6','#a855f7','#fb923c','#67e8f9','#fde047','#e879f9','#f97316','#38bdf8'][Math.floor(seed*100)%12], cc=['#facc15','#fde047','#fbbf24','#fef08a','#fb923c'][Math.floor(seed*37)%5]; px(ctx, fx-u*2.5, fy, u*5, u*1.5, 'rgba(0,0,0,0.18)'); px(ctx, fx-u, fy-u*24, u*2, u*24, '#4d7c0f'); px(ctx, fx-u*4, fy-u*12, u*4, u*2, '#3f6212'); px(ctx, fx+u, fy-u*16, u*4, u*2, '#3f6212'); px(ctx, fx-u*2, fy-u*26, u*4, u*4, cc); px(ctx, fx-u*6, fy-u*26, u*4, u*4, pc); px(ctx, fx+u*2, fy-u*26, u*4, u*4, pc); px(ctx, fx-u*2, fy-u*30, u*4, u*4, pc); px(ctx, fx-u*2, fy-u*22, u*4, u*4, pc); }
+  function drawGiantFlower(ctx, fx, fy, seed) { 
+    const u=P;
+    const petalColors=['#ef4444','#eab308','#3b82f6','#f472b6','#a855f7','#fb923c','#67e8f9','#e879f9','#f97316','#38bdf8'];
+    const centerColors=['#facc15','#fb923c','#4ade80','#f9a8d4','#fde047','#a3e635','#60a5fa','#fbbf24','#86efac','#c084fc'];
+    const pi = Math.floor(seed*100) % petalColors.length;
+    // 確保花蕊和花瓣顏色不同（偏移3個索引）
+    const ci = (pi + 3 + Math.floor(seed*37)) % centerColors.length;
+    const pc = petalColors[pi], cc = centerColors[ci];
+    // 確保 cc !== pc（double check）
+    const finalCC = cc === pc ? centerColors[(ci+5)%centerColors.length] : cc;
+    px(ctx, fx-u*2.5, fy, u*5, u*1.5, 'rgba(0,0,0,0.18)'); 
+    px(ctx, fx-u, fy-u*24, u*2, u*24, '#4d7c0f'); 
+    px(ctx, fx-u*4, fy-u*12, u*4, u*2, '#3f6212'); 
+    px(ctx, fx+u, fy-u*16, u*4, u*2, '#3f6212'); 
+    // 花蕊（中心）
+    px(ctx, fx-u*2, fy-u*26, u*4, u*4, finalCC); 
+    // 花瓣（四方向）
+    px(ctx, fx-u*6, fy-u*26, u*4, u*4, pc); 
+    px(ctx, fx+u*2, fy-u*26, u*4, u*4, pc); 
+    px(ctx, fx-u*2, fy-u*30, u*4, u*4, pc); 
+    px(ctx, fx-u*2, fy-u*22, u*4, u*4, pc); 
+  }
   function drawPikmin(ctx, px_x, px_y, type, time, isActive) {
     const u=P; let bounce=0;
     if(isActive){ bounce=(type==='winged')?Math.sin(time/150)*u*2+u*4:Math.abs(Math.sin(time/100))*u; }
@@ -2976,6 +3523,447 @@ load(); run(); calcExpected(); renderTodayStats();
     else{ px(ctx, px_x-u*2.5, y+u, u*2, u*2, '#fff'); px(ctx, px_x+u*0.5, y+u, u*2, u*2, '#fff'); px(ctx, px_x-u*1.5, y+u*1.5, u, u, '#000'); px(ctx, px_x+u*1.5, y+u*1.5, u, u, '#000'); }
   }
   function drawPikminGoal(ctx, gx, gy, seed) { const u=P; if(seed>0.5){ px(ctx, gx-u*6, gy-u*12, u*12, u*12, '#ef4444'); px(ctx, gx-u*4, gy-u*14, u*8, u*2, '#ef4444'); px(ctx, gx-u*4, gy-u*14, u*8, u*2, '#22c55e'); px(ctx, gx-u*3, gy-u*6, u, u, '#facc15'); px(ctx, gx+u*2, gy-u*8, u, u, '#facc15'); px(ctx, gx, gy-u*3, u, u, '#facc15'); }else{ px(ctx, gx-u*5, gy-u*6, u*10, u*6, '#b45309'); px(ctx, gx-u*6, gy-u*8, u*12, u*2, '#d97706'); px(ctx, gx-u, gy-u*14, u*2, u*6, '#a3e635'); px(ctx, gx-u*3, gy-u*18, u*6, u*4, '#fde047'); } }
+
+  function drawPixelHeart(ctx, cx, cy, alpha) {
+    const u=P;
+    // 像素愛心（7x6 格）
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    const c = '#f472b6';
+    const c2 = '#fda4af';
+    // 上兩個圓弧
+    px(ctx, cx-u*3, cy-u*2, u*2, u*2, c);
+    px(ctx, cx+u,   cy-u*2, u*2, u*2, c);
+    // 中排
+    px(ctx, cx-u*4, cy-u, u*4, u, c);
+    px(ctx, cx,     cy-u, u*4, u, c);
+    // 寬排
+    px(ctx, cx-u*4, cy,   u*8, u, c);
+    // 縮收
+    px(ctx, cx-u*3, cy+u,  u*6, u, c);
+    px(ctx, cx-u*2, cy+u*2,u*4, u, c);
+    px(ctx, cx-u,   cy+u*3,u*2, u, c);
+    // 亮點
+    px(ctx, cx-u*2, cy-u,  u,   u, c2);
+    ctx.restore();
+  }
+
+  // 喇叭音波特效（在車頭前方閃兩次弧形音波）
+  function drawHonkWave(ctx, carX, carDrawY, ts, roadAnimalEffects) {
+    const u = P;
+    // 找最近一次觸發的 roadAnimalEffect
+    let mostRecent = null;
+    for(let e of roadAnimalEffects){
+      if(!mostRecent || e.startTs > mostRecent.startTs) mostRecent = e;
+    }
+    if(!mostRecent) return;
+    const age = ts - mostRecent.startTs;
+    if(age < 0 || age > 500) return;
+
+    // 車頭位置（carX 是車左邊，scaled 後車頭約在 carX + u*24*1.19 ≈ carX + u*28.6）
+    const headX = carX + Math.round(u * 28.6);
+    // 車子垂直中心（drawY + scale後車身中心 ≈ drawY + u*4*1.38）
+    const midY = carDrawY + Math.round(u * 4 * 1.38);
+
+    // 每 200ms 閃一次，共兩次
+    // wave1: 0~200ms，wave2: 200~400ms
+    ctx.save();
+    for(let wave = 0; wave < 2; wave++){
+      const wStart = wave * 200;
+      const wAge = age - wStart;
+      if(wAge < 0 || wAge > 220) continue;
+      const prog = Math.min(1, wAge / 180); // 0→1 展開
+      const fadeAlpha = wAge < 80 ? wAge/80 : 1 - (wAge-80)/140;
+      if(fadeAlpha <= 0) continue;
+      ctx.globalAlpha = Math.max(0, fadeAlpha) * 0.9;
+
+      // 音波：3條弧，隨 prog 向外擴展
+      for(let arc = 0; arc < 3; arc++){
+        const arcProg = Math.min(1, prog + arc * 0.08);
+        const dist = (arc + 1) * u * 3 + arcProg * u * 5;
+        const arcH = (arc + 1) * u * 2 + arcProg * u * 2;
+        // 用像素矩形模擬弧形音波（3段：上、中、下）
+        const arcX = headX + dist;
+        const arcW = u;
+        ctx.fillStyle = '#fde047'; // 亮黃色音波
+        // 上段
+        px(ctx, arcX, midY - arcH, arcW, arcH * 0.6, '#fde047');
+        // 下段
+        px(ctx, arcX, midY + arcH * 0.4, arcW, arcH * 0.6, '#fde047');
+        // 點綴外框色
+        ctx.fillStyle = '#ca8a04';
+        px(ctx, arcX - u, midY - arcH * 0.5, arcW, arcH * 0.3, '#ca8a04');
+        px(ctx, arcX - u, midY + arcH * 0.2, arcW, arcH * 0.3, '#ca8a04');
+      }
+      // "!" 感嘆號（第一波閃時出現）
+      if(wave === 0 && wAge < 200){
+        ctx.globalAlpha = Math.max(0, fadeAlpha) * 0.95;
+        px(ctx, headX + u*3, midY - u*5, u*2, u*4, '#fde047');
+        px(ctx, headX + u*3, midY,       u*2, u*2, '#fde047');
+      }
+    }
+    ctx.restore();
+  }
+
+  // 像素波紋特效（車燈右方出現三個 ))) 白色像素波紋）
+  function drawPixelHorn(ctx, carX, carDrawY, ts, hornEffects, scaleX, scaleY) {
+    const u = P;
+    let mostRecent = null;
+    for(let e of hornEffects){
+      if(!mostRecent || e.startTs > mostRecent.startTs) mostRecent = e;
+    }
+    if(!mostRecent) return;
+    const age = ts - mostRecent.startTs;
+    if(age < 0 || age > mostRecent.dur) return;
+
+    const prog = age / mostRecent.dur;
+    const alpha = prog < 0.15 ? prog/0.15 : prog < 0.75 ? 1 : 1-(prog-0.75)/0.25;
+    if(alpha <= 0) return;
+
+    // 車燈位置：車燈約在 carX + u*23*scaleX，垂直約 carDrawY + u*3.5*scaleY
+    const headlightX = Math.round(carX + u * 23 * (scaleX||1.19));
+    const headlightY = Math.round(carDrawY + u * 3.5 * (scaleY||1.38));
+
+    ctx.save();
+
+    // 三個像素感 ) 波紋，依序出現，向右擴散
+    for(let wi = 0; wi < 3; wi++){
+      const wDelay = wi * 160;
+      const wAge = age - wDelay;
+      if(wAge < 0) continue;
+      const wProg = Math.min(1, wAge / Math.max(1, mostRecent.dur - wDelay));
+      const wAlpha = wProg < 0.2 ? wProg/0.2 : wProg < 0.75 ? 1 : 1-(wProg-0.75)/0.25;
+      if(wAlpha <= 0) continue;
+
+      ctx.globalAlpha = Math.max(0, alpha * wAlpha * 0.95);
+
+      // 波紋向右飄移（整數像素）
+      const drift = Math.round(wProg * u * 2.88 / u) * u;
+      const wx = headlightX + u*1.6 + wi * u*3.2 + drift;
+      const wy = headlightY;
+
+      // 像素「)」圓弧：9段矩形，模擬平滑括號曲線（縮小20%，高約u*6.4）
+      const S = 0.50; // 縮小（原本 0.72）
+      ctx.globalAlpha = Math.max(0, alpha * wAlpha * 0.95);
+      px(ctx, wx + u*0.40, wy - u*3.20, u*S, u*S, '#ffffff'); // 最頂
+      px(ctx, wx + u*1.04, wy - u*2.48, u*S, u*S, '#ffffff'); // 上弧外擴
+      px(ctx, wx + u*1.44, wy - u*1.76, u*S, u*S, '#ffffff'); // 最右上
+      px(ctx, wx + u*1.60, wy - u*0.88, u*S, u*0.88, '#ffffff'); // 右側中上
+      px(ctx, wx + u*1.60, wy + u*0.00, u*S, u*0.88, '#ffffff'); // 最右（中心）
+      px(ctx, wx + u*1.44, wy + u*0.88, u*S, u*S, '#ffffff'); // 右側中下
+      px(ctx, wx + u*1.04, wy + u*1.76, u*S, u*S, '#ffffff'); // 最右下
+      px(ctx, wx + u*0.40, wy + u*2.48, u*S, u*S, '#ffffff'); // 下弧收回
+      px(ctx, wx + u*0.00, wy + u*3.20, u*S, u*S, '#ffffff'); // 最底
+      // 淡藍外框
+      ctx.globalAlpha = Math.max(0, alpha * wAlpha * 0.28);
+      px(ctx, wx - u*0.32, wy - u*3.20, u*S, u*S, 'rgba(180,220,255,1)');
+      px(ctx, wx + u*0.32, wy - u*2.48, u*S, u*S, 'rgba(180,220,255,1)');
+      px(ctx, wx + u*0.72, wy - u*1.76, u*S, u*S, 'rgba(180,220,255,1)');
+      px(ctx, wx + u*0.88, wy - u*0.88, u*S, u*0.88, 'rgba(180,220,255,1)');
+      px(ctx, wx + u*0.88, wy + u*0.00, u*S, u*0.88, 'rgba(180,220,255,1)');
+      px(ctx, wx + u*0.72, wy + u*0.88, u*S, u*S, 'rgba(180,220,255,1)');
+      px(ctx, wx + u*0.32, wy + u*1.76, u*S, u*S, 'rgba(180,220,255,1)');
+      px(ctx, wx - u*0.32, wy + u*2.48, u*S, u*S, 'rgba(180,220,255,1)');
+    }
+    ctx.restore();
+  }
+
+  // 螢火蟲繪製
+  function drawFireflies(ctx, ts, style, sky, skyH) {
+    if(style.season === 3) return; // 冬天無螢火蟲
+    const nightAlpha = Math.max(0, (0.35 - sky.t) / 0.35); // sky.t < 0.35 為晚上
+    if(nightAlpha <= 0) return;
+
+    const u = P;
+    if(!firefliesInit || fireflies.length === 0){
+      fireflies = [];
+      for(let i = 0; i < 18; i++){
+        fireflies.push({
+          x: Math.random() * W,
+          y: skyH * 0.3 + Math.random() * (H - skyH * 0.3 - u*10),
+          phase: Math.random() * Math.PI * 2,
+          speed: 0.3 + Math.random() * 0.5,
+          glow: Math.random(),
+          vx: (Math.random()-0.5) * 0.6,
+          vy: (Math.random()-0.5) * 0.4,
+        });
+      }
+      firefliesInit = true;
+    }
+
+    ctx.save();
+    for(let i = 0; i < fireflies.length; i++){
+      const f = fireflies[i];
+      // 更新位置（緩慢飄動）
+      f.x += f.vx + Math.sin(ts/2000 + f.phase) * 0.3;
+      f.y += f.vy + Math.cos(ts/1700 + f.phase * 1.3) * 0.2;
+      // 邊界迴繞
+      if(f.x < -u*2) f.x = W + u;
+      if(f.x > W + u*2) f.x = -u;
+      if(f.y < skyH * 0.2) f.vy = Math.abs(f.vy) * 0.5 + 0.1;
+      if(f.y > H - u*8) f.vy = -Math.abs(f.vy) * 0.5 - 0.1;
+
+      // 發光閃爍（隨機相位）
+      const glowPhase = Math.sin(ts/600 + f.phase * 3.7 + i * 1.1);
+      const glowBright = glowPhase > 0.2 ? Math.pow((glowPhase - 0.2)/0.8, 1.5) : 0;
+      if(glowBright <= 0.05) continue;
+
+      const fa = nightAlpha * glowBright * 0.92;
+      const px2 = Math.round(f.x / u) * u;
+      const py2 = Math.round(f.y / u) * u;
+
+      // 螢火蟲光暈（外圈柔光）
+      ctx.globalAlpha = fa * 0.25;
+      ctx.fillStyle = '#bbf7d0';
+      ctx.fillRect(px2 - u*2, py2 - u*2, u*5, u*5);
+      ctx.globalAlpha = fa * 0.45;
+      ctx.fillStyle = '#86efac';
+      ctx.fillRect(px2 - u, py2 - u, u*3, u*3);
+      // 核心亮點（像素）
+      ctx.globalAlpha = fa;
+      ctx.fillStyle = '#ecfdf5';
+      ctx.fillRect(px2, py2, u, u);
+    }
+    ctx.restore();
+  }
+
+  // 蝴蝶繪製（fly-in/fly-out 模式）
+  function drawButterflies(ctx, ts, style, sky, skyH) {
+    if(style.season === 3) return; // 冬天無蝴蝶
+    const dayAlpha = Math.max(0, (sky.t - 0.4) / 0.6);
+    if(dayAlpha <= 0.15) return;
+
+    const u = P;
+    const wingColors = [
+      ['#f472b6','#fda4af'],['#facc15','#fef08a'],['#60a5fa','#bfdbfe'],
+      ['#fb923c','#fed7aa'],['#a855f7','#e9d5ff'],['#4ade80','#bbf7d0'],
+      ['#f43f5e','#fda4af'],['#fbbf24','#fef3c7'],
+    ];
+
+    if(!butterfliesInit){
+      butterflies = [];
+      butterfliesInit = true;
+    }
+
+    // 生成新蝴蝶，出現在畫面寬度各處（不集中在中間）
+    if(butterflies.length < 4 && Math.random() < 0.0007){
+      const fromLeft = Math.random() > 0.5;
+      const ci = Math.floor(Math.random() * wingColors.length);
+      // 飛入的 Y 位置分散在整個可見區域
+      const targetY = skyH * 0.45 + Math.random() * (H - skyH * 0.45 - u*32);
+      butterflies.push({
+        x: fromLeft ? -u*10 : W + u*10,
+        y: targetY,
+        vx: fromLeft ? 0.5 + Math.random()*0.3 : -(0.5 + Math.random()*0.3),
+        wy: (Math.random()-0.5) * 0.3,
+        phase: Math.random() * Math.PI * 2,
+        colorIdx: ci,
+        spawnTs: ts,
+        state: 'in',
+        stayDur: 18000 + Math.random() * 10000,
+        stayTs: -1,
+        alpha: 0,
+        // 目標 X：分散在畫面寬度的不同位置（避免聚集）
+        targetX: u*20 + Math.random() * (W - u*40),
+      });
+    }
+
+    ctx.save();
+    const toRemove = [];
+    for(let i = 0; i < butterflies.length; i++){
+      const b = butterflies[i];
+
+      if(b.state === 'in'){
+        b.x += b.vx * 1.2;
+        b.alpha = Math.min(1, b.alpha + 0.025);
+        // 到達目標 X 後轉為 stay
+        const reached = b.vx > 0 ? b.x >= b.targetX : b.x <= b.targetX;
+        if(reached){
+          b.x = b.targetX;
+          b.state = 'stay';
+          b.stayTs = ts;
+          b.vx *= 0.15;
+        }
+      } else if(b.state === 'stay'){
+        b.x += b.vx + Math.sin(ts/2000 + b.phase) * 0.5;
+        b.y += b.wy + Math.cos(ts/1600 + b.phase * 1.3) * 0.35;
+        b.alpha = Math.min(1, b.alpha + 0.02);
+        if(b.x < u*8){ b.x = u*8; b.vx = Math.abs(b.vx) * 0.5; }
+        if(b.x > W - u*8){ b.x = W - u*8; b.vx = -Math.abs(b.vx) * 0.5; }
+        if(b.y < skyH * 0.35){ b.y = skyH * 0.35; b.wy = Math.abs(b.wy); }
+        if(b.y > H - u*33){ b.y = H - u*33; b.wy = -Math.abs(b.wy); }
+        if(ts - b.stayTs > b.stayDur){
+          b.state = 'out';
+          b.vx = b.x < W/2 ? -(0.7 + Math.random()*0.4) : (0.7 + Math.random()*0.4);
+        }
+      } else {
+        b.x += b.vx * 1.8;
+        b.y += b.wy;
+        b.alpha = Math.max(0, b.alpha - 0.012);
+        if(b.x < -u*20 || b.x > W + u*20 || b.alpha <= 0){
+          toRemove.push(i);
+          continue;
+        }
+      }
+
+      // 蝴蝶縮小：用 u*0.75 為基本單位
+      const S = 0.75; // 縮放比例
+      const bx = Math.round(b.x / u) * u;
+      const by = Math.round(b.y / u) * u;
+      const wingPhase = Math.sin(ts/130 + b.phase * 2);
+      const wingOpen = wingPhase > 0;
+      const [c1, c2] = wingColors[b.colorIdx % wingColors.length];
+
+      ctx.globalAlpha = Math.min(1, dayAlpha * 0.88) * b.alpha;
+
+      // 身體中心點為 bx, by
+      // 翅膀完全對稱：左翅 = 右翅鏡像
+      if(wingOpen){
+        // 上翅（左）
+        px(ctx, bx - u*4*S, by - u*4*S, u*3*S, u*3*S, c1);
+        px(ctx, bx - u*3*S, by - u*5*S, u*2*S, u*2*S, c2);
+        // 上翅（右）
+        px(ctx, bx + u*1*S, by - u*4*S, u*3*S, u*3*S, c1);
+        px(ctx, bx + u*1*S, by - u*5*S, u*2*S, u*2*S, c2);
+        // 下翅（左）
+        px(ctx, bx - u*3*S, by - u*1*S, u*2.5*S, u*2.5*S, c1);
+        // 下翅（右）
+        px(ctx, bx + u*0.5*S, by - u*1*S, u*2.5*S, u*2.5*S, c1);
+        // 斑點（兩側對稱）
+        px(ctx, bx - u*2.5*S, by - u*2.5*S, u*S, u*S, c2);
+        px(ctx, bx + u*1.5*S, by - u*2.5*S, u*S, u*S, c2);
+      } else {
+        // 翅膀半收（左右各一條垂直）
+        px(ctx, bx - u*2.5*S, by - u*5*S, u*2*S, u*5*S, c1);
+        px(ctx, bx + u*0.5*S, by - u*5*S, u*2*S, u*5*S, c1);
+        px(ctx, bx - u*2*S,   by - u*3*S, u*S,   u*2*S, c2);
+        px(ctx, bx + u*1*S,   by - u*3*S, u*S,   u*2*S, c2);
+      }
+      // 身體（細長，居中對稱）
+      px(ctx, bx - u*0.5*S, by - u*5*S, u*S, u*5*S, '#2d1a0e');
+      // 觸角（左右對稱）
+      px(ctx, bx - u*2*S, by - u*6*S, u*S, u*S, c2);
+      px(ctx, bx + u*1*S, by - u*6*S, u*S, u*S, c2);
+    }
+    for(let i = toRemove.length - 1; i >= 0; i--) butterflies.splice(toRemove[i], 1);
+    ctx.restore();
+  }
+
+  // 公路之旅地圖晚上亮燈的路邊小屋
+  function drawNightRoadHouse(ctx, bx, groundY, skyT, ts) {
+    const u = P;
+    const nightAlpha = Math.max(0, (0.38 - skyT) / 0.38);
+    if(nightAlpha <= 0) return;
+
+    const winX1 = bx - u*5;
+    const winX2 = bx + u*3;
+    const winY  = groundY - u*11;
+
+    ctx.save();
+    // 只把窗戶顏色改為黃色，不加光暈
+    ctx.globalAlpha = nightAlpha;
+    ctx.fillStyle = '#fde047';
+    ctx.fillRect(winX1, winY, u*2, u*2);
+    ctx.fillRect(winX2, winY, u*2, u*2);
+    ctx.restore();
+  }
+  // 達成率 10% 以內：地面隨機出現垃圾或大便（世界座標固定，不隨前進移動）
+  function drawGroundJunk(ctx, roadOffset, style, skyT, roadY, roadH) {
+    const u = P;
+    const pct = getProgressPct();
+    if(pct > 10) return;
+
+    // 和其他背景物件完全相同的 slot 捲動方式（不截斷 roadOffset，直接浮點連續移動）
+    const junkSpacing = u * 38;
+    const jRaw = Math.floor(roadOffset);
+    const jSlotScroll = jRaw % junkSpacing;
+    const jSlotBase = Math.floor(jRaw / junkSpacing);
+    const jSlotsNeeded = Math.ceil(W / junkSpacing) + 3;
+
+    for(let si = -1; si < jSlotsNeeded; si++){
+      const slotIdx = jSlotBase + si;
+      const tx = si * junkSpacing - jSlotScroll;
+
+      let seed = Math.abs(Math.sin(slotIdx * 1337.77) * 54321.9);
+      let r = seed - Math.floor(seed);
+      if(r > 0.35) continue;
+
+      let seed2 = Math.abs(Math.sin(slotIdx * 97.13) * 88888.1);
+      let r2 = seed2 - Math.floor(seed2);
+      const isPoop = r2 < 0.45;
+
+      // X 偏移：種子固定整數，不含浮點邊界
+      let seed3 = Math.abs(Math.sin(slotIdx * 43.71) * 31415.9);
+      let r3 = seed3 - Math.floor(seed3);
+      const xOff = Math.floor((r3 - 0.5) * 12) * u;
+      const jx = Math.round(tx) + xOff;
+
+      // Y：整數像素
+      let seed4 = Math.abs(Math.sin(slotIdx * 211.3) * 76543.2);
+      let r4 = seed4 - Math.floor(seed4);
+      const jy = roadY + u + Math.floor(r4 * (roadH - u*3) / u) * u;
+
+      ctx.save();
+      ctx.globalAlpha = 0.82;
+
+      if(isPoop){
+        // 大便（棕色系，眼睛也用咖啡色）
+        const pc1 = '#7c4a1e', pc2 = '#5c3010', pc3 = '#a06030';
+        const eyeC = '#5c3010'; // 咖啡色眼睛
+        // 陰影
+        px(ctx, jx - u, jy + u*2, u*6, u, 'rgba(0,0,0,0.22)');
+        // 底層
+        px(ctx, jx - u, jy,       u*6, u*2, pc1);
+        px(ctx, jx - u, jy + u,   u*6, u,   pc2);
+        // 中層
+        px(ctx, jx,     jy - u*2, u*4, u*2, pc1);
+        px(ctx, jx + u, jy - u*2, u*2, u,   pc3);
+        // 頂部圓球
+        px(ctx, jx + u, jy - u*4, u*2, u*2, pc1);
+        px(ctx, jx + u*1.5, jy - u*4, u, u, pc3);
+        // 臭氣
+        ctx.globalAlpha = 0.20;
+        px(ctx, jx + u,   jy - u*5, u, u*2, '#c8b060');
+        ctx.globalAlpha = 0.13;
+        px(ctx, jx + u*3, jy - u*6, u, u*2, '#c8b060');
+        // 眼睛（咖啡色）
+        ctx.globalAlpha = 0.82;
+        px(ctx, jx + u,   jy - u*3, u, u, eyeC);
+        px(ctx, jx + u*2, jy - u*3, u, u, eyeC);
+      } else {
+        // 垃圾
+        let r5 = Math.abs(Math.sin(slotIdx * 61.7) * 999) % 1;
+        if(r5 < 0.35){
+          // 空瓶（綠色/棕色）
+          const bc = r5 < 0.18 ? '#4a7a40' : '#7a5c30';
+          const bh = '#90c078';
+          px(ctx, jx,     jy,       u*2, u*4, bc);
+          px(ctx, jx,     jy,       u*2, u,   bh);
+          px(ctx, jx,     jy - u,   u*2, u,   '#b0d090');
+          px(ctx, jx - u, jy + u*4, u*4, u,   'rgba(0,0,0,0.18)');
+        } else if(r5 < 0.68){
+          // 皺紙/垃圾袋
+          const gc = '#d8cc90';
+          px(ctx, jx - u, jy,       u*5, u*3, gc);
+          px(ctx, jx,     jy - u,   u*3, u,   '#eee0b0');
+          px(ctx, jx,     jy + u,   u*4, u,   '#c4b870');
+          px(ctx, jx - u, jy + u*3, u*6, u,   'rgba(0,0,0,0.18)');
+          px(ctx, jx + u, jy + u,   u,   u*2, '#b0a860');
+        } else {
+          // 易開罐
+          const cc  = r5 < 0.84 ? '#ef4444' : '#3b82f6';
+          const cc2 = r5 < 0.84 ? '#dc2626' : '#2563eb';
+          px(ctx, jx,     jy,       u*2, u*4, cc);
+          px(ctx, jx,     jy,       u*2, u,   '#f8fafc');
+          px(ctx, jx,     jy + u*3, u*2, u,   cc2);
+          px(ctx, jx - u, jy + u*4, u*4, u,   'rgba(0,0,0,0.18)');
+          px(ctx, jx,     jy + u,   u,   u*2, 'rgba(255,255,255,0.22)');
+        }
+      }
+      ctx.restore();
+    }
+  }
+
   function drawPikminHorizon(ctx, skyH, u, style, roadOffset){
     const horizonY = skyH;
     const mtnFarOff = 0; // 修改：遠山完全靜止
@@ -3034,6 +4022,26 @@ load(); run(); calcExpected(); renderTodayStats();
     px(ctx, ox+u*11,oy,     u,   u*5, dimHex(gC1, skyT));
   }
 
+  function drawChimneySmoke(ctx, cx, topY, ts) {
+    // 煙囪冒煙：3個漸漸上飄的煙圈，用 ts 驅動
+    const u=P;
+    const cycle = ts % 2400;
+    for(let i=0;i<3;i++){
+      const phase = (cycle + i*800) % 2400;
+      const progress = phase / 2400; // 0→1
+      const smokeX = cx + Math.sin(progress * Math.PI * 2.5) * u * 1.5;
+      const smokeY = topY - progress * u * 18;
+      const alpha = (1 - progress) * 0.45;
+      const size = (1 + progress * 2) * u;
+      if(alpha > 0.05) {
+        ctx.fillStyle = `rgba(210,210,210,${alpha})`;
+        ctx.fillRect(Math.round(smokeX - size/2), Math.round(smokeY - size/2), Math.round(size), Math.round(size));
+        ctx.fillStyle = `rgba(240,240,240,${alpha*0.5})`;
+        ctx.fillRect(Math.round(smokeX - size/4), Math.round(smokeY - size/4), Math.round(size/2), Math.round(size/2));
+      }
+    }
+  }
+
   function drawPikminTrack(pct, ts, driveTime){
     const canvas=document.getElementById('pixel-track'); if(!canvas)return; const ctx=canvas.getContext('2d'), u=P; ctx.clearRect(0,0,W,H);
     const style=getActiveStyle(), sky=getSky(style), skyH=150; drawSky(ctx, skyH, u, style, sky, ts);
@@ -3074,27 +4082,45 @@ load(); run(); calcExpected(); renderTodayStats();
       const tx = si * scenerySpacing - pkSlotScroll;
       if(pct>=100&&tx>goalX-u*15) continue;
       let seed=Math.abs(Math.sin(slotIdx*269.731)*43758.5453), r=seed-Math.floor(seed);
-      // Y軸範圍：從地平線(groundTopY+u*2)到地面底部(H-u*2)，向下多2px
       let objY=groundTopY+u*2+r*(H+2-groundTopY-u*4), objType='none', objBottomY=objY;
-      // 拿掉dirt，改成bushclump（草叢）；r<0.25原本是dirt
-      if(r<0.25){objType='bushclump';objBottomY=objY+u*5;}
-      else if(r<0.4){objType='tallgrass_dark';objBottomY=objY+u*4;}
-      else if(r<0.5){objType='tallgrass_light';objBottomY=objY+u*3;}
-      else if(r<0.6){objType='mushroom';}
-      else if(r<0.7){objType='flower';}
-      else if(r<0.78){objType='tree';}
-      else if(r<0.85){objType='rock';objBottomY=objY+u*2;}
-      else if(r<0.95){objType='animal';}
-      if(objType!=='none') objects.push({x:tx,y:objY,type:objType,r:r,sortY:objBottomY});
+      if(r<0.25){objType='bushclump'; objBottomY=objY;}
+      else if(r<0.4){objType='tallgrass_dark'; objBottomY=objY;}
+      else if(r<0.5){objType='tallgrass_light'; objBottomY=objY;}
+      else if(r<0.6){objType='mushroom'; objBottomY=objY;}
+      else if(r<0.7){objType='flower'; objBottomY=objY;}
+      else if(r<0.78){objType='tree'; objBottomY=objY;}
+      else if(r<0.85){objType='rock'; objBottomY=objY;}
+      else if(r<0.95){objType='animal'; objBottomY=objY;}
+      if(objType!=='none') objects.push({x:tx,y:objY,type:objType,r:r,sortY:objBottomY,slotIdx:slotIdx});
     }
     const carMinX=u*8, carMaxX=goalX-u*10, rawPct=Math.max(0,Math.min(pct,100)), carX=Math.round((carMinX+(carMaxX-carMinX)*rawPct/100)/u)*u;
     // 皮克敏行走範圍向下移動（+u*6）
     let carYOffset=0; if(pct<100){ let cycleIdx=Math.floor(driveTime/20000), phaseTime=driveTime%20000, amp=u*8, lp=[-amp,amp,amp,-amp,-amp,amp], currLane=lp[cycleIdx%lp.length], prevLane=cycleIdx===0?currLane:lp[(cycleIdx-1)%lp.length]; carYOffset=prevLane+(currLane-prevLane)*Math.min(1,phaseTime/2000); }else{ carYOffset=-u*5; }
     const drawY=roadY+roadH/2+carYOffset-u*4; // 原本-u*10，下移為-u*4
-    objects.push({x:carX,y:drawY,type:'pikmin',sortY:drawY+u*8});
-    if(pct>=100) objects.push({x:goalX,y:roadY+roadH/2,type:'goal',sortY:roadY+roadH/2+u*6});
-    // 排序：tallgrass/bushclump最先（最底層），再依sortY；熱氣球已在最底層畫好
-    objects.sort((a,b)=>{ const ig=t=>t==='bushclump'||t==='tallgrass_dark'||t==='tallgrass_light'; if(ig(a.type)&&!ig(b.type))return -1; if(!ig(a.type)&&ig(b.type))return 1; return a.sortY-b.sortY; });
+    // 地面垃圾/大便（在皮克敏之前畫，排序在皮克敏後方）
+    drawGroundJunk(ctx, roadOffset, style, skyT, roadY, roadH);
+    objects.push({x:carX,y:drawY,type:'pikmin',sortY:drawY+u*8,slotIdx:-1});
+    if(pct>=100) objects.push({x:goalX,y:roadY+roadH/2,type:'goal',sortY:roadY+roadH/2+u*6,slotIdx:-2});
+    objects.sort((a,b)=>a.sortY-b.sortY);
+    
+    // 碰撞偵測：皮克敏與動物距離，觸發愛心 + 跳躍（皮克敏不按喇叭）
+    const pikminObj = objects.find(o=>o.type==='pikmin');
+    if(pikminObj){
+      for(let obj of objects){
+        if(obj.type!=='animal') continue;
+        const dx = Math.abs(pikminObj.x - obj.x);
+        const dy = Math.abs(pikminObj.sortY - obj.sortY);
+        if(dx < P*14 && dy < P*14){
+          const alreadyHasEffect = heartEffects.some(h=>h.slotIdx===obj.slotIdx && ts - h.startTs < h.duration);
+          if(!alreadyHasEffect){
+            heartEffects.push({x: obj.x, y: obj.y - P*12, startTs: ts, duration: 1000, slotIdx: obj.slotIdx, jumpStartTs: ts, jumpDur: 500});
+          }
+        }
+      }
+    }
+    // 清除過期愛心和喇叭
+    heartEffects = heartEffects.filter(h => ts - h.startTs < h.duration);
+    hornEffects = hornEffects.filter(e => ts - e.startTs < e.dur + 50);
     
     for(let obj of objects){
       if(obj.type==='bushclump'){
@@ -3114,7 +4140,26 @@ load(); run(); calcExpected(); renderTodayStats();
         else if(obj.type==='flower'){ drawGiantFlower(ctx, obj.x, obj.y, obj.r); }
         else if(obj.type==='tree'){ drawTree(ctx, obj.x, obj.y, style, obj.r<0.75); }
         else if(obj.type==='rock'){ drawRock(ctx, obj.x, obj.y, style); }
-        else if(obj.type==='animal'){ const facingRight = Math.sin(obj.r*997.3) > 0; let as=Math.floor(obj.r*100)%7; if(as===0)drawDog(ctx,obj.x,obj.y,facingRight);else if(as===1)drawPig(ctx,obj.x,obj.y,facingRight);else if(as===2)drawSheep(ctx,obj.x,obj.y,facingRight);else if(as===3)drawCow(ctx,obj.x,obj.y,facingRight);else if(as===4)drawChicken(ctx,obj.x,obj.y,facingRight);else if(as===5)drawDuck(ctx,obj.x,obj.y,facingRight);else drawHorse(ctx,obj.x,obj.y,facingRight); }
+        else if(obj.type==='animal'){ 
+          const facingRight = Math.sin(obj.r*997.3) > 0;
+          // 碰觸觸發跳躍：檢查 heartEffects 裡是否有此動物的跳躍紀錄
+          const touchEffect = heartEffects.find(h=>h.slotIdx===obj.slotIdx && h.jumpStartTs!==undefined);
+          let jumpY = obj.y;
+          if(touchEffect){
+            const jAge = ts - touchEffect.jumpStartTs;
+            if(jAge >= 0 && jAge < touchEffect.jumpDur){
+              jumpY = obj.y - Math.sin((jAge/touchEffect.jumpDur)*Math.PI)*P*8;
+            }
+          }
+          let as=Math.floor(obj.r*100)%7; 
+          if(as===0)drawDog(ctx,obj.x,jumpY,facingRight);
+          else if(as===1)drawPig(ctx,obj.x,jumpY,facingRight);
+          else if(as===2)drawSheep(ctx,obj.x,jumpY,facingRight);
+          else if(as===3)drawCow(ctx,obj.x,jumpY,facingRight);
+          else if(as===4)drawChicken(ctx,obj.x,jumpY,facingRight);
+          else if(as===5)drawDuck(ctx,obj.x,jumpY,facingRight);
+          else drawHorse(ctx,obj.x,jumpY,facingRight);
+        }
         else if(obj.type==='pikmin'){ drawPikmin(ctx, obj.x, obj.y, trackPikminType, driveTime, pct<100&&isRacerActive()); }
         else if(obj.type==='goal'){ let gs=Math.abs(Math.sin(obj.x))*43758.5453; drawPikminGoal(ctx, obj.x, obj.y, gs-Math.floor(gs)); }
     }
@@ -3129,6 +4174,19 @@ load(); run(); calcExpected(); renderTodayStats();
     }
     // 飛碟最後畫（蓋住所有物件）
     if(activeEgg === 'ufo') drawEasterEgg(ctx, skyH, ts, false);
+    // 蝴蝶（白天，非冬季）
+    drawButterflies(ctx, ts, style, sky, skyH);
+    // 螢火蟲（晚上，非冬季）
+    drawFireflies(ctx, ts, style, sky, skyH);
+    // 愛心特效（最後畫，蓋在最上層）
+    for(let h of heartEffects){
+      const age = ts - h.startTs;
+      if(age < 0 || age > h.duration) continue;
+      const progress = age / h.duration;
+      const alpha = progress < 0.2 ? progress/0.2 : progress < 0.7 ? 1 : 1-(progress-0.7)/0.3;
+      const floatY = h.y - progress * P * 8;
+      drawPixelHeart(ctx, h.x, floatY, alpha);
+    }
   }
 
   // 熱氣球底部高度（籃子底部約 y+u*3，氣球本體高約 u*24，加上安全邊距）
@@ -3151,7 +4209,6 @@ load(); run(); calcExpected(); renderTodayStats();
     else if(activeEgg==='comet')     drawComet(ctx, eggX, currentY, ts);
     else if(activeEgg==='airplane')  drawAirplane(ctx, eggX, currentY, ts);
     else if(activeEgg==='balloon')   drawBalloon(ctx, eggX, currentY, ts, roadY);
-    else if(activeEgg==='flyroach')  drawFlyingCockroach(ctx, eggX, currentY, ts);
     ctx.restore();
   }
   
@@ -3173,47 +4230,32 @@ load(); run(); calcExpected(); renderTodayStats();
       if(eggTimer >= EGG_INTERVAL && !activeEgg){ eggTimer = 0; spawnEgg(); }
       if(activeEgg){
         let speed = 0.07;
-        if (activeEgg === 'flyroach') speed = roachWander ? 0 : 0.13;
-        else if (activeEgg === 'airplane') speed = 0.1;
+        if (activeEgg === 'airplane') speed = 0.11;
         else if (activeEgg === 'balloon') speed = 0.03;
 
-        // 蟑螂亂飛模式
-        if(activeEgg === 'flyroach' && roachWander){
-          roachWanderTimer += elapsed;
-          eggX += roachVX * elapsed;
-          eggY += roachVY * elapsed;
-          // 撞邊反彈
-          if(eggY < 10){ eggY = 10; roachVY = Math.abs(roachVY); }
-          if(eggY > H-P*5){ eggY = H-P*5; roachVY = -Math.abs(roachVY); }
-          // 隨機改方向
-          if(Math.random() < 0.01){ roachVX = -(0.06+Math.random()*0.08); roachVY = (Math.random()-0.5)*0.12; }
-          if(roachWanderTimer > roachWanderDuration){ roachWander=false; }
-          if(eggX < -200){ activeEgg=null; roachWander=false; }
-        } else {
-          // 飛碟逃跑：偵測與車子/皮克敏的距離
-          if(activeEgg === 'ufo' && !ufoEscaping){
-            const u=P;
-            const pct2 = getProgressPct();
-            let targetX = -999;
-            if(trackMode === 'pikmin'){
-              const goalX=W-u*25, carMinX=u*8, carMaxX=goalX-u*10, rawPct=Math.max(0,Math.min(pct2,100));
-              targetX = Math.round((carMinX+(carMaxX-carMinX)*rawPct/100)/u)*u;
-            } else {
-              const houseX2 = W - u*26 - u*5;
-              const carMinX=u*8, carMaxX=houseX2-u*26, rawPct=Math.max(0,Math.min(pct2,100));
-              targetX = Math.round((carMinX+(carMaxX-carMinX)*rawPct/100)/u)*u;
-            }
-            if(Math.abs(eggX - targetX) < u*30){ ufoEscaping = true; }
-          }
-          if(activeEgg === 'ufo' && ufoEscaping){
-            speed = 0.45;
-            eggX += elapsed * speed;
-            if(eggX > W+200){ activeEgg = null; ufoEscaping = false; }
+        // 飛碟逃跑：偵測與車子/皮克敏的距離
+        if(activeEgg === 'ufo' && !ufoEscaping){
+          const u=P;
+          const pct2 = getProgressPct();
+          let targetX = -999;
+          if(trackMode === 'pikmin'){
+            const goalX=W-u*25, carMinX=u*8, carMaxX=goalX-u*10, rawPct=Math.max(0,Math.min(pct2,100));
+            targetX = Math.round((carMinX+(carMaxX-carMinX)*rawPct/100)/u)*u;
           } else {
-            eggX -= elapsed * speed;
-            if(activeEgg === 'ufo') ufoBeam = Math.min(1, ufoBeam + elapsed * 0.0015);
-            if(eggX < -160){ activeEgg = null; ufoEscaping = false; roachWander = false; }
+            const houseX2 = W - u*26 - u*5;
+            const carMinX=u*8, carMaxX=houseX2-u*26, rawPct=Math.max(0,Math.min(pct2,100));
+            targetX = Math.round((carMinX+(carMaxX-carMinX)*rawPct/100)/u)*u;
           }
+          if(Math.abs(eggX - targetX) < u*30){ ufoEscaping = true; }
+        }
+        if(activeEgg === 'ufo' && ufoEscaping){
+          speed = 0.45;
+          eggX += elapsed * speed;
+          if(eggX > W+200){ activeEgg = null; ufoEscaping = false; }
+        } else {
+          eggX -= elapsed * speed;
+          if(activeEgg === 'ufo') ufoBeam = Math.min(1, ufoBeam + elapsed * 0.0015);
+          if(eggX < -160){ activeEgg = null; ufoEscaping = false; }
         }
         eggAlpha = Math.min(1, eggAlpha + elapsed * 0.003);
       }
