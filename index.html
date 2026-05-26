@@ -174,31 +174,35 @@ body {
       <div class="cfg-row" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));">
         <div class="fld">
           <label>考試日期</label>
-          <input type="date" id="exam-date" onchange="save();run()">
+          <input type="date" id="exam-date" onchange="save();run()" style="text-align:left;">
         </div>
         <div class="fld">
           <label>考試倒數</label>
           <div class="countdown-box" id="countdown-display" style="color:var(--primary); font-weight:700;">請設定日期</div>
         </div>
         <div class="fld">
-          <label>今日衝刺剩餘</label>
+          <label>今日衝刺剩餘 <span style="font-size:11px; color:var(--text-muted); font-weight:400;">（截至 22:30）</span></label>
           <div class="countdown-box" id="today-remaining-display">計算中...</div>
         </div>
         <div class="fld">
-          <label>一般人剩餘</label>
+          <label>一般人剩餘 <span style="font-size:11px; color:var(--text-muted); font-weight:400;">（截至 22:30）</span></label>
           <div class="countdown-box" id="today-normal-remaining-display">計算中...</div>
         </div>
         <div class="fld">
-          <label>距離看完所有書</label>
-          <div class="countdown-box" id="all-books-remain-pct" style="color:var(--danger); font-weight:700;">計算中...</div>
+          <label>每日頁數建議</label>
+          <div class="countdown-box" id="daily-pages-suggest" style="color:var(--primary); font-weight:700;">計算中...</div>
         </div>
         <div class="fld">
           <label>目前已讀完</label>
-          <div class="countdown-box" id="all-books-read-pct" style="color:var(--success); font-weight:700;">計算中...</div>
+          <div class="countdown-box" id="all-books-read-pct" style="color:var(--success); font-weight:700; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">計算中...</div>
         </div>
         <div class="fld">
           <label>目前配速</label>
           <div class="countdown-box" id="current-avg-speed" style="color:var(--text-main); font-weight:600;">計算中...</div>
+        </div>
+        <div class="fld">
+          <label>達成每日建議配速</label>
+          <div class="countdown-box" id="stat-pace-suggest" style="color:var(--primary); font-weight:700;">計算中...</div>
         </div>
         <div class="fld">
           <label>今日已讀 (頁)</label>
@@ -207,6 +211,10 @@ body {
         <div class="fld">
           <label>今日進步</label>
           <div class="countdown-box" id="stat-today-pct-box" style="color:var(--success); font-weight:700;">0.00%</div>
+        </div>
+        <div class="fld">
+          <label>昨日頁數</label>
+          <div class="countdown-box" id="stat-yesterday-pages-box" style="color:var(--text-muted); font-weight:700;">--</div>
         </div>
         <div class="fld">
           <label>相較昨天</label>
@@ -265,6 +273,23 @@ body {
           <div id="rc-result-text"></div>
           <div style="text-align:right; margin-top:10px;">
             <button class="btn btn-w btn-sm" onclick="clearFocusResult()">🧹 清除面板</button>
+          </div>
+        </div>
+
+        <!-- 精神指標 -->
+        <div style="margin-top:16px; padding:14px 16px; background:#fff; border-radius:var(--radius-sm); border:1px solid var(--border);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="font-size:13px; font-weight:600; color:var(--text-main);">🔥 jjmmggdd 精神指標達成率</span>
+            <span style="font-size:11px; color:var(--text-muted);">每日目標 10 小時專注</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+            <div style="flex:1; height:10px; background:#e2e8f0; border-radius:5px; overflow:hidden;">
+              <div id="spirit-bar" style="height:100%; background:linear-gradient(90deg,#3498db,#2ecc71); width:0%; transition:width 0.5s;"></div>
+            </div>
+            <span id="spirit-pct" style="font-size:18px; font-weight:800; color:var(--primary); min-width:48px; text-align:right;">0%</span>
+          </div>
+          <div style="font-size:12px; color:var(--text-muted); text-align:center; font-style:italic; line-height:1.5; padding-top:6px; border-top:1px dashed var(--border);">
+            「最殘忍的不是有人比你聰明，而是比你聰明的人都比你努力。」
           </div>
         </div>
       </div>
@@ -450,6 +475,7 @@ function load(){
       if(!bk.chapters) bk.chapters = [];
       if(bk.isExpanded === undefined) bk.isExpanded = false;
       if(!bk.pageReadLog) bk.pageReadLog = []; 
+      if(bk.paused === undefined) bk.paused = false;
       bk.chapters.forEach(ch => { if(ch.isCollapsed === undefined) ch.isCollapsed = false; });
     });
   });
@@ -557,7 +583,7 @@ function renderCombinedDB() {
       const emptyHint = pageLog.length === 0 ? `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;color:#94a3b8;letter-spacing:1px;">尚無閱讀紀錄</div>` : '';
 
       html += `
-        <div class="db-book-container" draggable="true" ondragstart="dragStart(event, 'book', ${si}, ${bi})" ondragover="dragOver(event)" ondrop="drop(event, 'book', ${si}, ${bi})">
+        <div class="db-book-container" draggable="true" ondragstart="dragStart(event, 'book', ${si}, ${bi})" ondragover="dragOver(event)" ondrop="drop(event, 'book', ${si}, ${bi})" style="${b.paused ? 'opacity:0.55; background:#f8fafc;' : ''}">
           <div class="db-book-row" style="display:flex; gap:16px; padding:12px 16px; align-items:center; flex-wrap:wrap;">
             
             <span style="cursor:grab; font-size:16px; color:#cbd5e1; padding-right:4px;">☰</span>
@@ -573,7 +599,10 @@ function renderCombinedDB() {
                   <span style="margin:0 4px;">／</span>
                   <span style="display:flex; align-items:center; gap:4px;">總共 <input type="number" value="${b.total}" min="1" onchange="updBook(${si},${bi},'total',+this.value)" onclick="event.stopPropagation()" style="width:48px; text-align:center; border:1px solid #cbd5e1; border-radius:4px; padding:2px;"> 頁</span>
                 </div>
-                <span style="font-weight:600; color:var(--primary);">推估尚需 ${estHrs}h</span>
+                <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+                  <span style="font-weight:600; color:var(--primary);">推估尚需 ${estHrs}h</span>
+                  <span style="font-size:12px; color:var(--text-muted);">上次閱讀：${b.lastRead ? b.lastRead : '未記錄'}</span>
+                </div>
               </div>
               <div style="position:relative; height:12px; background:#e2e8f0; border-radius:6px; overflow:hidden;">
                 ${segments} ${ticks} ${emptyHint}
@@ -587,7 +616,7 @@ function renderCombinedDB() {
             
             <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
               <button class="btn btn-w btn-sm" onclick="toggleChaptersBlock(${si}, ${bi})">章節 (${b.chapters.length})</button>
-              
+              <button class="btn btn-w btn-sm" style="color:${b.paused ? 'var(--warning)' : 'var(--text-muted)'}; border-color:${b.paused ? 'var(--warning)' : '#cbd5e1'};" title="${b.paused ? '目前已暫停計入進度，點擊恢復' : '點擊暫停計入總進度'}" onclick="toggleBookPaused(${si},${bi})">${b.paused ? '⏸ 已暫停' : '計入中'}</button>
               <button class="btn btn-w btn-sm" style="color:var(--danger);" onclick="removeBook(${si},${bi})">刪除</button>
             </div>
           </div>
@@ -668,7 +697,7 @@ function importChaptersData(input) {
       let light = 'none'; if(lightRaw){ const lr = lightRaw.toLowerCase(); if(lr.includes('green')||lr.includes('綠')||lr.includes('通過')) light='green'; else if(lr.includes('yellow')||lr.includes('黃')||lr.includes('半熟')) light='yellow'; else if(lr.includes('red')||lr.includes('紅')||lr.includes('不熟')) light='red'; }
       let subjObj = S.subjects.find(s => s.name === subjName); if (!subjObj) { subjObj = { name: subjName, books: [] }; S.subjects.push(subjObj); }
       let bookObj = subjObj.books.find(b => b.title === bookTitle);
-      if (!bookObj) { bookObj = { title: bookTitle, total: totalRaw||300, current: 0, chapters: [], isExpanded: false, pageReadLog: decodePageLog(get(colIdx.pageLog)), lastRead: get(colIdx.lastRead)||'' }; subjObj.books.push(bookObj); updatedBooks++; } 
+      if (!bookObj) { bookObj = { title: bookTitle, total: totalRaw||300, current: 0, chapters: [], isExpanded: false, pageReadLog: decodePageLog(get(colIdx.pageLog)), lastRead: get(colIdx.lastRead)||'', paused: false }; subjObj.books.push(bookObj); updatedBooks++; } 
       else if (!booksSeen.has(subjName+'|'+bookTitle)) { bookObj.chapters = []; if(totalRaw > 0) bookObj.total = totalRaw; if(get(colIdx.lastRead)) bookObj.lastRead = get(colIdx.lastRead); if(get(colIdx.pageLog)) bookObj.pageReadLog = decodePageLog(get(colIdx.pageLog)); updatedBooks++; }
       booksSeen.add(subjName+'|'+bookTitle);
       bookObj.chapters.push({ id: makeId(), name: chapName, level: level, light: light, lastRead: '', isCollapsed: false }); addedChapters++;
@@ -693,7 +722,8 @@ function exportChaptersCSV() {
 function addSubject(){ S.subjects.push({name:'新科目',books:[{title:'新書本',total:300,current:0,chapters:[], isExpanded:false, pageReadLog:[]}]}); save();run(); }
 function removeSubject(si){ if(!confirm('確定刪除此科目？'))return; S.subjects.splice(si,1); save();run(); }
 function updSubjName(si,val){ const old=S.subjects[si].name; S.subjects[si].name=val; DAYS.forEach(d=>SESSIONS.forEach(s=>{ if(S.schedule[d][s.key].subject===old) S.schedule[d][s.key].subject=val; })); save();run(); }
-function addBook(si){ S.subjects[si].books.push({title:'新書本',total:300,current:0,chapters:[], isExpanded:false, pageReadLog:[]}); save();run(); }
+function addBook(si){ S.subjects[si].books.push({title:'新書本',total:300,current:0,chapters:[], isExpanded:false, pageReadLog:[], paused:false}); save();run(); }
+function toggleBookPaused(si,bi){ S.subjects[si].books[bi].paused = !S.subjects[si].books[bi].paused; save();run(); }
 function removeBook(si,bi){ if(!confirm('確定移除此書本？'))return; S.subjects[si].books.splice(bi,1); save();run(); }
 function updBook(si,bi,field,val){ S.subjects[si].books[bi][field]=val; save();run(); }
 function addChapter(si,bi){ S.subjects[si].books[bi].chapters.push({id:makeId(), name:'新章節', level:'章', light:'none', lastRead:'', isCollapsed:false}); save();run(); }
@@ -774,6 +804,7 @@ function updateFocusTicks() {
   document.getElementById('live-driving-time').innerText = formatDuration(elapsedActiveMs);
   const timeProgressPct = expectedTotalMs > 0 ? Math.min(100, (elapsedActiveMs / expectedTotalMs) * 100) : 0;
   document.getElementById('rc-bar').style.width = `${timeProgressPct}%`;
+  updateSpiritIndicator();
 }
 
 function stopFocus() {
@@ -1063,24 +1094,53 @@ function run(){
   ssWrap.innerHTML = ssHtml + '</tbody></table>';
 }
 
+// 一般人剩餘時間（秒），全域，供配速計算使用
+window.normalRemainingSeconds = 0;
+
 function updateTodayRemaining() {
-  const diffMs = new Date().setHours(23, 59, 59, 999) - new Date();
+  const now = new Date();
+  const cutoff = new Date(); cutoff.setHours(22, 30, 0, 0);
+  const rawSec = Math.max(0, Math.floor((cutoff - now) / 1000));
   const el = document.getElementById('today-remaining-display');
   const el2 = document.getElementById('today-normal-remaining-display');
-  if (diffMs <= 0) {
+  if (rawSec <= 0) {
     el.innerHTML = '已結束';
     el2.innerHTML = '已結束';
+    window.normalRemainingSeconds = 0;
+    updatePaceSuggest();
     return;
   }
-  const totalSec = Math.floor(diffMs / 1000);
-  const h = Math.floor(totalSec / 3600), m = Math.floor((totalSec % 3600) / 60);
+  // 今日衝刺剩餘：從現在到22:30
+  const h = Math.floor(rawSec / 3600), m = Math.floor((rawSec % 3600) / 60);
   el.innerHTML = `${h} 小時 ${m} 分鐘`;
-  // 一般人剩餘：每讀1小時休息30分，可用時間 = 剩餘時間 × (2/3)
-  const normalSec = Math.floor(totalSec * 2 / 3);
+  // 一般人剩餘：同樣到22:30，乘以2/3（讀1小時休半小時）
+  const normalSec = Math.floor(rawSec * 2 / 3);
+  window.normalRemainingSeconds = normalSec;
   const nh = Math.floor(normalSec / 3600), nm = Math.floor((normalSec % 3600) / 60);
   el2.innerHTML = `${nh} 小時 ${nm} 分鐘`;
+  updatePaceSuggest();
 }
 setInterval(updateTodayRemaining, 1000); updateTodayRemaining();
+
+function updatePaceSuggest() {
+  const el = document.getElementById('stat-pace-suggest');
+  if (!el) return;
+  // 取得每日建議頁數（從 daily-pages-suggest 反推，或直接重算）
+  const remaining = calcTotalRemainingPages();
+  const examDateVal = S.examDate ? new Date(S.examDate) : null;
+  const now = new Date();
+  const daysLeft = examDateVal ? Math.max(1, diffDays(now, examDateVal)) : 0;
+  let pagesPerDay = 0;
+  if (daysLeft > 0 && remaining > 0) {
+    pagesPerDay = Math.ceil(remaining / daysLeft);
+  }
+  if (pagesPerDay <= 0) { el.innerText = '請設定考試日期'; el.style.color = 'var(--text-muted)'; return; }
+  const normalRemainMins = window.normalRemainingSeconds / 60;
+  if (normalRemainMins <= 0) { el.innerText = '今日已結束'; el.style.color = 'var(--text-muted)'; return; }
+  const minsPerPage = (normalRemainMins / pagesPerDay).toFixed(1);
+  el.innerText = minsPerPage + ' 分鐘／頁';
+  el.style.color = 'var(--primary)';
+}
 
 function getTodayStats() {
   const today = ds(new Date());
@@ -1118,10 +1178,10 @@ function saveTodayToHistory(stats) {
   localStorage.setItem(key, JSON.stringify(snap));
 }
 
-// 計算全書總頁數
+// 計算全書總頁數（排除已暫停計入的書）
 function calcTotalAllPages() {
   let total = 0;
-  S.subjects.forEach(subj => { subj.books.forEach(b => { total += b.total || 0; }); });
+  S.subjects.forEach(subj => { subj.books.forEach(b => { if(!b.paused) total += b.total || 0; }); });
   return total;
 }
 
@@ -1161,11 +1221,11 @@ function calcGlobalAvgSpeed() {
   return 5; // 預設5分/頁
 }
 
-// 計算全書剩餘總頁數
+// 計算全書剩餘總頁數（排除已暫停計入的書）
 function calcTotalRemainingPages() {
   let total = 0;
   S.subjects.forEach(subj => {
-    subj.books.forEach(b => { total += Math.max(0, b.total - b.current); });
+    subj.books.forEach(b => { if(!b.paused) total += Math.max(0, b.total - b.current); });
   });
   return total;
 }
@@ -1199,8 +1259,20 @@ function renderTodayStats() {
   const todayPctBox = document.getElementById('stat-today-pct-box');
   if (todayPctBox) todayPctBox.innerText = todayPct.toFixed(2) + '%';
 
-  // 相較昨天
+  // 昨日頁數
   const ystats = getYesterdayStats();
+  const yPagesBox = document.getElementById('stat-yesterday-pages-box');
+  if (yPagesBox) {
+    if (ystats && ystats.pages != null) {
+      yPagesBox.innerText = ystats.pages + ' 頁';
+      yPagesBox.style.color = 'var(--text-muted)';
+    } else {
+      yPagesBox.innerText = '--';
+      yPagesBox.style.color = 'var(--text-muted)';
+    }
+  }
+
+  // 相較昨天
   const vsEl = document.getElementById('stat-vs-yesterday');
   const vsMsgEl = document.getElementById('stat-vs-yesterday-msg');
   const vsBox = document.getElementById('stat-vs-yesterday-box');
@@ -1239,6 +1311,8 @@ function renderTodayStats() {
 
   window.currentTodayPct = todayPct;
   updateAllBooksProgress();
+  updateSpiritIndicator();
+  updatePaceSuggest();
 }
 
 function updateAllBooksProgress() {
@@ -1246,9 +1320,9 @@ function updateAllBooksProgress() {
   const remaining = calcTotalRemainingPages();
   const readPages = totalAll - remaining;
 
-  const pctEl = document.getElementById('all-books-remain-pct');
   const readEl = document.getElementById('all-books-read-pct');
   const speedEl = document.getElementById('current-avg-speed');
+  const dailyEl = document.getElementById('daily-pages-suggest');
 
   const avgSpeed = calcGlobalAvgSpeed();
 
@@ -1268,19 +1342,68 @@ function updateAllBooksProgress() {
   }
 
   if (totalAll === 0) {
-    if (pctEl) pctEl.innerText = '尚無資料';
     if (readEl) readEl.innerText = '尚無資料';
+    if (dailyEl) dailyEl.innerText = '尚無資料';
     return;
   }
 
-  const remainPct = (remaining / totalAll * 100).toFixed(1);
   const readPct = (readPages / totalAll * 100).toFixed(1);
-  if (pctEl) pctEl.innerText = `還剩 ${remainPct}%（${remaining} 頁）`;
-  if (readEl) readEl.innerText = `已讀 ${readPct}%（${readPages} 頁）`;
+  if (readEl) readEl.innerText = readPct + '%（' + readPages + ' 頁／' + totalAll + ' 頁）';
+
+  // 每日頁數建議：剩餘頁數 ÷ 剩餘天數（考試倒數），若無考試日則用配速估算
+  if (dailyEl) {
+    const examDateVal = S.examDate ? new Date(S.examDate) : null;
+    const now = new Date();
+    const daysLeft = examDateVal ? Math.max(1, diffDays(now, examDateVal)) : 0;
+    if (daysLeft > 0 && remaining > 0) {
+      const pagesPerDay = Math.ceil(remaining / daysLeft);
+      const estMins = Math.round(pagesPerDay * avgSpeed);
+      const estHrs = (estMins / 60).toFixed(1);
+      dailyEl.innerText = pagesPerDay + ' 頁／天（約 ' + estHrs + ' 小時）';
+      dailyEl.style.color = 'var(--primary)';
+    } else if (remaining === 0) {
+      dailyEl.innerText = '🎉 全部讀完！';
+      dailyEl.style.color = 'var(--success)';
+    } else {
+      const availMinsPerDay = 8 * 60;
+      const suggestedPages = Math.floor(availMinsPerDay / avgSpeed);
+      const estDays = remaining > 0 && avgSpeed > 0 ? Math.ceil(remaining * avgSpeed / availMinsPerDay) : 0;
+      if (estDays > 0) {
+        dailyEl.innerText = suggestedPages + ' 頁／天（估 ' + estDays + ' 天完讀）';
+      } else {
+        dailyEl.innerText = '請設定考試日期';
+      }
+      dailyEl.style.color = 'var(--text-muted)';
+    }
+  }
 }
 
 // 每分鐘自動刷新今日狀態與配速（不需要手動觸發）
 setInterval(() => { renderTodayStats(); }, 60000);
+
+function updateSpiritIndicator() {
+  const stats = getTodayStats();
+  // 今日專注時間（分鐘）＋ 目前正在跑的 session（若有）
+  let totalMins = stats.minutes || 0;
+  if (window.sessionDrivingMs && window.sessionDrivingMs > 0) {
+    totalMins += window.sessionDrivingMs / 60000;
+  }
+  const targetMins = 10 * 60; // 10小時
+  const pct = Math.min(100, Math.round(totalMins / targetMins * 100));
+  const bar = document.getElementById('spirit-bar');
+  const pctEl = document.getElementById('spirit-pct');
+  if (bar) {
+    bar.style.width = pct + '%';
+    if (pct >= 100) bar.style.background = 'linear-gradient(90deg,#2ecc71,#27ae60)';
+    else if (pct >= 60) bar.style.background = 'linear-gradient(90deg,#3498db,#2ecc71)';
+    else if (pct >= 30) bar.style.background = 'linear-gradient(90deg,#f1c40f,#3498db)';
+    else bar.style.background = 'linear-gradient(90deg,#e74c3c,#f1c40f)';
+  }
+  if (pctEl) {
+    pctEl.innerText = pct + '%';
+    pctEl.style.color = pct >= 100 ? 'var(--success)' : pct >= 60 ? 'var(--primary)' : pct >= 30 ? 'var(--warning)' : 'var(--danger)';
+  }
+}
 
 function clearTodayRecord() {
   if (!confirm('確定要清除今日的統計？')) return;
