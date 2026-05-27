@@ -56,21 +56,7 @@ body {
 }
 .card-body { padding: 20px; }
 
-/* 數值格 */
-.stat-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
-@media(max-width:900px){ .stat-grid{ grid-template-columns: repeat(3,1fr); } }
-@media(max-width:500px){ .stat-grid{ grid-template-columns: repeat(2,1fr); } }
-.stat-cell {
-  background: #f8fafc; border-radius: var(--radius-sm); border: 1px solid var(--border);
-  padding: 14px 12px; text-align: center; transition: transform 0.2s; display: flex; flex-direction: column; justify-content: center;
-}
-.stat-cell:hover { transform: translateY(-2px); }
-.stat-cell-label { font-size: 13px; color: var(--text-muted); margin-bottom: 6px; font-weight: 500; }
-.stat-cell-value { font-size: 26px; font-weight: 700; color: var(--primary); line-height: 1.2; }
-.stat-cell-unit { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
-
 /* 表單欄位 */
-.cfg-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
 .fld label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 6px; font-weight: 500; }
 .fld input, .fld select, .today-box, .countdown-box {
   width: 100%; height: 38px; padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid #cbd5e1;
@@ -138,21 +124,38 @@ body {
 .sess-flex { background: #f1f5f9; color: #475569; }
 
 /* 專注追蹤區塊 */
-.focus-tracker { background: #f8fafc; border-radius: var(--radius-sm); padding: 20px; border: 1px solid var(--border); }
-.focus-hud { display: flex; justify-content: space-around; text-align: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+.focus-tracker { background: #f8fafc; border-radius: var(--radius-sm); padding: 16px; border: 1px solid var(--border); }
+.focus-hud { display: flex; justify-content: space-around; text-align: center; margin-bottom: 12px; flex-wrap: wrap; gap: 12px; }
 .focus-hud-item { display: flex; flex-direction: column; gap: 2px; }
 .focus-hud-label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
 .focus-hud-value { font-size: 24px; font-weight: 700; color: var(--text-main); font-variant-numeric: tabular-nums; }
 .focus-controls {
-  display: flex; flex-direction: column; gap: 16px; background: #fff;
-  padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 12px; background: #fff;
+  padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border);
 }
-.focus-progress { height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; position: relative; margin-top: 12px; }
-.focus-progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.5s linear; }
 
-@media(max-width:700px){
-  #two-col-row, div[style*="grid-template-columns:1fr 1fr"] { grid-template-columns: 1fr !important; }
+/* 底部 10 個數據方格 */
+.stat-grid { 
+  display: grid; 
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: repeat(5, 1fr); 
+  grid-auto-flow: column; /* 讓元素由上到下，再左到右排列（符合要求） */
+  gap: 8px; 
 }
+@media(max-width:900px){ 
+  .stat-grid { grid-template-rows: auto; grid-template-columns: repeat(3, 1fr); grid-auto-flow: row; } 
+}
+@media(max-width:600px){ 
+  .stat-grid { grid-template-columns: repeat(2, 1fr); } 
+}
+
+.stat-cell {
+  background: #f8fafc; border-radius: var(--radius-sm); border: 1px solid var(--border);
+  padding: 10px 6px; transition: transform 0.2s; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; box-sizing: border-box;
+}
+.stat-cell:hover { transform: translateY(-2px); }
+.st-title { font-size: 12px; color: var(--text-muted); font-weight: 500; margin-bottom: 4px; white-space: nowrap; }
+.st-val { font-size: 16px; font-weight: 700; color: var(--text-main); white-space: nowrap; }
 
 </style>
 </head>
@@ -164,72 +167,32 @@ body {
   <div class="console-subtitle">專業學習與排程追蹤系統</div>
 </div>
 
-<!-- 系統設定 + 專注追蹤：左右兩欄 -->
-<div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px;">
-
-  <!-- 左欄：系統設定 -->
-  <div class="card" style="margin-bottom:0;">
-    <div class="card-title">系統設定</div>
-    <div class="card-body">
-      <div class="cfg-row" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));">
-        <div class="fld">
-          <label>考試日期</label>
-          <input type="date" id="exam-date" onchange="save();run()" style="text-align:left;">
-        </div>
-        <div class="fld">
-          <label>考試倒數</label>
-          <div class="countdown-box" id="countdown-display" style="color:var(--primary); font-weight:700;">請設定日期</div>
-        </div>
-        <div class="fld">
-          <label>今日衝刺剩餘 <span style="font-size:11px; color:var(--text-muted); font-weight:400;">（截至 22:30）</span></label>
-          <div class="countdown-box" id="today-remaining-display">計算中...</div>
-        </div>
-        <div class="fld">
-          <label>一般人剩餘 <span style="font-size:11px; color:var(--text-muted); font-weight:400;">（截至 22:30）</span></label>
-          <div class="countdown-box" id="today-normal-remaining-display">計算中...</div>
-        </div>
-        <div class="fld">
-          <label>每日頁數建議</label>
-          <div class="countdown-box" id="daily-pages-suggest" style="color:var(--primary); font-weight:700;">計算中...</div>
-        </div>
-        <div class="fld">
-          <label>目前已讀完</label>
-          <div class="countdown-box" id="all-books-read-pct" style="color:var(--success); font-weight:700; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">計算中...</div>
-        </div>
-        <div class="fld">
-          <label>目前配速</label>
-          <div class="countdown-box" id="current-avg-speed" style="color:var(--text-main); font-weight:600;">計算中...</div>
-        </div>
-        <div class="fld">
-          <label>達成每日建議配速</label>
-          <div class="countdown-box" id="stat-pace-suggest" style="color:var(--primary); font-weight:700;">計算中...</div>
-        </div>
-        <div class="fld">
-          <label>今日已讀 (頁)</label>
-          <div class="countdown-box" id="stat-pages-box" style="color:var(--warning); font-weight:700;">0</div>
-        </div>
-        <div class="fld">
-          <label>今日進步</label>
-          <div class="countdown-box" id="stat-today-pct-box" style="color:var(--success); font-weight:700;">0.00%</div>
-        </div>
-        <div class="fld">
-          <label>昨日頁數</label>
-          <div class="countdown-box" id="stat-yesterday-pages-box" style="color:var(--text-muted); font-weight:700;">--</div>
-        </div>
-        <div class="fld">
-          <label>相較昨天</label>
-          <div class="countdown-box" id="stat-vs-yesterday-box" style="font-weight:700;">--</div>
-        </div>
+<div class="card" style="margin-bottom:20px;">
+  <div class="card-title">系統設定</div>
+  <div class="card-body" style="padding:14px 20px;">
+    <div style="display:flex; gap:20px; flex-wrap:wrap; align-items:flex-end;">
+      <div class="fld" style="min-width:160px;">
+        <label>考試日期</label>
+        <input type="date" id="exam-date" onchange="save();run()" style="text-align:left;">
+      </div>
+      <div class="fld" style="min-width:140px;">
+        <label>考試倒數</label>
+        <div class="countdown-box" id="countdown-display" style="color:var(--primary); font-weight:700;">請設定日期</div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- 右欄：專注追蹤 -->
-  <div class="card" style="margin-bottom:0;">
-    <div class="card-title">專注追蹤</div>
-    <div class="card-body">
-      <div class="focus-tracker">
-        <div class="focus-hud" style="justify-content:center;">
+<div class="card" style="margin-bottom:20px;">
+  <div class="card-title">今天</div>
+  <div class="card-body" style="padding:0; display:flex; flex-direction:column;">
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:0; align-items:stretch;">
+
+    <div style="padding:20px; border-right:1px solid var(--border); display:flex; flex-direction:column;">
+      <div style="font-size:13px; font-weight:700; color:var(--text-muted); margin-bottom:12px; text-transform:uppercase; letter-spacing:1px;">⏱ 專注追蹤</div>
+      <div class="focus-tracker" style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+        <div class="focus-hud">
           <div class="focus-hud-item" style="align-items:center;">
             <span class="focus-hud-label">專注時間</span>
             <span class="focus-hud-value" id="live-driving-time" style="color:var(--primary); font-size:44px; font-weight:800; letter-spacing:2px;">00:00:00</span>
@@ -242,7 +205,6 @@ body {
             <button class="btn btn-g btn-sm" id="rc-btn-stop" onclick="stopFocus()" disabled>⏹ 完成</button>
             <button class="btn btn-w btn-sm" id="rc-btn-cancel" onclick="cancelFocus()" disabled>✕ 放棄</button>
           </div>
-          <div style="width:100%; height:1px; background:var(--border);"></div>
           <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; width:100%; text-align:center; align-items:end;">
             <div style="display:flex; flex-direction:column; gap:4px; align-items:center;">
               <span style="font-size:12px; color:var(--text-muted);">起始頁</span>
@@ -266,39 +228,174 @@ body {
             </div>
           </div>
         </div>
-        <div class="focus-progress">
-          <div class="focus-progress-fill" id="rc-bar"></div>
-        </div>
+        
         <div id="rc-result" style="display:none; margin-top:16px; padding:16px; background:#fff; border-radius:var(--radius-sm); border:1px solid var(--border);">
           <div id="rc-result-text"></div>
           <div style="text-align:right; margin-top:10px;">
             <button class="btn btn-w btn-sm" onclick="clearFocusResult()">🧹 清除面板</button>
           </div>
         </div>
+      </div>
+    </div><div style="padding:20px; display:flex; flex-direction:column;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; gap:8px; flex-wrap:wrap;">
+        <div style="font-size:13px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">⏰ 今日時間軸</div>
+        <div style="display:flex; gap:5px; align-items:center; flex-wrap:wrap;">
+          <div style="padding:2px 9px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:6px; font-size:12px; font-weight:700; color:#1d4ed8; white-space:nowrap;">讀書 <span id="dp-total-study-today-hdr">—</span></div>
+          <div style="padding:2px 9px; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6px; font-size:12px; font-weight:700; color:#15803d; white-space:nowrap;">休息 <span id="dp-total-rest-today-hdr">—</span></div>
+          <div style="padding:2px 9px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:6px; font-size:12px; font-weight:700; color:#1d4ed8; white-space:nowrap;">計劃剩餘 <span id="dp-remaining-study-today">—</span></div>
+          <div id="today-cumulative-badge" style="padding:2px 9px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:6px; font-size:12px; font-weight:700; color:#1d4ed8; white-space:nowrap;">⏱ —</div>
+        </div>
+      </div>
+      <div style="overflow-x:auto;">
+        <div id="today-timeline-card" style="min-width:400px;"></div>
+      </div>
+      
+      <div style="margin-top:16px; padding:10px 16px; background:#fff; border-radius:var(--radius-sm); border:1px solid var(--border); display:flex; flex-direction:column; justify-content:center;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span style="font-size:13px; font-weight:600; color:var(--text-main);">🔥 jjmmggdd 精神指標達成率</span>
+          <span style="font-size:11px; color:var(--text-muted);">每日目標 10 小時專注</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:6px;">
+          <div style="flex:1; height:10px; background:#e2e8f0; border-radius:5px; overflow:hidden;">
+            <div id="spirit-bar" style="height:100%; background:linear-gradient(90deg,#3498db,#2ecc71); width:0%; transition:width 0.5s;"></div>
+          </div>
+          <span id="spirit-pct" style="font-size:16px; font-weight:800; color:var(--primary); min-width:48px; text-align:right;">0%</span>
+        </div>
+        <div style="font-size:11px; color:var(--text-muted); text-align:center; font-style:italic; line-height:1.5; padding-top:6px; border-top:1px dashed var(--border);">
+          「最殘忍的不是有人比你聰明，而是比你聰明的人都比你努力。」
+        </div>
+      </div>
+      
+    </div></div>
 
-        <!-- 精神指標 -->
-        <div style="margin-top:16px; padding:14px 16px; background:#fff; border-radius:var(--radius-sm); border:1px solid var(--border);">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <span style="font-size:13px; font-weight:600; color:var(--text-main);">🔥 jjmmggdd 精神指標達成率</span>
-            <span style="font-size:11px; color:var(--text-muted);">每日目標 10 小時專注</span>
-          </div>
-          <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
-            <div style="flex:1; height:10px; background:#e2e8f0; border-radius:5px; overflow:hidden;">
-              <div id="spirit-bar" style="height:100%; background:linear-gradient(90deg,#3498db,#2ecc71); width:0%; transition:width 0.5s;"></div>
-            </div>
-            <span id="spirit-pct" style="font-size:18px; font-weight:800; color:var(--primary); min-width:48px; text-align:right;">0%</span>
-          </div>
-          <div style="font-size:12px; color:var(--text-muted); text-align:center; font-style:italic; line-height:1.5; padding-top:6px; border-top:1px dashed var(--border);">
-            「最殘忍的不是有人比你聰明，而是比你聰明的人都比你努力。」
-          </div>
+    <div style="padding:16px 20px 20px; border-top:1px solid var(--border);">
+      <div class="stat-grid">
+        <div class="stat-cell">
+          <div class="st-title">衝刺剩餘(至22:30)</div>
+          <div class="st-val" id="today-remaining-display">計算中...</div>
+        </div>
+        <div class="stat-cell">
+          <div class="st-title">一般剩餘(至22:30)</div>
+          <div class="st-val" id="today-normal-remaining-display">計算中...</div>
+        </div>
+        <div class="stat-cell">
+          <div class="st-title">每日頁數建議</div>
+          <div class="st-val" id="daily-pages-suggest" style="color:var(--primary);">計算中...</div>
+        </div>
+        <div class="stat-cell">
+          <div class="st-title">目前已讀完</div>
+          <div class="st-val" id="all-books-read-pct" style="color:var(--success);">計算中...</div>
+        </div>
+        <div class="stat-cell">
+          <div class="st-title">目前配速</div>
+          <div class="st-val" id="current-avg-speed">計算中...</div>
+        </div>
+        <div class="stat-cell">
+          <div class="st-title">達成每日配速</div>
+          <div class="st-val" id="stat-pace-suggest" style="color:var(--primary);">計算中...</div>
+        </div>
+        <div class="stat-cell">
+          <div class="st-title">今日已讀</div>
+          <div class="st-val" style="color:var(--warning);"><span id="stat-pages-box">0</span><span style="font-size:12px; margin-left:2px;">頁</span></div>
+        </div>
+        <div class="stat-cell">
+          <div class="st-title">今日進步</div>
+          <div class="st-val" id="stat-today-pct-box" style="color:var(--success);">0.00%</div>
+        </div>
+        <div class="stat-cell">
+          <div class="st-title">昨日頁數</div>
+          <div class="st-val" id="stat-yesterday-pages-box" style="color:var(--text-muted);">--</div>
+        </div>
+        <div class="stat-cell">
+          <div class="st-title">相較昨天</div>
+          <div class="st-val" id="stat-vs-yesterday-box">--</div>
         </div>
       </div>
     </div>
-  </div>
 
+    <div style="padding:10px 20px 12px; border-top:1px solid var(--border); background:#f0f9ff;">
+      <!-- 六個等寬小框 -->
+      <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:6px;">
+
+        <!-- 開始時 -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 4px;">
+          <span style="font-size:11px; color:var(--text-muted); white-space:nowrap;">開始時</span>
+          <div class="num-spinner ns-sm" style="width:100%;">
+            <button type="button" tabindex="-1" onclick="dpStep('dp-start-h',-1,0,23); dpSyncHidden()">-</button>
+            <input type="number" id="dp-start-h" value="8" min="0" max="23" style="flex:1;width:0;min-width:0;border:none!important;box-shadow:none!important;"
+              onchange="dpClamp(this,0,23); dpSyncHidden()"
+              onkeydown="dpKeyStep(event,this,0,23); dpSyncHidden()">
+            <button type="button" tabindex="-1" onclick="dpStep('dp-start-h',1,0,23); dpSyncHidden()">+</button>
+          </div>
+        </div>
+
+        <!-- 開始分 -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 4px;">
+          <span style="font-size:11px; color:var(--text-muted); white-space:nowrap;">開始分</span>
+          <div class="num-spinner ns-sm" style="width:100%;">
+            <button type="button" tabindex="-1" onclick="dpStep('dp-start-m',-5,0,59); dpSyncHidden()">-</button>
+            <input type="number" id="dp-start-m" value="0" min="0" max="59" style="flex:1;width:0;min-width:0;border:none!important;box-shadow:none!important;"
+              onchange="dpClamp(this,0,59); dpSyncHidden()"
+              onkeydown="dpKeyStep(event,this,0,59); dpSyncHidden()">
+            <button type="button" tabindex="-1" onclick="dpStep('dp-start-m',5,0,59); dpSyncHidden()">+</button>
+          </div>
+        </div>
+
+        <!-- 結束時 -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 4px;">
+          <span style="font-size:11px; color:var(--text-muted); white-space:nowrap;">結束時</span>
+          <div class="num-spinner ns-sm" style="width:100%;">
+            <button type="button" tabindex="-1" onclick="dpStep('dp-end-h',-1,0,23); dpSyncHidden()">-</button>
+            <input type="number" id="dp-end-h" value="22" min="0" max="23" style="flex:1;width:0;min-width:0;border:none!important;box-shadow:none!important;"
+              onchange="dpClamp(this,0,23); dpSyncHidden()"
+              onkeydown="dpKeyStep(event,this,0,23); dpSyncHidden()">
+            <button type="button" tabindex="-1" onclick="dpStep('dp-end-h',1,0,23); dpSyncHidden()">+</button>
+          </div>
+        </div>
+
+        <!-- 結束分 -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 4px;">
+          <span style="font-size:11px; color:var(--text-muted); white-space:nowrap;">結束分</span>
+          <div class="num-spinner ns-sm" style="width:100%;">
+            <button type="button" tabindex="-1" onclick="dpStep('dp-end-m',-5,0,59); dpSyncHidden()">-</button>
+            <input type="number" id="dp-end-m" value="0" min="0" max="59" style="flex:1;width:0;min-width:0;border:none!important;box-shadow:none!important;"
+              onchange="dpClamp(this,0,59); dpSyncHidden()"
+              onkeydown="dpKeyStep(event,this,0,59); dpSyncHidden()">
+            <button type="button" tabindex="-1" onclick="dpStep('dp-end-m',5,0,59); dpSyncHidden()">+</button>
+          </div>
+        </div>
+
+        <!-- 讀(分) -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 4px;">
+          <span style="font-size:11px; color:var(--text-muted); white-space:nowrap;">讀(分)</span>
+          <div class="num-spinner ns-sm" style="width:100%;">
+            <button type="button" tabindex="-1" onclick="dpStep('dp-study-dur-today',-5,5,300); renderTodayTimelineCard()">-</button>
+            <input type="number" id="dp-study-dur-today" value="50" min="5" max="300" style="flex:1;width:0;min-width:0;border:none!important;box-shadow:none!important;"
+              oninput="renderTodayTimelineCard()"
+              onkeydown="dpKeyStep(event,this,5,300); renderTodayTimelineCard()">
+            <button type="button" tabindex="-1" onclick="dpStep('dp-study-dur-today',5,5,300); renderTodayTimelineCard()">+</button>
+          </div>
+        </div>
+
+        <!-- 休(分) -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 4px;">
+          <span style="font-size:11px; color:var(--text-muted); white-space:nowrap;">休(分)</span>
+          <div class="num-spinner ns-sm" style="width:100%;">
+            <button type="button" tabindex="-1" onclick="dpStep('dp-rest-dur-today',-5,0,120); renderTodayTimelineCard()">-</button>
+            <input type="number" id="dp-rest-dur-today" value="10" min="0" max="120" style="flex:1;width:0;min-width:0;border:none!important;box-shadow:none!important;"
+              oninput="renderTodayTimelineCard()"
+              onkeydown="dpKeyStep(event,this,0,120); renderTodayTimelineCard()">
+            <button type="button" tabindex="-1" onclick="dpStep('dp-rest-dur-today',5,0,120); renderTodayTimelineCard()">+</button>
+          </div>
+        </div>
+
+      </div>
+      <!-- hidden inputs preserved for JS -->
+      <input type="hidden" id="dp-start-today" value="08:00">
+      <input type="hidden" id="dp-end-today" value="22:00">
+    </div>  </div>
 </div>
 
-<!-- 隱藏的舊 stat 元素（保留 id 供 JS 使用） -->
 <div style="display:none;">
   <div id="stat-pages">0</div>
   <div id="stat-today-pct">0.00%</div>
@@ -306,16 +403,58 @@ body {
   <div id="stat-vs-yesterday-msg"></div>
 </div>
 
-<!-- 分頁區塊：書籍資料庫 / 每週排程表 / 進度分析 -->
+
 <div class="card">
   <div style="display:flex; border-bottom:1px solid var(--border); flex-wrap:wrap;">
-    <button id="tab-btn-db" onclick="switchTab('db')" style="padding:12px 18px; font-size:14px; font-weight:600; background:transparent; border:none; border-bottom:3px solid var(--primary); color:var(--primary); cursor:pointer; margin-bottom:-1px;">📚 書籍資料庫</button>
+    <button id="tab-btn-effort" onclick="switchTab('effort')" style="padding:12px 18px; font-size:14px; font-weight:600; background:transparent; border:none; border-bottom:3px solid var(--primary); color:var(--primary); cursor:pointer; margin-bottom:-1px;">🏆 努力紀錄</button>
+    <button id="tab-btn-db" onclick="switchTab('db')" style="padding:12px 18px; font-size:14px; font-weight:600; background:transparent; border:none; border-bottom:3px solid transparent; color:var(--text-muted); cursor:pointer; margin-bottom:-1px;">📚 書籍資料庫</button>
     <button id="tab-btn-sched" onclick="switchTab('sched')" style="padding:12px 18px; font-size:14px; font-weight:600; background:transparent; border:none; border-bottom:3px solid transparent; color:var(--text-muted); cursor:pointer; margin-bottom:-1px;">📅 每週排程表</button>
     <button id="tab-btn-analysis" onclick="switchTab('analysis')" style="padding:12px 18px; font-size:14px; font-weight:600; background:transparent; border:none; border-bottom:3px solid transparent; color:var(--text-muted); cursor:pointer; margin-bottom:-1px;">📊 進度分析</button>
     <button id="tab-btn-history" onclick="switchTab('history')" style="padding:12px 18px; font-size:14px; font-weight:600; background:transparent; border:none; border-bottom:3px solid transparent; color:var(--text-muted); cursor:pointer; margin-bottom:-1px;">🗂️ 記錄庫</button>
   </div>
 
-  <div id="tab-db" class="tab-pane">
+  <div id="tab-effort" class="tab-pane" style="display:block;">
+    <div class="card-body">
+
+      <div style="margin-bottom:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+          <div style="font-size:14px; font-weight:700; color:var(--text-main);">📅 七天時間軸</div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <button class="btn btn-w btn-sm" onclick="weekTimelinePrev()">&#9664; 上週</button>
+            <span id="week-timeline-label" style="font-size:13px; font-weight:600; color:var(--text-main); min-width:130px; text-align:center;"></span>
+            <button class="btn btn-w btn-sm" onclick="weekTimelineNext()">下週 &#9654;</button>
+            <button class="btn btn-primary btn-sm" onclick="weekTimelineThisWeek()">本週</button>
+          </div>
+        </div>
+        <div style="overflow-x:auto; padding-bottom:4px;">
+          <div id="week-timeline" style="min-width:700px;"></div>
+        </div>
+      </div>
+
+      <div style="border-top:2px solid var(--border); padding-top:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <button class="btn btn-w btn-sm" onclick="effortCalPrevMonth()">&#9664;</button>
+            <span id="effort-cal-label" style="font-size:15px; font-weight:700; color:var(--text-main); min-width:100px; text-align:center;"></span>
+            <button class="btn btn-w btn-sm" onclick="effortCalNextMonth()">&#9654;</button>
+          </div>
+          <div style="display:flex; gap:12px; flex-wrap:wrap; font-size:12px; color:var(--text-muted); align-items:center;">
+            <span>顏色說明：</span>
+            <span style="display:inline-flex; align-items:center; gap:4px;"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#e2e8f0;"></span>無紀錄</span>
+            <span style="display:inline-flex; align-items:center; gap:4px;"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#bae6fd;"></span>&lt;3h</span>
+            <span style="display:inline-flex; align-items:center; gap:4px;"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#7dd3fc;"></span>3-6h</span>
+            <span style="display:inline-flex; align-items:center; gap:4px;"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#38bdf8;"></span>6-8h</span>
+            <span style="display:inline-flex; align-items:center; gap:4px;"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#0284c7;"></span>8-10h</span>
+            <span style="display:inline-flex; align-items:center; gap:4px;"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#f59e0b;"></span>🏆 ≥10h</span>
+          </div>
+        </div>
+        <div id="effort-calendar" style="overflow-x:auto;"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="tab-db" class="tab-pane" style="display:none;">
     <div class="card-body">
       <div style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">進度全自動根據閱讀紀錄推算，避免重疊計數。支援拖曳排序。</div>
       <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; align-items:center;">
@@ -356,9 +495,22 @@ body {
     <div class="timeline-wrap" id="timeline-area" style="overflow-x:auto;"></div>
   </div>
 
-  <!-- 記錄庫 tab -->
   <div id="tab-history" class="tab-pane" style="display:none;">
     <div class="card-body">
+
+      <div style="margin-bottom:20px; padding:16px; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:var(--radius-sm);">
+        <div style="font-size:13px; font-weight:700; color:#15803d; margin-bottom:12px; text-transform:uppercase; letter-spacing:1px;">⏱ 今日時段記錄</div>
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; padding:10px 14px; background:#fff; border:1px solid var(--border); border-radius:var(--radius-sm); margin-bottom:10px;">
+          <span style="font-size:13px; color:var(--text-muted); font-weight:600;">＋ 新增時段</span>
+          <input type="time" id="effort-slot-start-today" step="1" style="padding:4px 8px; border:1px solid #cbd5e1; border-radius:4px; font-size:13px;">
+          <span style="font-size:13px; color:var(--text-muted);">→</span>
+          <input type="time" id="effort-slot-end-today" step="1" style="padding:4px 8px; border:1px solid #cbd5e1; border-radius:4px; font-size:13px;">
+          <input type="number" id="effort-pages-input-today" placeholder="頁數" min="0" style="width:70px; padding:4px 8px; border:1px solid #cbd5e1; border-radius:4px; font-size:13px;">
+          <button class="btn btn-g btn-sm" onclick="effortAddSlotToday()">記錄</button>
+        </div>
+        <div id="today-slots-list"></div>
+      </div>
+
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:8px;">
         <span style="font-size:13px; color:var(--text-muted);">顯示最近 <strong id="hist-days-label">30</strong> 天的閱讀紀錄，為配速、今日進步、相較昨天等指標的計算依據。</span>
         <button class="btn btn-r btn-sm" onclick="clearAllHistory()">🗑️ 清除所有歷史紀錄</button>
@@ -373,6 +525,7 @@ body {
               <th style="padding:10px 12px; border-bottom:2px solid var(--border); text-align:center; font-weight:600; color:var(--text-muted);">配速 (分/頁)</th>
               <th style="padding:10px 12px; border-bottom:2px solid var(--border); text-align:center; font-weight:600; color:var(--text-muted);">今日進步</th>
               <th style="padding:10px 12px; border-bottom:2px solid var(--border); text-align:center; font-weight:600; color:var(--text-muted);">剩餘頁數快照</th>
+              <th style="padding:10px 12px; border-bottom:2px solid var(--border); text-align:left; font-weight:600; color:var(--text-muted); min-width:200px;">已記錄時段</th>
               <th style="padding:10px 12px; border-bottom:2px solid var(--border); text-align:center; font-weight:600; color:var(--text-muted);">操作</th>
             </tr>
           </thead>
@@ -392,6 +545,16 @@ body {
 </div>
 
 <script>
+// 日期工具函式（解決 toISOString 時區偏差問題）
+function getLocalISODate(d = new Date()) {
+  const pad = n => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+function parseLocalDate(str) {
+  const [y, m, d] = str.split('-');
+  return new Date(y, m - 1, d);
+}
+
 const PALETTE = ['#3498db','#e74c3c','#2ecc71','#9b59b6','#f1c40f','#e67e22','#1abc9c','#34495e','#d35400','#c0392b'];
 function subjColor(idx){ return PALETTE[idx % PALETTE.length]; }
 
@@ -496,14 +659,30 @@ function resetAll(){
   if(!confirm('確定清空所有資料？'))return;
   localStorage.removeItem('SDv11_unified');
   localStorage.removeItem('td');
-  // 清除所有歷史紀錄（配速依據、今日進步依據）
   const toRemove = [];
   for (let i = 0; i < localStorage.length; i++) {
     const k = localStorage.key(i);
-    if (k && k.startsWith('td_hist_')) toRemove.push(k);
+    if (k && (k.startsWith('td_hist_') || k.startsWith('effort_'))) toRemove.push(k);
   }
   toRemove.forEach(k => localStorage.removeItem(k));
   location.reload();
+}
+
+// 全域格式化：秒 → Xh Ym Zs
+function fmtHMS(totalSec) {
+  totalSec = Math.round(totalSec);
+  if (totalSec <= 0) return '0s';
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  let str = '';
+  if (h > 0) str += h + 'h ';
+  if (m > 0 || h > 0) str += m + 'm ';
+  str += s + 's';
+  return str.trim();
+}
+function fmtHMSfromMins(totalMins) {
+  return fmtHMS(Math.round(totalMins * 60));
 }
 
 function ds(d){ return d.toLocaleDateString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit'}); }
@@ -550,10 +729,9 @@ function renderCombinedDB() {
     subj.books.forEach((b, bi) => {
       const rem = Math.max(0, b.total - b.current);
       const pct = b.total > 0 ? Math.min(100, Math.round(b.current / b.total * 100)) : 0;
-      const avgSpeed = calcGlobalAvgSpeed(); // 分鐘/頁
+      const avgSpeed = calcGlobalAvgSpeed();
       const estHrs = (rem * avgSpeed / 60).toFixed(1);
       
-      // 生成熱力圖
       const pageLog = b.pageReadLog || [];
       const totalPages = b.total || 1;
       const pageMap = {};
@@ -802,8 +980,6 @@ function updateFocusTicks() {
   const now = Date.now(), currentPauseMs = isFocusPaused ? (now - pauseStartTime) : 0, effectivePauseMs = totalPauseMs + currentPauseMs, elapsedActiveMs = now - focusStartTime - effectivePauseMs;
   window.sessionDrivingMs = elapsedActiveMs;
   document.getElementById('live-driving-time').innerText = formatDuration(elapsedActiveMs);
-  const timeProgressPct = expectedTotalMs > 0 ? Math.min(100, (elapsedActiveMs / expectedTotalMs) * 100) : 0;
-  document.getElementById('rc-bar').style.width = `${timeProgressPct}%`;
   updateSpiritIndicator();
 }
 
@@ -830,7 +1006,6 @@ function clearFocusResult() {
   focusStartTime = null; isFocusPaused = false; pauseStartTime = null; totalPauseMs = 0; expectedTotalMs = 0; pendingRacerMinutes = 0; pendingDrivingMs = 0; window.sessionDrivingMs = 0;
   focusBtnsIdle();
   document.getElementById('live-driving-time').innerText = '00:00:00';
-  document.getElementById('rc-bar').style.width = '0%';
   document.getElementById('rc-btn-pause').innerText = '⏸ 暫停';
   calcExpected();
 }
@@ -912,14 +1087,14 @@ window.submitRcLog = function() {
     const reachedPage = parseInt(row.querySelector('.rc-log-reached').value, 10) || 0;
     
     if (pagesRead > 0) {
-      S.subjects[si].books[bi].lastRead = new Date().toISOString().slice(0,10);
+      S.subjects[si].books[bi].lastRead = getLocalISODate();
       totalPagesSubmitted += pagesRead;
     }
     
     if (startPage > 0 && reachedPage >= startPage) {
       const bk = S.subjects[si].books[bi];
       if(!bk.pageReadLog) bk.pageReadLog = [];
-      const today = new Date().toISOString().slice(0,10);
+      const today = getLocalISODate();
       const pageCount = {};
       bk.pageReadLog.forEach(e => {
         for (let p = e.startPage; p <= e.endPage; p++) {
@@ -966,13 +1141,32 @@ window.submitRcLog = function() {
       if (totalPagesSubmitted > 0 || pendingRacerMinutes > 0) stats.sessions += 1;
       stats.drivingMs = (stats.drivingMs || 0) + pendingDrivingMs;
       localStorage.setItem('td', JSON.stringify(stats));
+
+      // 同步到努力紀錄（使用本地實際完成時間寫入區段）
+      const todayStr = getLocalISODate();
+      const effortData = getEffortDay(todayStr);
+      
+      if (pendingDrivingMs > 0) {
+        const wallEnd = new Date();
+        const wallEndSec = wallEnd.getHours() * 3600 + wallEnd.getMinutes() * 60 + wallEnd.getSeconds();
+        const sessionSecs = Math.round(pendingDrivingMs / 1000);
+        let wallStartSec = Math.max(0, wallEndSec - sessionSecs);
+        
+        if (wallEndSec > wallStartSec) {
+          effortData.slots.push({ startSec: wallStartSec, endSec: wallEndSec, pages: totalPagesSubmitted, autoSync: true });
+          effortData.slots.sort((a,b) => slotStartSec(a) - slotStartSec(b));
+        }
+      }
+
+      // 無論是否計算時間，有頁數就疊加上去
+      effortData.pages = (effortData.pages || 0) + totalPagesSubmitted;
+      saveEffortDay(todayStr, effortData);
   }
   save(); run();
-  // save() 之後 syncBookProgress 已執行，剩餘頁數正確，再存快照
   if (totalPagesSubmitted > 0 || pendingRacerMinutes > 0 || pendingDrivingMs > 0) {
     saveTodayToHistory(getTodayStats());
   }
-  alert(`成功同步 ${successCount} 本書進度！`); clearFocusResult(); renderTodayStats();
+  alert(`成功同步 ${successCount} 本書進度！`); clearFocusResult(); renderTodayStats(); renderEffortTab(); renderWeekTimeline(); renderTodayCardSlots(); renderTodayTimelineCard();
 };
 
 function computeWeeklyHoursPerSubject(){
@@ -1125,7 +1319,6 @@ setInterval(updateTodayRemaining, 1000); updateTodayRemaining();
 function updatePaceSuggest() {
   const el = document.getElementById('stat-pace-suggest');
   if (!el) return;
-  // 取得每日建議頁數（從 daily-pages-suggest 反推，或直接重算）
   const remaining = calcTotalRemainingPages();
   const examDateVal = S.examDate ? new Date(S.examDate) : null;
   const now = new Date();
@@ -1155,7 +1348,6 @@ function getTodayStats() {
   return stats;
 }
 
-// 取得昨天的統計
 function getYesterdayStats() {
   const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
   const yKey = 'td_hist_' + ds(yesterday);
@@ -1166,10 +1358,8 @@ function getYesterdayStats() {
   return null;
 }
 
-// 把今日數據同時存進每日歷史（含當天剩餘頁數快照）
 function saveTodayToHistory(stats) {
   const key = 'td_hist_' + stats.date;
-  // 快照當前剩餘頁數與全書總頁數（讓昨天的數字可供明天計算）
   const snap = {
     ...stats,
     remainingPages: calcTotalRemainingPages(),
@@ -1178,14 +1368,12 @@ function saveTodayToHistory(stats) {
   localStorage.setItem(key, JSON.stringify(snap));
 }
 
-// 計算全書總頁數（排除已暫停計入的書）
 function calcTotalAllPages() {
   let total = 0;
   S.subjects.forEach(subj => { subj.books.forEach(b => { if(!b.paused) total += b.total || 0; }); });
   return total;
 }
 
-// 計算每週排程總讀書時數（不分科，用於推算完讀日）
 function calcWeeklyStudyHours() {
   let total = 0;
   DAYS.forEach(d => {
@@ -1197,10 +1385,8 @@ function calcWeeklyStudyHours() {
   return total; // 小時/週
 }
 
-// 計算所有書本的歷史平均配速（分鐘/頁），沒有資料回傳5
 function calcGlobalAvgSpeed() {
   let totalPages = 0, totalMinutes = 0;
-  // 掃描最近30天歷史
   for (let i = 0; i < 30; i++) {
     const d = new Date(); d.setDate(d.getDate() - i);
     const key = 'td_hist_' + ds(d);
@@ -1213,15 +1399,13 @@ function calcGlobalAvgSpeed() {
       }
     } catch(e) {}
   }
-  // 也加上今天
   const today = getTodayStats();
   totalPages += today.pages || 0;
   totalMinutes += today.minutes || 0;
   if (totalPages > 0 && totalMinutes > 0) return totalMinutes / totalPages;
-  return 5; // 預設5分/頁
+  return 5; 
 }
 
-// 計算全書剩餘總頁數（排除已暫停計入的書）
 function calcTotalRemainingPages() {
   let total = 0;
   S.subjects.forEach(subj => {
@@ -1230,7 +1414,6 @@ function calcTotalRemainingPages() {
   return total;
 }
 
-// 取每日統計歷史（最近N天），用於顯示每本書尚需時間
 function getDailyHistory(days) {
   const result = [];
   for (let i = 0; i < days; i++) {
@@ -1246,20 +1429,16 @@ function getDailyHistory(days) {
 
 function renderTodayStats() {
   const stats = getTodayStats();
-  // 寫入隱藏元素（供舊程式碼相容）
   document.getElementById('stat-pages').innerText = stats.pages;
-  // 寫入系統設定欄的新 box
   const pagesBox = document.getElementById('stat-pages-box');
   if (pagesBox) pagesBox.innerText = stats.pages;
 
-  // 今日進步% = 今天讀的頁數 / 目前所有科目書的剩餘總頁數（即時值）
   const currentRemaining = calcTotalRemainingPages();
   const todayPct = currentRemaining > 0 ? (stats.pages / currentRemaining * 100) : 0;
   document.getElementById('stat-today-pct').innerText = todayPct.toFixed(2) + '%';
   const todayPctBox = document.getElementById('stat-today-pct-box');
   if (todayPctBox) todayPctBox.innerText = todayPct.toFixed(2) + '%';
 
-  // 昨日頁數
   const ystats = getYesterdayStats();
   const yPagesBox = document.getElementById('stat-yesterday-pages-box');
   if (yPagesBox) {
@@ -1272,7 +1451,6 @@ function renderTodayStats() {
     }
   }
 
-  // 相較昨天
   const vsEl = document.getElementById('stat-vs-yesterday');
   const vsMsgEl = document.getElementById('stat-vs-yesterday-msg');
   const vsBox = document.getElementById('stat-vs-yesterday-box');
@@ -1326,7 +1504,6 @@ function updateAllBooksProgress() {
 
   const avgSpeed = calcGlobalAvgSpeed();
 
-  // 配速
   if (speedEl) {
     let hasHistory = false;
     for (let i = 0; i < 30; i++) {
@@ -1350,7 +1527,6 @@ function updateAllBooksProgress() {
   const readPct = (readPages / totalAll * 100).toFixed(1);
   if (readEl) readEl.innerText = readPct + '%（' + readPages + ' 頁／' + totalAll + ' 頁）';
 
-  // 每日頁數建議：剩餘頁數 ÷ 剩餘天數（考試倒數），若無考試日則用配速估算
   if (dailyEl) {
     const examDateVal = S.examDate ? new Date(S.examDate) : null;
     const now = new Date();
@@ -1378,17 +1554,15 @@ function updateAllBooksProgress() {
   }
 }
 
-// 每分鐘自動刷新今日狀態與配速（不需要手動觸發）
 setInterval(() => { renderTodayStats(); }, 60000);
 
 function updateSpiritIndicator() {
   const stats = getTodayStats();
-  // 今日專注時間（分鐘）＋ 目前正在跑的 session（若有）
   let totalMins = stats.minutes || 0;
   if (window.sessionDrivingMs && window.sessionDrivingMs > 0) {
     totalMins += window.sessionDrivingMs / 60000;
   }
-  const targetMins = 10 * 60; // 10小時
+  const targetMins = 10 * 60; 
   const pct = Math.min(100, Math.round(totalMins / targetMins * 100));
   const bar = document.getElementById('spirit-bar');
   const pctEl = document.getElementById('spirit-pct');
@@ -1415,7 +1589,7 @@ function clearTodayRecord() {
 }
 
 function switchTab(name) {
-  ['db','sched','analysis','history'].forEach(t => {
+  ['effort','db','sched','analysis','history'].forEach(t => {
     document.getElementById('tab-' + t).style.display = t === name ? 'block' : 'none';
     const btn = document.getElementById('tab-btn-' + t);
     if (btn) {
@@ -1424,6 +1598,7 @@ function switchTab(name) {
     }
   });
   if (name === 'history') renderHistory();
+  if (name === 'effort') renderEffortTab();
 }
 
 function renderHistory() {
@@ -1431,7 +1606,6 @@ function renderHistory() {
   const emptyEl = document.getElementById('history-empty');
   if (!tbody) return;
 
-  // 收集所有 td_hist_ 紀錄
   const records = [];
   for (let i = 0; i < localStorage.length; i++) {
     const k = localStorage.key(i);
@@ -1442,15 +1616,13 @@ function renderHistory() {
       } catch(e) {}
     }
   }
-  // 也加今天（td）
+  
   const todayRec = getTodayStats();
   if (todayRec && (todayRec.pages > 0 || todayRec.minutes > 0)) {
     const snap = { ...todayRec, key: 'td', remainingPages: calcTotalRemainingPages(), totalAllPages: calcTotalAllPages() };
-    // 避免重複（若今天已有 hist 快照）
     if (!records.find(r => r.date === todayRec.date)) records.push(snap);
   }
 
-  // 依日期降冪排序
   records.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
   if (records.length === 0) {
@@ -1478,6 +1650,32 @@ function renderHistory() {
     const isToday = rec.key === 'td';
     const rowBg = idx % 2 === 0 ? '' : 'background:#f8fafc;';
     const todayBadge = isToday ? '<span style="font-size:11px; background:#e8f0fe; color:#1a73e8; border-radius:8px; padding:2px 6px; margin-left:6px;">今日</span>' : '';
+
+    // Effort slots for this date
+    let slotsHtml = '<span style="color:var(--text-muted); font-size:12px;">—</span>';
+    try {
+      const recDate = rec.date;
+      if (recDate) {
+        const effortData = getEffortDay(recDate);
+        if (effortData.slots && effortData.slots.length > 0) {
+          const fmtDurSec = sec => {
+            const h = Math.floor(sec/3600), m = Math.floor((sec%3600)/60), s = sec%60;
+            let str = '';
+            if (h) str += h + 'h ';
+            if (m) str += m + 'm ';
+            str += s + 's';
+            return str.trim();
+          };
+          slotsHtml = '<div style="display:flex; flex-direction:column; gap:3px;">' +
+            effortData.slots.map(sl => {
+              const ss = slotStartSec(sl), se = slotEndSec(sl), dur = se - ss;
+              return `<span style="font-size:12px; color:var(--primary); white-space:nowrap;">${effortSecToLabel(ss)}–${effortSecToLabel(se)} <span style="color:var(--text-muted);">(${fmtDurSec(dur)}${sl.pages ? ', ' + sl.pages + '頁' : ''})</span></span>`;
+            }).join('') +
+            '</div>';
+        }
+      }
+    } catch(e) {}
+
     return `<tr style="${rowBg}">
       <td style="padding:10px 12px; border-bottom:1px solid var(--border); white-space:nowrap; font-weight:600;">${rec.date || '--'}${todayBadge}</td>
       <td style="padding:10px 12px; border-bottom:1px solid var(--border); text-align:center; color:var(--warning); font-weight:700;">${pages}</td>
@@ -1485,6 +1683,7 @@ function renderHistory() {
       <td style="padding:10px 12px; border-bottom:1px solid var(--border); text-align:center; color:var(--primary); font-weight:600;">${speed}</td>
       <td style="padding:10px 12px; border-bottom:1px solid var(--border); text-align:center; color:var(--success);">${pct}</td>
       <td style="padding:10px 12px; border-bottom:1px solid var(--border); text-align:center; color:var(--text-muted);">${typeof remaining === 'number' ? remaining + ' 頁' : '--'}</td>
+      <td style="padding:10px 12px; border-bottom:1px solid var(--border);">${slotsHtml}</td>
       <td style="padding:10px 12px; border-bottom:1px solid var(--border); text-align:center;">
         ${!isToday ? `<button class="btn btn-w btn-sm" style="color:var(--danger); font-size:12px;" onclick="deleteHistoryRecord('${rec.key}')">刪除</button>` : '<span style="font-size:12px; color:var(--text-muted);">（今日）</span>'}
       </td>
@@ -1512,7 +1711,612 @@ function clearAllHistory() {
   renderTodayStats();
 }
 
-load(); run(); calcExpected(); renderTodayStats();
+// ═══════════════════════════════════════════════════
+//   努力紀錄模組
+// ═══════════════════════════════════════════════════
+
+const EFFORT_START_MIN = 0;
+const EFFORT_END_MIN   = 24 * 60; // 1440
+const EFFORT_SLOT_MINS = 30;
+const EFFORT_SLOTS = [];
+for (let m = EFFORT_START_MIN; m < EFFORT_END_MIN; m += EFFORT_SLOT_MINS) {
+  const hh = String(Math.floor(m/60)).padStart(2,'0');
+  const mm = String(m%60).padStart(2,'0');
+  EFFORT_SLOTS.push({ min: m, label: hh + ':' + mm });
+}
+
+let currentEffortDate = getLocalISODate();
+let currentCalMonth = { y: new Date().getFullYear(), m: new Date().getMonth() }; 
+
+function effortDateKey(dateStr) { return 'effort_' + dateStr; }
+
+function getEffortDay(dateStr) {
+  try {
+    const raw = localStorage.getItem(effortDateKey(dateStr));
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return { slots: [], pages: 0 };
+}
+
+function saveEffortDay(dateStr, data) {
+  localStorage.setItem(effortDateKey(dateStr), JSON.stringify(data));
+}
+
+function effortFmtDate(dateStr) {
+  const d = parseLocalDate(dateStr);
+  return d.toLocaleDateString('zh-TW', { year:'numeric', month:'2-digit', day:'2-digit', weekday:'short' });
+}
+
+function slotStartSec(s) { return s.startSec !== undefined ? s.startSec : (s.startMin||0)*60; }
+function slotEndSec(s)   { return s.endSec   !== undefined ? s.endSec   : (s.endMin||0)*60; }
+function slotDurSec(s)   { return slotEndSec(s) - slotStartSec(s); }
+
+function effortTotalMins(slots) {
+  return slots.reduce((sum, s) => sum + slotDurSec(s) / 60, 0);
+}
+
+function effortInitSelects() {
+  const startEl = document.getElementById('effort-slot-start');
+  const endEl   = document.getElementById('effort-slot-end');
+  if (!startEl || !endEl) return;
+  // Only set default value if empty
+  if (!startEl.value) {
+    const now = new Date();
+    const pad = n => String(n).padStart(2,'0');
+    const nowStr = pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+    startEl.value = nowStr;
+    // Default end = start + 1h30m
+    const endMs = now.getTime() + 90*60*1000;
+    const endD = new Date(endMs);
+    endEl.value = pad(endD.getHours()) + ':' + pad(endD.getMinutes()) + ':' + pad(endD.getSeconds());
+  }
+}
+
+// ── 今天卡片專用：初始化時間輸入框 ──
+function effortInitSelectsToday() {
+  const startEl = document.getElementById('effort-slot-start-today');
+  const endEl   = document.getElementById('effort-slot-end-today');
+  if (!startEl || !endEl) return;
+  if (!startEl.value) {
+    const now = new Date();
+    const pad = n => String(n).padStart(2,'0');
+    startEl.value = pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+    const endMs = now.getTime() + 90*60*1000;
+    const endD = new Date(endMs);
+    endEl.value = pad(endD.getHours()) + ':' + pad(endD.getMinutes()) + ':' + pad(endD.getSeconds());
+  }
+}
+
+// ── 今天卡片專用：新增時段（強制存到今天） ──
+function effortAddSlotToday() {
+  const startVal = document.getElementById('effort-slot-start-today').value;
+  const endVal   = document.getElementById('effort-slot-end-today').value;
+  const pages    = parseInt(document.getElementById('effort-pages-input-today').value) || 0;
+  if (!startVal || !endVal) { alert('請輸入起始與結束時間！'); return; }
+  const startSec = timeStrToSec(startVal);
+  const endSec   = timeStrToSec(endVal);
+  if (endSec <= startSec) { alert('結束時間必須晚於起始時間！'); return; }
+  const todayStr = getLocalISODate();
+  const data = getEffortDay(todayStr);
+  const overlaps = data.slots.some(s => {
+    const ss = s.startSec !== undefined ? s.startSec : s.startMin*60;
+    const se = s.endSec   !== undefined ? s.endSec   : s.endMin*60;
+    return se > startSec && ss < endSec;
+  });
+  if (overlaps) {
+    if (!confirm('此時段與既有紀錄重疊，確定要新增？')) return;
+  }
+  data.slots.push({ startSec, endSec, pages });
+  data.slots.sort((a,b) => (a.startSec||a.startMin*60) - (b.startSec||b.startMin*60));
+  data.pages = (data.pages || 0) + pages;
+  saveEffortDay(todayStr, data);
+  document.getElementById('effort-pages-input-today').value = '';
+  document.getElementById('effort-slot-start-today').value = '';
+  document.getElementById('effort-slot-end-today').value = '';
+  effortInitSelectsToday();
+  renderTodayCardSlots();
+  renderTodayTimelineCard();
+  renderTodayStats();
+  // 同步 effort tab（如果已開啟）
+  if (currentEffortDate === todayStr) renderEffortTab();
+}
+
+// ── 今天卡片：刪除時段 ──
+function effortDeleteSlotToday(idx) {
+  const todayStr = getLocalISODate();
+  const data = getEffortDay(todayStr);
+  const removed = data.slots.splice(idx, 1)[0];
+  data.pages = Math.max(0, (data.pages || 0) - (removed.pages || 0));
+  saveEffortDay(todayStr, data);
+  renderTodayCardSlots();
+  renderTodayTimelineCard();
+  renderTodayStats();
+  if (currentEffortDate === todayStr) renderEffortTab();
+}
+
+// ── 今天卡片：渲染已記錄時段列表 ──
+function renderTodayCardSlots() {
+  const listEl = document.getElementById('today-slots-list');
+  if (!listEl) return;
+  const todayStr = getLocalISODate();
+  const data = getEffortDay(todayStr);
+  if (!data.slots.length) {
+    listEl.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:13px; padding:10px;">尚無今日時段紀錄。</div>';
+    return;
+  }
+  const fmtDur = sec => {
+    const h = Math.floor(sec/3600), m = Math.floor((sec%3600)/60), s = sec%60;
+    let str = '';
+    if (h) str += h + 'h ';
+    if (m) str += m + 'm ';
+    str += s + 's';
+    return str.trim();
+  };
+  listEl.innerHTML = `<div style="font-size:12px; font-weight:600; color:var(--text-muted); margin-bottom:6px;">📋 今日已記錄時段</div>` +
+    `<div style="display:flex; flex-direction:column; gap:5px;">` +
+    data.slots.map((s, idx) => {
+      const ss = slotStartSec(s), se = slotEndSec(s), dur = se - ss;
+      return `<div style="display:flex; align-items:center; gap:10px; padding:7px 12px; background:#f8fafc; border:1px solid var(--border); border-radius:var(--radius-sm); flex-wrap:wrap;">
+        <span style="font-weight:700; color:var(--primary); font-size:13px; min-width:150px;">${effortSecToLabel(ss)} – ${effortSecToLabel(se)}</span>
+        <span style="color:var(--text-muted); font-size:12px;">${fmtDur(dur)}</span>
+        <span style="color:var(--warning); font-weight:600; font-size:12px;">${s.pages} 頁</span>
+        <button class="btn btn-w btn-sm" style="color:var(--danger); margin-left:auto; font-size:12px;" onclick="effortDeleteSlotToday(${idx})">刪除</button>
+      </div>`;
+    }).join('') +
+    `</div>`;
+}
+
+// ── 今天卡片：渲染時間軸 ──
+function renderTodayTimelineCard() {
+  const tlEl = document.getElementById('today-timeline-card');
+  if (!tlEl) return;
+  const todayStr = getLocalISODate();
+  const data = getEffortDay(todayStr);
+  const totalSec = 24 * 3600;
+
+  // 實際紀錄（藍色）
+  let actualBars = '';
+  data.slots.forEach(s => {
+    const ss = slotStartSec(s), se = slotEndSec(s);
+    const leftPct  = (ss / totalSec * 100).toFixed(4);
+    const widthPct = ((se - ss) / totalSec * 100).toFixed(4);
+    actualBars += `<div style="position:absolute;left:${leftPct}%;width:${widthPct}%;top:50%;height:50%;background:#3498db;box-sizing:border-box;border-right:1px solid rgba(255,255,255,0.3);" title="${effortSecToLabel(ss)}–${effortSecToLabel(se)}"></div>`;
+  });
+
+  // 預計計畫（上半層）
+  let planBars = '';
+  let planTotalStudy = 0, planTotalRest = 0, planSess = 0;
+  const dpStartVal = (document.getElementById('dp-start-today')||{value:'08:00'}).value || '08:00';
+  const dpEndVal   = (document.getElementById('dp-end-today')  ||{value:'22:00'}).value || '22:00';
+  const dpStudyDur = Math.max(5, parseInt((document.getElementById('dp-study-dur-today')||{value:'50'}).value)||50);
+  const dpRestDur  = Math.max(0, parseInt((document.getElementById('dp-rest-dur-today') ||{value:'10'}).value)||10);
+  const [dsh, dsm] = dpStartVal.split(':').map(Number);
+  const [deh, dem] = dpEndVal.split(':').map(Number);
+  const dpStartMin = dsh*60 + dsm, dpEndMin = deh*60 + dem;
+  if (dpEndMin > dpStartMin) {
+    let cur = dpStartMin;
+    while (cur + dpStudyDur <= dpEndMin) {
+      planTotalStudy += dpStudyDur; planSess++;
+      const ss = cur*60, se = (cur+dpStudyDur)*60;
+      const lp = (ss/totalSec*100).toFixed(4), wp = ((se-ss)/totalSec*100).toFixed(4);
+      planBars += `<div style="position:absolute;left:${lp}%;width:${wp}%;top:0;height:50%;background:rgba(52,152,219,0.25);box-sizing:border-box;border-right:1px solid rgba(255,255,255,0.4);"></div>`;
+      cur += dpStudyDur;
+      if (dpRestDur > 0 && cur < dpEndMin) {
+        const re = Math.min(cur + dpRestDur, dpEndMin);
+        planTotalRest += re - cur;
+        const rs = cur*60, rse = re*60;
+        planBars += `<div style="position:absolute;left:${(rs/totalSec*100).toFixed(4)}%;width:${((rse-rs)/totalSec*100).toFixed(4)}%;top:0;height:50%;background:rgba(46,204,113,0.3);box-sizing:border-box;"></div>`;
+        cur = re;
+      }
+    }
+  }
+
+  // 更新計畫統計
+  const avgSpeed = calcGlobalAvgSpeed();
+  const fmtHM = mins => { const h=Math.floor(mins/60),m=mins%60; return h>0?(h+'h'+(m>0?' '+m+'m':'')):(m+'m'); };
+  const estPages = avgSpeed > 0 ? Math.floor(planTotalStudy / avgSpeed) : 0;
+
+  // 依計劃剩餘讀書時間（計算現在之後還有幾分鐘計劃讀書）
+  const nowMin = new Date().getHours()*60 + new Date().getMinutes();
+  let planRemainingStudy = 0;
+  if (dpEndMin > dpStartMin) {
+    let cur = dpStartMin;
+    while (cur + dpStudyDur <= dpEndMin) {
+      const segEnd = cur + dpStudyDur;
+      if (segEnd > nowMin) {
+        planRemainingStudy += Math.min(segEnd, dpEndMin) - Math.max(cur, nowMin);
+      }
+      cur += dpStudyDur;
+      if (dpRestDur > 0 && cur < dpEndMin) cur = Math.min(cur + dpRestDur, dpEndMin);
+    }
+  }
+  planRemainingStudy = Math.max(0, planRemainingStudy);
+
+  // update bottom-row hidden stats + header badges + legend
+  const _studyFmt = fmtHM(planTotalStudy), _restFmt = fmtHM(planTotalRest);
+  const els = { 'dp-total-study-today': _studyFmt, 'dp-total-rest-today': _restFmt, 'dp-sessions-today': planSess, 'dp-est-pages-today': estPages };
+  Object.entries(els).forEach(([id, val]) => { const e = document.getElementById(id); if(e) e.textContent = val; });
+  // header badges
+  const _hdrStudy = document.getElementById('dp-total-study-today-hdr'); if(_hdrStudy) _hdrStudy.textContent = _studyFmt;
+  const _hdrRest  = document.getElementById('dp-total-rest-today-hdr');  if(_hdrRest)  _hdrRest.textContent  = _restFmt;
+  // legend
+  const _legSess  = document.getElementById('dp-sessions-legend');   if(_legSess)  _legSess.textContent  = planSess;
+  const _legPages = document.getElementById('dp-est-pages-legend');  if(_legPages) _legPages.textContent  = estPages;
+
+  // 更新計劃剩餘
+  const remEl = document.getElementById('dp-remaining-study-today');
+  if (remEl) remEl.textContent = planRemainingStudy > 0 ? fmtHM(planRemainingStudy) : '0m';
+
+  // 更新今日累計 badge
+  const cumEl = document.getElementById('today-cumulative-badge');
+  if (cumEl) {
+    const ts = data.slots.reduce((a,s) => a + slotDurSec(s), 0);
+    const tm = ts / 60;
+    cumEl.textContent = (tm >= 600 ? '🏆 ' : '⏱ ') + fmtHMS(ts);
+    cumEl.style.background = tm >= 600 ? '#fef3c7' : '#eff6ff';
+    cumEl.style.borderColor = tm >= 600 ? '#fcd34d' : '#bfdbfe';
+    cumEl.style.color       = tm >= 600 ? '#92400e' : '#1d4ed8';
+  }
+
+  // 刻度標籤
+  let labelHtml = '';
+  for (let h = 0; h <= 24; h++) {
+    const pct = h / 24 * 100;
+    let transform = 'translateX(-50%)';
+    if (h === 0) transform = 'translateX(0%)';
+    if (h === 24) transform = 'translateX(-100%)';
+    labelHtml += `<div style="position:absolute;left:${pct}%;transform:${transform};font-size:11px;color:var(--text-muted);white-space:nowrap;">${h}</div>`;
+  }
+
+  // 紅線（標籤在條棒上方，不覆蓋圖例）
+  const now = new Date();
+  const nowSec = now.getHours()*3600 + now.getMinutes()*60 + now.getSeconds();
+  const nowPct = (nowSec / totalSec * 100).toFixed(4);
+  const nowLabel = effortSecToLabel(nowSec).slice(0,5);
+  const redLine = `<div id="today-card-redline" style="position:absolute;left:${nowPct}%;top:0;width:2px;height:100%;background:#e74c3c;z-index:10;pointer-events:none;">
+    <div style="position:absolute;top:-20px;left:50%;transform:translateX(-50%);background:#e74c3c;color:#fff;font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;white-space:nowrap;">${nowLabel}</div>
+  </div>`;
+
+  const divider = `<div style="position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,0.08);z-index:5;pointer-events:none;"></div>`;
+
+  tlEl.innerHTML = `
+    <div style="position:relative;">
+      <div style="font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <span style="display:inline-flex;align-items:center;gap:5px;"><span style="display:inline-block;width:14px;height:8px;background:rgba(52,152,219,0.28);border:1px solid #93c5fd;border-radius:2px;"></span>計畫讀書</span>
+        <span style="display:inline-flex;align-items:center;gap:5px;"><span style="display:inline-block;width:14px;height:8px;background:rgba(46,204,113,0.32);border:1px solid #86efac;border-radius:2px;"></span>計畫休息</span>
+        <span style="display:inline-flex;align-items:center;gap:5px;"><span style="display:inline-block;width:14px;height:8px;background:#3498db;border-radius:2px;"></span>實際紀錄</span>
+        <span style="display:inline-flex;align-items:center;gap:5px;"><span style="display:inline-block;width:2px;height:14px;background:#e74c3c;"></span>現在</span>
+        <span style="margin-left:auto;display:inline-flex;align-items:center;gap:12px;">
+          <span style="color:var(--text-main);">段數 <strong id="dp-sessions-legend" style="color:var(--text-main);">—</strong></span>
+          <span style="color:var(--text-main);">換算頁 <strong id="dp-est-pages-legend" style="color:var(--warning);">—</strong></span>
+        </span>
+      </div>
+    </div>
+    <div style="position:relative;padding-top:20px;">
+      <div style="position:relative;height:56px;border-radius:6px;overflow:visible;border:1px solid var(--border);background:#f8fafc;">
+        <div style="position:absolute;inset:0;border-radius:6px;overflow:hidden;">${planBars}${divider}${actualBars}</div>
+        ${redLine}
+      </div>
+      <div style="position:relative;height:20px;margin-top:6px;overflow:visible;">${labelHtml}</div>
+    </div>`;
+}
+
+// ── 今天卡片紅線每秒更新 ──
+function updateTodayCardRedLine() {
+  const lineEl = document.getElementById('today-card-redline');
+  if (!lineEl) return;
+  const now = new Date();
+  const nowSec = now.getHours()*3600 + now.getMinutes()*60 + now.getSeconds();
+  const nowPct = (nowSec / 86400 * 100).toFixed(4);
+  const nowLabel = effortSecToLabel(nowSec).slice(0,5);
+  lineEl.style.left = nowPct + '%';
+  const tag = lineEl.querySelector('div');
+  if (tag) tag.textContent = nowLabel;
+}
+setInterval(updateTodayCardRedLine, 1000);
+
+function timeStrToSec(str) {
+  if (!str) return 0;
+  const parts = str.split(':').map(Number);
+  return (parts[0]||0)*3600 + (parts[1]||0)*60 + (parts[2]||0);
+}
+function secToTimeStr(sec) {
+  const h = Math.floor(sec/3600), m = Math.floor((sec%3600)/60), s = sec%60;
+  return String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+}
+
+function effortAddSlot() {
+  const startVal = document.getElementById('effort-slot-start').value;
+  const endVal   = document.getElementById('effort-slot-end').value;
+  const pages    = parseInt(document.getElementById('effort-pages-input').value) || 0;
+  if (!startVal || !endVal) { alert('請輸入起始與結束時間！'); return; }
+  const startSec = timeStrToSec(startVal);
+  const endSec   = timeStrToSec(endVal);
+  if (endSec <= startSec) { alert('結束時間必須晚於起始時間！'); return; }
+  const data = getEffortDay(currentEffortDate);
+  // Overlap check (in seconds)
+  const overlaps = data.slots.some(s => {
+    const ss = s.startSec !== undefined ? s.startSec : s.startMin*60;
+    const se = s.endSec   !== undefined ? s.endSec   : s.endMin*60;
+    return se > startSec && ss < endSec;
+  });
+  if (overlaps) {
+    if (!confirm('此時段與既有紀錄重疊，確定要新增？')) return;
+  }
+  data.slots.push({ startSec, endSec, pages });
+  data.slots.sort((a,b) => (a.startSec||a.startMin*60) - (b.startSec||b.startMin*60));
+  data.pages = (data.pages || 0) + pages;
+  saveEffortDay(currentEffortDate, data);
+  document.getElementById('effort-pages-input').value = '';
+  // Reset time inputs so next call shows current time
+  document.getElementById('effort-slot-start').value = '';
+  document.getElementById('effort-slot-end').value = '';
+  effortInitSelects();
+  renderEffortTab();
+}
+
+function effortDeleteSlot(dateStr, idx) {
+  const data = getEffortDay(dateStr);
+  const removed = data.slots.splice(idx, 1)[0];
+  data.pages = Math.max(0, (data.pages || 0) - (removed.pages || 0));
+  saveEffortDay(dateStr, data);
+  renderEffortTab();
+}
+
+function effortPrevDay() {
+  const d = parseLocalDate(currentEffortDate);
+  d.setDate(d.getDate() - 1);
+  currentEffortDate = getLocalISODate(d);
+  renderEffortTab();
+}
+
+function effortNextDay() {
+  const d = parseLocalDate(currentEffortDate);
+  d.setDate(d.getDate() + 1);
+  currentEffortDate = getLocalISODate(d);
+  renderEffortTab();
+}
+
+function effortGoToday() {
+  currentEffortDate = getLocalISODate();
+  renderEffortTab();
+}
+
+function effortCalPrevMonth() {
+  currentCalMonth.m--;
+  if (currentCalMonth.m < 0) { currentCalMonth.m = 11; currentCalMonth.y--; }
+  renderEffortCalendar();
+}
+
+function effortCalNextMonth() {
+  currentCalMonth.m++;
+  if (currentCalMonth.m > 11) { currentCalMonth.m = 0; currentCalMonth.y++; }
+  renderEffortCalendar();
+}
+
+function effortSecToLabel(sec) {
+  const h = Math.floor(sec/3600), m = Math.floor((sec%3600)/60), s = sec%60;
+  return String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+}
+function effortMinToLabel(m) {
+  return String(Math.floor(m/60)).padStart(2,'0') + ':' + String(m%60).padStart(2,'0') + ':00';
+}
+
+function effortHrsColor(hrs) {
+  if (hrs <= 0)  return '#e2e8f0';
+  if (hrs < 3)   return '#bae6fd';
+  if (hrs < 6)   return '#7dd3fc';
+  if (hrs < 8)   return '#38bdf8';
+  if (hrs < 10)  return '#0284c7';
+  return '#f59e0b'; 
+}
+
+function renderEffortTab() {
+  renderWeekTimeline();
+  renderEffortCalendar();
+}
+
+
+
+function renderEffortCalendar() {
+  const calLbl = document.getElementById('effort-cal-label');
+  if (calLbl) calLbl.textContent = currentCalMonth.y + ' 年 ' + (currentCalMonth.m + 1) + ' 月';
+
+  const calEl = document.getElementById('effort-calendar');
+  if (!calEl) return;
+
+  const { y, m } = currentCalMonth;
+  const firstDay = new Date(y, m, 1);
+  const lastDay  = new Date(y, m+1, 0);
+  const startDow = (firstDay.getDay() + 6) % 7; 
+
+  const weekDays = ['一','二','三','四','五','六','日'];
+  let html = `<table style="width:100%; border-collapse:collapse; min-width:500px;">
+    <thead><tr>`;
+  weekDays.forEach(d => {
+    html += `<th style="padding:8px 4px; font-size:13px; color:var(--text-muted); font-weight:600; text-align:center; border-bottom:2px solid var(--border);">${d}</th>`;
+  });
+  html += `</tr></thead><tbody><tr>`;
+
+  for (let i = 0; i < startDow; i++) {
+    html += `<td style="padding:4px;"></td>`;
+  }
+
+  let dow = startDow;
+  for (let day = 1; day <= lastDay.getDate(); day++) {
+    const dateStr = y + '-' + String(m+1).padStart(2,'0') + '-' + String(day).padStart(2,'0');
+    const data = getEffortDay(dateStr);
+    const totalMins = effortTotalMins(data.slots);
+    const hrs = totalMins / 60;
+    const pages = data.pages || 0;
+    const bg = effortHrsColor(hrs);
+    const isToday = dateStr === getLocalISODate();
+    const isCurrent = dateStr === currentEffortDate;
+    const startDate = '2025-05-27';
+    const isBeforeStart = dateStr < startDate;
+
+    const totalSecs = data.slots.reduce((a,s)=>a+slotDurSec(s),0);
+    const timeStr = totalSecs > 0 ? fmtHMS(totalSecs) : '';
+    const isGold = !isBeforeStart && hrs >= 10;
+    const trophy = isGold ? '👑' : '';
+    const calBg = isBeforeStart ? '#fafafa' : isGold ? '#fef9c3' : bg;
+    const calBorder = isCurrent ? '2px solid var(--primary)' : isToday ? '2px solid var(--success)' : isGold ? '2px solid #f59e0b' : '1px solid var(--border)';
+
+    html += `<td style="padding:4px; vertical-align:top;">
+      <div onclick="currentEffortDate='${dateStr}'; renderEffortTab();" style="cursor:pointer; border-radius:8px; border:${calBorder}; background:${calBg}; padding:6px 6px 4px; min-height:72px; opacity:${isBeforeStart ? '0.4' : '1'}; transition:all 0.15s; position:relative;">
+        <div style="font-size:12px; font-weight:${isToday ? '800' : '600'}; color:${isToday ? 'var(--success)' : isGold ? '#92400e' : 'var(--text-main)'}; margin-bottom:4px;">${day}${trophy}</div>
+        ${timeStr ? `<div style="font-size:11px; font-weight:600; color:${isGold ? '#b45309' : '#0369a1'};">${timeStr}</div>` : ''}
+        ${pages > 0 ? `<div style="font-size:11px; color:#475569;">${pages}頁</div>` : ''}
+      </div>
+    </td>`;
+
+    dow++;
+    if (dow === 7 && day < lastDay.getDate()) {
+      html += `</tr><tr>`;
+      dow = 0;
+    }
+  }
+
+  while (dow > 0 && dow < 7) {
+    html += `<td style="padding:4px;"></td>`;
+    dow++;
+  }
+
+  html += `</tr></tbody></table>`;
+  calEl.innerHTML = html;
+}
+
+// ═══════════════════════════════════════════════════
+//   本週七天時間軸
+// ═══════════════════════════════════════════════════
+let weekTimelineOffset = 0; 
+
+function getWeekMonday(offsetWeeks) {
+  const now = new Date();
+  const day = now.getDay(); 
+  const diff = (day === 0 ? -6 : 1 - day); 
+  const mon = new Date(now);
+  mon.setDate(now.getDate() + diff + offsetWeeks * 7);
+  mon.setHours(0,0,0,0);
+  return mon;
+}
+
+function weekTimelinePrev() { weekTimelineOffset--; renderWeekTimeline(); }
+function weekTimelineNext() { weekTimelineOffset++; renderWeekTimeline(); }
+function weekTimelineThisWeek() { weekTimelineOffset = 0; renderWeekTimeline(); }
+
+function renderWeekTimeline() {
+  const lbl = document.getElementById('week-timeline-label');
+  const el = document.getElementById('week-timeline');
+  if (!el) return;
+
+  const monday = getWeekMonday(weekTimelineOffset);
+  const sunday = new Date(monday); sunday.setDate(monday.getDate() + 6);
+  if (lbl) {
+    const fmt = d => d.toLocaleDateString('zh-TW', {month:'2-digit', day:'2-digit'});
+    lbl.textContent = fmt(monday) + ' – ' + fmt(sunday);
+  }
+
+  const dayNames = ['一','二','三','四','五','六','日'];
+  const totalSlots = (EFFORT_END_MIN - EFFORT_START_MIN) / EFFORT_SLOT_MINS;
+  const slotW = 100 / totalSlots;
+
+  let labelHtml = '';
+  for (let m = EFFORT_START_MIN; m <= EFFORT_END_MIN; m += 60) {
+    const pct = (m - EFFORT_START_MIN) / (EFFORT_END_MIN - EFFORT_START_MIN) * 100;
+    const lh = String(Math.floor(m/60)).padStart(2,'0'); // 移除 ':00'
+    let transform = 'translateX(-50%)';
+    if (pct === 0) transform = 'translateX(0%)';
+    else if (pct === 100) transform = 'translateX(-100%)';
+    labelHtml += '<div style="position:absolute; left:' + pct + '%; transform:' + transform + '; font-size:10px; color:var(--text-muted); white-space:nowrap;">' + lh + '</div>';
+  }
+
+  let html = '';
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(monday); d.setDate(monday.getDate() + i);
+    const dateStr = getLocalISODate(d);
+    const dayData = getEffortDay(dateStr);
+    const totalMins = effortTotalMins(dayData.slots);
+    const totalPages = dayData.pages || 0;
+    const isToday = dateStr === getLocalISODate();
+    const isCurrent = dateStr === currentEffortDate;
+
+    const fillMap = {};
+    dayData.slots.forEach(s => {
+      const ss = slotStartSec(s), se = slotEndSec(s);
+      for (let m = Math.floor(ss/30)*30; m < se; m += 30) {
+        const idx = Math.floor(m / 60);
+        if (idx >= EFFORT_START_MIN/60 && idx < EFFORT_END_MIN/60)
+          fillMap[Math.floor((m - EFFORT_START_MIN*60/60) / EFFORT_SLOT_MINS)] = true;
+      }
+    });
+
+    const isGoldDay = totalMins >= 600;
+    const barFill = isGoldDay ? '#f59e0b' : '#3498db';
+    let barHtml = '';
+    for (let s = 0; s < totalSlots; s++) {
+      barHtml += '<div style="position:absolute; left:' + (s*slotW) + '%; width:' + slotW + '%; height:100%; background:' + (fillMap[s] ? barFill : '#e2e8f0') + '; border-right:1px solid #f4f7f9; box-sizing:border-box;"></div>';
+    }
+
+    const hh = Math.floor(totalMins/60), hm = totalMins%60;
+    const timeStr = totalMins > 0 ? fmtHMSfromMins(totalMins) : '0s';
+    const dayLabel = (isGoldDay ? '👑' : '') + '週' + dayNames[i];
+    const dateLabel = (d.getMonth()+1) + '/' + d.getDate();
+    const borderStyle = isCurrent ? '2px solid var(--primary)' : isToday ? '2px solid var(--success)' : isGoldDay ? '2px solid #f59e0b' : '1px solid var(--border)';
+    const dayLabelColor = isToday ? 'var(--success)' : isCurrent ? 'var(--primary)' : isGoldDay ? '#b45309' : 'var(--text-muted)';
+    const timeColor = isGoldDay ? '#b45309' : totalMins > 0 ? 'var(--primary)' : 'var(--text-muted)';
+
+    html += `<div style="display:flex; align-items:center; gap:10px; margin-bottom:6px; cursor:pointer;" onclick="currentEffortDate='${dateStr}'; renderEffortTab();">`
+      + '<div style="width:52px; text-align:right; font-size:12px; font-weight:' + (isToday?'800':'600') + '; color:' + dayLabelColor + '; flex-shrink:0;">' + dayLabel + '<br><span style="font-size:11px; font-weight:400; color:var(--text-muted);">' + dateLabel + '</span></div>'
+      + '<div style="flex:1; position:relative; height:22px; border-radius:4px; overflow:hidden; border:' + borderStyle + '; box-sizing:border-box;' + (isGoldDay ? ' background:#fef9c3;' : '') + '">' + barHtml + '</div>'
+      + '<div style="width:56px; font-size:12px; font-weight:600; color:' + timeColor + '; flex-shrink:0;">' + timeStr + (totalPages>0 ? '<br><span style="font-size:11px; color:#475569; font-weight:400;">' + totalPages + '頁</span>' : '') + '</div>'
+      + '</div>';
+  }
+
+  html += '<div style="display:flex; align-items:flex-start; gap:10px; margin-top:2px;">'
+    + '<div style="width:52px; flex-shrink:0;"></div>'
+    + '<div style="flex:1; position:relative; height:16px; overflow:visible;">' + labelHtml + '</div>'
+    + '<div style="width:56px; flex-shrink:0;"></div>'
+    + '</div>';
+
+  el.innerHTML = html;
+}
+
+load(); run(); calcExpected(); renderTodayStats(); renderWeekTimeline(); renderEffortCalendar(); effortInitSelectsToday(); renderTodayCardSlots(); renderTodayTimelineCard(); switchTab('effort');
+
+// ── 時間軸控制：step=15, ↑↓=1 ──
+function dpClamp(el, mn, mx) {
+  let v = parseInt(el.value);
+  if (isNaN(v)) v = mn;
+  el.value = Math.max(mn, Math.min(mx, v));
+}
+function dpStep(id, delta, mn, mx) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  let v = parseInt(el.value) || 0;
+  v = Math.max(mn, Math.min(mx, v + delta));
+  el.value = v;
+}
+function dpKeyStep(event, el, mn, mx) {
+  if (event.key === 'ArrowUp') {
+    event.preventDefault();
+    let v = Math.min(mx, (parseInt(el.value) || 0) + 1);
+    el.value = v;
+  } else if (event.key === 'ArrowDown') {
+    event.preventDefault();
+    let v = Math.max(mn, (parseInt(el.value) || 0) - 1);
+    el.value = v;
+  }
+}
+function dpSyncHidden() {
+  ['start','end'].forEach(prefix => {
+    const h = Math.max(0, Math.min(23, parseInt(document.getElementById('dp-' + prefix + '-h').value) || 0));
+    const m = Math.max(0, Math.min(59, parseInt(document.getElementById('dp-' + prefix + '-m').value) || 0));
+    const hid = document.getElementById('dp-' + prefix + '-today');
+    if (hid) hid.value = String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0');
+  });
+  renderTodayTimelineCard();
+}
 </script>
 </body>
 </html>
